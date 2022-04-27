@@ -30,6 +30,7 @@ import { reactive, ref } from 'vue'
 import type { FormInstance, FormRules } from 'element-plus'
 import axios from '../axios'
 import stores from '../store/index'
+import router from '../router/index'
 const formSize = ref('default')
 const ruleFormRef = ref<FormInstance>()
 const userinfo = reactive({
@@ -57,6 +58,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
             stores.commit('setdtly',e.data.data)
             console.log(stores["getters"].getdtly)
             console.log(sessionStorage.getItem("token"))
+            router.push("/home")
           }
 
      })
