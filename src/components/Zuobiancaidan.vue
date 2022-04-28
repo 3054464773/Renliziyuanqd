@@ -5,16 +5,20 @@
       class="el-menu-vertical-demo"
       default-active="1"
       text-color="#fff"
+      :router="true"
   >
     <el-menu-item index="1">首页</el-menu-item>
+
     <el-sub-menu index="2">
-      <template #title>权限管理</template>
-      <el-menu-item index="2-1">item one</el-menu-item>
+      <template #title>社保管理</template>
+      <el-menu-item index="/goshebao">社保</el-menu-item>
     </el-sub-menu>
+
     <el-sub-menu index="3">
       <template #title>员工管理</template>
-      <el-menu-item index="3-1">item one</el-menu-item>
+      <el-menu-item index="/gouser">员工</el-menu-item>
     </el-sub-menu>
+
   </el-menu>
 </template>
 
