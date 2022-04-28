@@ -7,58 +7,22 @@
 	} from '@element-plus/icons-vue'
 	import {
 		reactive,
-		ref
+		ref,
+		onMounted 
 	} from 'vue'
+
 	import type {
 		FormInstance,
 		FormRules
 	} from 'element-plus'
-	import type { ElTable } from 'element-plus'
-	//表格
-	interface User {
-	  date: string
-	  name: string
-	  address: string
-	}
-	const multipleTableRef = ref<InstanceType<typeof ElTable>>()
-	const multipleSelection = ref<User[]>([])
-	const tableData: User[] = [
-	  {
-	    date: '2016-05-03',
-	    name: 'Tom',
-	    address: 'No. 189, Grove St, Los Angeles',
-	  },
-	  {
-	    date: '2016-05-02',
-	    name: 'Tom',
-	    address: 'No. 189, Grove St, Los Angeles',
-	  },
-	  {
-	    date: '2016-05-04',
-	    name: 'Tom',
-	    address: 'No. 189, Grove St, Los Angeles',
-	  },
-	  {
-	    date: '2016-05-01',
-	    name: 'Tom',
-	    address: 'No. 189, Grove St, Los Angeles',
-	  },
-	  {
-	    date: '2016-05-08',
-	    name: 'Tom',
-	    address: 'No. 189, Grove St, Los Angeles',
-	  },
-	  {
-	    date: '2016-05-06',
-	    name: 'Tom',
-	    address: 'No. 189, Grove St, Los Angeles',
-	  },
-	  {
-	    date: '2016-05-07',
-	    name: 'Tom',
-	    address: 'No. 189, Grove St, Los Angeles',
-	  },
-	]
+
+	import axios from '../axios.js'
+	const total=ref(0)
+	const tableData=ref([])
+	var data=reactive({
+		pageNum:1,
+		pageSize:3
+	})
 	// 分页标签
 	const currentPage = ref(1)
 	const pageSize = ref(20)
@@ -77,70 +41,53 @@
 		type: [],
 		bili: ''
 	})
+
+	//查询所有数据方法
+	function selectlist(){
+		console.log("1111111111111")
+		axios.get("/selectList",{
+			params:{
+				pageNum:data.pageNum,
+				pageSize:data.pageSize
+			},
+		}).then(function(response){
+			console.log(response)
+			console.log("12345678")
+			tableData.value=response.data.data
+			/* console.log(tableData)
+			data.tableData=response.data.data
+			data.total=response.data.data.total	 */
+		}).catch(function(error){
+			console.log(error)
+		})
+	}
 	//新增表单数据验证
 	const rules = reactive < FormRules > ({
-		name: [{
-				required: true,
-				message: 'Please input Activity name',
-				trigger: 'blur'
-			},
-			{
-				min: 3,
-				max: 5,
-				message: 'Length should be 3 to 5',
-				trigger: 'blur'
-			},
+		faid: [
+			{ required: true,message: '请输入方案id！',trigger: 'blur'},
+			{ min: 0, max: 6,message: '请输入合法的方案id！',trigger: 'blur'},
 		],
-		region: [{
-			required: true,
-			message: 'Please select Activity zone',
-			trigger: 'change',
-		}, ],
-		type: [{
-			type: 'array',
-			required: true,
-			message: 'Please select at least one activity type',
-			trigger: 'change',
-		}, ],
-		resource: [{
-			required: true,
-			message: 'Please select activity resource',
-			trigger: 'change',
-		}, ],
+		name: [
+			{ required: true, message: '请输入方案名称！',trigger: 'blur',},
+		],
+		jsid: [
+			{ required: true, message: '请输入社保基数id！',trigger: 'blur',},
+		],
+		jsje: [
+			{ required: true, message: '请输入基数金额！',trigger: 'blur',},
+		],
+		type: [
+			{ type: 'array', required: true, message: '请选择社保名称！', trigger: 'change'}, 
+		],
+		bili: [
+			{ required: true, message: '请选择缴纳比例！', trigger: 'change',},
+			],
 	})
-	/* //表格数据
-	const tableData = [{
-			date: '2016-05-03',
-			name: 'Tom',
-			address: 'No. 189, Grove St, Los Angeles',
-		},
-		{
-			date: '2016-05-02',
-			name: 'Tom',
-			address: 'No. 189, Grove St, Los Angeles',
-		},
-		{
-			date: '2016-05-04',
-			name: 'Tom',
-			address: 'No. 189, Grove St, Los Angeles',
-		},
-		{
-			date: '2016-05-01',
-			name: 'Tom',
-			address: 'No. 189, Grove St, Los Angeles',
-		},
-		{
-			date: '2016-05-01',
-			name: 'jack',
-			address: 'No. 189, lisa gj, Los knkbb',
-		},
-		{
-			date: '2016-05-10',
-			name: 'jack',
-			address: 'No. 189, lisa gj, Los knkbb',
-		},
+	//页面加载完毕后调用
+	onMounted (()=>{
+		selectlist()
+	})
 
-	] */
 </script>
 
 <template>
@@ -193,24 +140,17 @@
 	</div>
 	<!-- 表格 -->
 	<el-table
-	    ref="multipleTableRef"
+
 	    :data="tableData"
-	    style="width: 100%"
-	  >
+	>
 	    <el-table-column type="selection" width="55" />
-	    <el-table-column label="Date" width="120">
-	      <template #default="scope">{{ scope.row.date }}</template>
-	    </el-table-column>
-	    <el-table-column property="name" label="Name" width="120" />
-	    <el-table-column property="address" label="Address" show-overflow-tooltip />
+	    <el-table-column property="bcbh" label="班次编号" width="160" sortable/>
+	    <el-table-column property="bcmc" label="班次名称"  width="160" />
+		<el-table-column property="bckssj" label="班次开始时间" show-overflow-tooltip sortable />
+		<el-table-column property="bcjssj" label="班次结束时间" show-overflow-tooltip  sortable/>
 	  </el-table>
 	
-	<!-- <el-table :data="tableData" border style="width: 100%">
-		<el-table-column prop="date" label="Date" width="180" sortable />
-		<el-table-column prop="name" label="Name" width="180" />
-		<el-table-column prop="address" label="Address" />
-	</el-table> -->
-	<!-- <el-pagination background :page-size="10" layout="prev, pager, next" :total="100"/> -->
+
 	<el-pagination v-model:currentPage="currentPage" v-model:page-size="pageSize" :page-sizes="[5, 10, 20]"
 		:small="small" :disabled="disabled" :background="background" layout="total, sizes, prev, pager, next, jumper"
 		:total="100" />
