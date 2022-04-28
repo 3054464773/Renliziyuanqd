@@ -10,11 +10,12 @@
 		ref,
 		onMounted 
 	} from 'vue'
-	
+
 	import type {
 		FormInstance,
 		FormRules
 	} from 'element-plus'
+
 	import axios from '../axios.js'
 	const total=ref(0)
 	const tableData=ref([])
@@ -40,6 +41,7 @@
 		type: [],
 		bili: ''
 	})
+
 	//查询所有数据方法
 	function selectlist(){
 		console.log("1111111111111")
@@ -85,6 +87,7 @@
 	onMounted (()=>{
 		selectlist()
 	})
+
 </script>
 
 <template>
@@ -137,6 +140,7 @@
 	</div>
 	<!-- 表格 -->
 	<el-table
+
 	    :data="tableData"
 	>
 	    <el-table-column type="selection" width="55" />
@@ -146,6 +150,7 @@
 		<el-table-column property="bcjssj" label="班次结束时间" show-overflow-tooltip  sortable/>
 	  </el-table>
 	
+
 	<el-pagination v-model:currentPage="currentPage" v-model:page-size="pageSize" :page-sizes="[5, 10, 20]"
 		:small="small" :disabled="disabled" :background="background" layout="total, sizes, prev, pager, next, jumper"
 		:total="100" />

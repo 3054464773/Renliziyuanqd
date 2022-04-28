@@ -13,6 +13,9 @@ export default createStore({
     setdtly(state,hddtly){
       state.dtly=hddtly;
       sessionStorage.setItem("token",hddtly.token)
+    },
+    resetdtly(state){
+      state.dtly={}
     }
   },
   actions: {
