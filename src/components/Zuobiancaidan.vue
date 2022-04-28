@@ -18,7 +18,10 @@
       <template #title>员工管理</template>
       <el-menu-item index="/gouser">员工</el-menu-item>
     </el-sub-menu>
-
+    <el-sub-menu index="4">
+      <template #title>系统设置</template>
+      <el-menu-item index="/goquanxian">权限管理</el-menu-item>
+    </el-sub-menu>
   </el-menu>
 </template>
 

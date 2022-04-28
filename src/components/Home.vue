@@ -91,4 +91,8 @@ padding: 0px;
 a{
   text-decoration: none;
 }
+.el-main{
+  padding: 0px;
+  margin: 0px;
+}
 </style>

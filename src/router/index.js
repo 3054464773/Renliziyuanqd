@@ -3,6 +3,7 @@ import Login from '../components/Login.vue'
 import Home from "../components/Home.vue";
 import shebaofangan from '../components/shebaofangan.vue'
 import user from '../components/user.vue'
+import Quanxian from "../components/Quanxian.vue";
 const routes = [
   {
     path: '/home',
@@ -18,6 +19,11 @@ const routes = [
         path:'/gouser',
         name:'user',
         component:user
+      },
+      {
+        path:'/goquanxian',
+        name:'quanxian',
+        component:Quanxian
       }
     ]
   },
