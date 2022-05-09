@@ -4,12 +4,19 @@ import Home from "../components/Home.vue";
 import shebaofangan from '../components/shebaofangan.vue'
 import user from '../components/user.vue'
 import Quanxian from "../components/Quanxian.vue";
+import Jiaose from "../components/Jiaose.vue";
+import Bumen from "../components/Bumen.vue";
 const routes = [
   {
     path: '/home',
     name: 'home',
     component: Home,
     children:[
+      {
+        path:'/gobumen',
+        name:'bumen',
+        component:Bumen
+      },
         {
           path:'/goshebao',
           name:'shebao',
@@ -24,6 +31,18 @@ const routes = [
         path:'/goquanxian',
         name:'quanxian',
         component:Quanxian
+      },
+      {
+        path:'/gojiaose',
+        name:'jiaose',
+        component:Jiaose,
+        // children:[
+        //     {
+        //       path:'/gojsandqx',
+        //       name:'jsandqx',
+        //       component:JiaoseQuanxian,
+        //     }
+        // ]
       }
     ]
   },
