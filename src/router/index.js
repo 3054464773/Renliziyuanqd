@@ -2,22 +2,44 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import Login from '../components/Login.vue'
 import Home from "../components/Home.vue";
 import shebaofangan from '../components/shebaofangan.vue'
+import canbaorenyuan from '../components/canbaorenyuan.vue'
+import shebaojiaofei from '../components/shebaojiaofei.vue'
 import user from '../components/user.vue'
 import Quanxian from "../components/Quanxian.vue";
+
 import KPIgrade from "../components/KPIgrade.vue"
 import KPIsheet from "../components/KPIsheet.vue";
 import KPIscore from "../components/KPIscore.vue";
+
+import Jiaose from "../components/Jiaose.vue";
+import Bumen from "../components/Bumen.vue";
+
 const routes = [
   {
     path: '/home',
     name: 'home',
     component: Home,
     children:[
+      {
+        path:'/gobumen',
+        name:'bumen',
+        component:Bumen
+      },
         {
           path:'/goshebao',
           name:'shebao',
           component:shebaofangan
         },
+      {
+        path:'/goshebaopeople',
+        name:'shebaopeople',
+        component:canbaorenyuan
+      },
+      {
+        path:'/goshebaojiaofei',
+        name:'shebaojiaofei',
+        component:shebaojiaofei
+      },
       {
         path:'/gouser',
         name:'user',
@@ -27,6 +49,7 @@ const routes = [
         path:'/goquanxian',
         name:'quanxian',
         component:Quanxian
+
       },{
         path: '/goinsertjixiao',
         name: 'jixiao',
@@ -39,6 +62,20 @@ const routes = [
         path:'/gojixiaoScore',
         name: 'jixiaoScore',
         component: KPIscore
+
+      },
+      {
+        path:'/gojiaose',
+        name:'jiaose',
+        component:Jiaose,
+        // children:[
+        //     {
+        //       path:'/gojsandqx',
+        //       name:'jsandqx',
+        //       component:JiaoseQuanxian,
+        //     }
+        // ]
+
       }
     ]
   },

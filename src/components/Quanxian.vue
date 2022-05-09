@@ -2,7 +2,7 @@
   <div class="qxheaddiv">
     <el-input  v-model="qxname" placeholder="请输入您要查找的权限名称" />
     <el-button type="primary" @click="chaxun" plain>查询</el-button>
-    <el-button type="success" @click="dialogVisible = true" plain>新增权限</el-button>
+    <el-button type="success" @click="xinzengquanxian" plain>新增权限</el-button>
   </div>
   <div class="qxheaddivtwo">
     <el-table :data="qxlist" style="width: 100%">
@@ -10,8 +10,21 @@
       <el-table-column  type="index" label="序号" width="180" />
       <el-table-column prop="qxmc" label="权限名称" width="220" />
       <el-table-column prop="qkey" label="权限标识" width="430"  />
-      <el-table-column label="编辑" width="70"> <el-button type="primary" :icon="Edit" circle /></el-table-column>
-      <el-table-column label="删除" > <el-button type="danger" :icon="Delete" circle /></el-table-column>
+      <el-table-column label="编辑" width="70" >
+        <template #default="scope">
+          <el-button @click="bianjiquanxian(scope.row)" type="primary" :icon="Edit" circle />
+        </template>
+      </el-table-column>
+      <el-table-column label="删除" >
+        <template #default="scope">
+          <el-popconfirm title="确定删除删吗？"  @confirm="shanchujixiao(scope.row)" confirmButtonText="确定" cancelButtonText="取消">
+            <template #reference>
+              <el-button type="danger" :icon="Delete" circle />
+            </template>
+          </el-popconfirm>
+        </template>
+
+      </el-table-column>
     </el-table>
     <el-empty description="没有找到可用数据！" v-if="iszdsj"/>
   </div>
@@ -22,9 +35,8 @@
 
   <el-dialog
       v-model="dialogVisible"
-      title="新增权限"
+      title="操作弹框"
       width="30%"
-
   >
         <el-form
             ref="qxstl"
@@ -32,7 +44,6 @@
             label-width="120px"
             class="demo-ruleForm"
             :rules="rules"
-
         >
           <el-form-item label="权限名称" prop="qxmc">
             <el-input v-model="qxstl.qxmc" />
@@ -41,7 +52,7 @@
             <el-input v-model="qxstl.qkey" />
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="submitForm('qxstl')">确定新增</el-button>
+            <el-button type="primary" @click="xinzenandxiugai('qxstl')">确定</el-button>
           </el-form-item>
         </el-form>
   </el-dialog>
@@ -63,6 +74,7 @@ export default {
       zts:0,
       dialogVisible:false,
       qxstl:{
+        qxbh:'',
         qxmc:'',
         qkey:''
       },
@@ -76,7 +88,8 @@ export default {
           { min: 4, message: '长度最少4个字符', trigger: 'blur' }
         ]
       },
-      iszdsj:false
+      iszdsj:false,
+      pdxzorxg:true//默认新增
     }
   },
   created() {
@@ -109,23 +122,53 @@ export default {
         console.log(e)
       })
     },
-    submitForm(formName) {
+    xinzenandxiugai(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          axios.post("/insertquanxian",this.qxstl).then((e)=>{
-                if (e.data.data){
-                  this.dialogVisible=false
-                  this.$message.success("新增成功！")
-                  this.chaxunalllist()
-                }
-          })
+          if(this.pdxzorxg){
+            axios.post("/insertquanxian",this.qxstl).then((e)=>{
+              if (e.data.data){
+                this.dialogVisible=false
+                this.$message.success("新增成功！")
+                this.chaxunalllist()
+              }
+            })
+          }else {
+              //updatquanxian
+            axios.put("/updatquanxian",this.qxstl).then((e)=>{
+              if (e.data.data){
+                this.dialogVisible=false
+                this.pdxzorxg=true;
+                this.$message.success("修改成功！")
+                this.chaxunalllist()
+              }
+            })
+          }
         } else {
 
           return false;
         }
       });
+    },
+    bianjiquanxian(e){
+      this.qxstl=e;
+      this.dialogVisible=true
+      this.pdxzorxg=false;
+    },
+    xinzengquanxian(){
+      this.dialogVisible = true;
+      this.qxstl={};
+    },
+    shanchujixiao(e){
+        axios.delete("/deletequanxian?qxbh="+e.qxbh).then((e)=>{
+          if (e.data.data){
+            this.$message.success("删除成功！")
+            this.chaxunalllist()
+          }
+        })
     }
   }
+
 }
 </script>
 
