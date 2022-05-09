@@ -5,7 +5,14 @@ import shebaofangan from '../components/shebaofangan.vue'
 import canbaorenyuan from '../components/canbaorenyuan.vue'
 import shebaojiaofei from '../components/shebaojiaofei.vue'
 import user from '../components/user.vue'
+import recruit from '../components/recruit.vue'
+import interview from '../components/interview.vue'
 import Quanxian from "../components/Quanxian.vue";
+
+import rencaizhub from '../components/rencaizhub.vue'
+import  usersss from '../components/usersss.vue'
+import UsersXz from '../components/UsersXz.vue'
+
 
 import KPIgrade from "../components/KPIgrade.vue"
 import KPIsheet from "../components/KPIsheet.vue";
@@ -13,6 +20,7 @@ import KPIscore from "../components/KPIscore.vue";
 
 import Jiaose from "../components/Jiaose.vue";
 import Bumen from "../components/Bumen.vue";
+
 
 const routes = [
   {
@@ -50,6 +58,35 @@ const routes = [
         name:'quanxian',
         component:Quanxian
 
+      },
+      {
+        path:'/gorecruit',
+        name:'recruit',
+        component:recruit
+      },
+      {
+        path:'/gointerview',
+        name:'interview',
+        component:interview
+      },
+      {
+        path:'/gorencaizhub',
+        name:'rencaizhub',
+        component:rencaizhub
+      },
+      {
+        path:'/gousersss',
+        name:'usersss',
+        component:usersss
+      },
+
+      {
+        path:'/goUsersXz',
+        name:'UsersXz',
+        component:UsersXz
+      },
+
+
       },{
         path: '/goinsertjixiao',
         name: 'jixiao',
@@ -77,6 +114,7 @@ const routes = [
         // ]
 
       }
+
     ]
   },
 

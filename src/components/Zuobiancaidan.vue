@@ -18,7 +18,9 @@
 
     <el-sub-menu index="3">
       <template #title>员工管理</template>
-      <el-menu-item index="/gouser">员工</el-menu-item>
+      <el-menu-item index="/gousersss">员工到岗信息</el-menu-item>
+      <el-menu-item index="/goUsersXz">员工薪资信息</el-menu-item>
+      <el-menu-item index="/gouser">黑名单</el-menu-item>
     </el-sub-menu>
     <el-sub-menu index="4">
       <template #title>系统设置</template>
@@ -27,10 +29,18 @@
       <el-menu-item index="/gobumen">部门管理</el-menu-item>
     </el-sub-menu>
     <el-sub-menu index="5">
+
+      <template #title>招聘管理</template>
+      <el-menu-item index="/gorecruit">应聘者信息</el-menu-item>
+      <el-menu-item index="/gointerview">面试</el-menu-item>
+      <el-menu-item index="/gorencaizhub">应聘者面试</el-menu-item>
+
+
       <template #title>绩效管理</template>
       <el-menu-item index="/goinsertjixiao">绩效名称</el-menu-item>
       <el-menu-item index="/gojixiaoGrade">绩效评分</el-menu-item>
       <el-menu-item index="/gojixiaoScore">绩效月报</el-menu-item>
+
     </el-sub-menu>
 
   </el-menu>
