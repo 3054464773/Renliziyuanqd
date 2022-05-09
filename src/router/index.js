@@ -85,9 +85,7 @@ const routes = [
         name:'UsersXz',
         component:UsersXz
       },
-
-
-      },{
+      {
         path: '/goinsertjixiao',
         name: 'jixiao',
         component: KPIgrade

@@ -34,15 +34,14 @@
       <el-menu-item index="/gorecruit">应聘者信息</el-menu-item>
       <el-menu-item index="/gointerview">面试</el-menu-item>
       <el-menu-item index="/gorencaizhub">应聘者面试</el-menu-item>
-
+    </el-sub-menu>
+    <el-sub-menu index="6">
 
       <template #title>绩效管理</template>
       <el-menu-item index="/goinsertjixiao">绩效名称</el-menu-item>
       <el-menu-item index="/gojixiaoGrade">绩效评分</el-menu-item>
       <el-menu-item index="/gojixiaoScore">绩效月报</el-menu-item>
-
     </el-sub-menu>
-
   </el-menu>
 </template>
 

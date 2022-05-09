@@ -4,6 +4,7 @@
         type="card"
         class="demo-tabs"
         model-value="second"
+        @tab-click="djxxk"
     >
       <el-tab-pane label="部门管理" name="second">
 
@@ -70,7 +71,43 @@
         </el-dialog>
       </el-tab-pane>
 
-      <el-tab-pane label="职位管理" name="first">Config</el-tab-pane>
+      <el-tab-pane label="职位管理" name="first">
+        <div class="qxheaddiv">
+          <el-input  v-model="bmname" placeholder="请输入您要查找的职位名称" />
+          <el-button type="primary" @click="chaxun" plain>查询</el-button>
+          <el-button type="success" @click="xinzengquanxian" plain>新增职位</el-button>
+        </div>
+        <div class="qxheaddivtwo">
+          <el-table :data="zwlist" style="width: 100%">
+            <el-table-column  width="110" />
+            <el-table-column  type="index" label="序号" width="150" />
+            <el-table-column prop="zwmc" label="职位名称" width="220" />
+            <el-table-column prop="zwjs" label="职位介绍" width="220"  />
+            <el-table-column prop="zwsj" label="职位创建时间" width="380"  />
+
+            <el-table-column label="编辑" width="70" >
+              <template #default="scope">
+                <el-button @click="bianjibm(scope.row)" type="primary" :icon="Edit" circle />
+              </template>
+            </el-table-column>
+
+            <el-table-column label="删除" >
+              <template #default="scope">
+                <el-popconfirm title="确定删除删吗？"  @confirm="shanchubm(scope.row)" confirmButtonText="确定" cancelButtonText="取消">
+                  <template #reference>
+                    <el-button type="danger" :icon="Delete" circle />
+                  </template>
+                </el-popconfirm>
+              </template>
+            </el-table-column>
+
+          </el-table>
+          <el-empty description="没有找到可用数据！" v-if="iszdsj"/>
+        </div>
+        <div class="qxheaddivthree">
+          <el-pagination background layout="prev, pager, next" :total="zts2" @current-change="xiayiye" @next-click="xiayiye" @prev-click="xiayiye"/>
+        </div>
+      </el-tab-pane>
 
     </el-tabs>
 
@@ -96,8 +133,11 @@ export default {
       Edit:Edit,
       Delete:Delete,
       bmlist:[],
+      zwlist:[],
       zts:0,
+      zts2:0,
       bmname:'',
+      zwname:'',
       iszdsj:false,
       bmstl:{
         bmbh:'',
@@ -113,10 +153,24 @@ export default {
     this.findallbm()
   },
   methods:{
+    djxxk(TabsPaneContext,Event){
+      if(TabsPaneContext.props.label=='职位管理'){
+        this.findallzw();
+      }else {
+        this.findallbm();
+      }
+
+    },
     findallbm(){
       axios.get("/findallbm?ym=1").then((e)=>{
           this.bmlist=e.data.data.bmlist;
           this.zts=parseInt(e.data.data.zts)*10;
+      })
+    },
+    findallzw(){
+      axios.get("/findallzw?ym=1").then((e)=>{
+        this.zwlist=e.data.data.zwlist;
+        this.zts2=parseInt(e.data.data.zts)*10;
       })
     },
     chaxun(){
