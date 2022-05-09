@@ -1,203 +1,84 @@
-<script setup>
-//组合式api
-import {
-  Delete,
-} from '@element-plus/icons-vue'
-import {ElNotification} from 'element-plus'
-
+<script  setup>
+import {onBeforeMount, reactive} from "vue";
+import axios from '../axios'
 import {
   ref,
-  reactive,
-  onBeforeMount,
-  inject
 } from 'vue'
-import axios from '../axios'
-
-
 const dialogFormVisible = ref(false)
-const dialogFormVisible2 = ref(false)
-const formLabelWidth = '140px'
-//新增数组
-const insers=reactive({
-  ybh:'',
-  bcbh:'1',
-  rzbh:'2',
-  zwbh:'1',
-  sbbh:'1',
-  ygzt:'',
-  yzh:'',
-  ymm:''
-})
 var data = reactive({
-  users:[],//存入查询后端响应过来的数据
-  total:0,//总页数
-  pageNum:1,//当前显示页码
-  pageSize:5,//每一页显示的条数
-  cx:{}, //根据id传后端查询返回的值
-  zts:0,
-  rzname:'',
-  zs:0
+  Recruit: [],//存入查询后端响应过来的数据
+  total: 0,//总页数
+  pageNum: 1,//当前显示页码
+  pageSize: 4,
+  cx:{}
+
 })
-//生命周期s
 onBeforeMount(() => {
-  axios.get("/findusershmd", {
+  axios.get("/selecdrencai", {
     params: {
       pageNum: data.pageNum,
       pageSize: data.pageSize
     }
   }).then(function(response) {
     console.log(response.data.data)
-    data.users = response.data.data.list
+    data.Recruit = response.data.data.list
     data.total = response.data.data.total
-    console.log(data.users)
-  }).catch(function(error) {
 
+  }).catch(function(error) {
+    console.log(error)
   })
 })
-function xiugai(rzbh){
-  axios.put("/updata",data.cx).then(function(response){
-    if(response.data.code!=200){
-      alert('修改失败'+response.data.code)
-      return
-    }
-  }).catch(function(error){
-    return
-  })
-}
-function mohuchaxunyghmd(){
-  axios.get("/mohuchaxunyghmd?rzname="+data.rzname).then(function(response){
-    data.users=response.data.data
-    console.log(response.data.data.users)
-  })
-}
-function page() {
-  axios.get("/findusershmd", {
+function  page() {
+  axios.get("/selecdrencai", {
     params: {
       pageNum: data.pageNum,
       pageSize: data.pageSize
     }
-  }).then(function(response) {
+  }).then(function (response) {
     data.total = response.data.data.total
-    data.users = response.data.data.list
-    console.log(data.users)
-  }).catch(function(error) {
+    data.Recruit = response.data.data.list
+
+  }).catch(function (error) {
     console.log(error)
   })
 }
-//根据id查询，将这条数据显示在修改页面中
-function a(rzbh){
-  console.log("用户id2222222222"+rzbh)
-  axios.get("/selectidd/"+rzbh)
-      //.then相当于ajax中的success:function成功回调函数
-      .then(function(response){
-        //获取后端传入的数据
-        data.cx=response.data.data//简单来说就是把修改后的数据重新赋值给data.cx对象
-      })
-}
-//根据id查询
-
-function delUser(ybh){
-  console.log(ybh)
-  axios.post("/delete/"+ybh).then(function(response){
-  }).catch(function(error){
-    alert("删除失败")
-    return
-  })
-}
-
-
-//新增方法
-function xinzeng(){
-  axios.post("/adddept",insers).then(function(response){
-
-    insers.ybh=response.data.users.ybh
-    insers.bcbh=response.data.users.bcbh
-    insers.rzbh=response.data.users.rzbh
-    insers.zwbh=response.data.users.zwbh
-    insers.sbbh=response.data.users.sbbh
-    insers.ygzt=response.data.users.ygzt
-    insers.yzh=response.data.users.yzh
-    insers.ymm=response.data.users.ymm
-
-  }).catch(function(error) {
-    console.log(Error)
-  })
-}
-
-
-const form = reactive({
-
-  delivery: false
-
-
-})
-const open = () => {
-  ElNotification({
-    title: '修改',
-    message: '修改成功',
-    type: 'success',
-  })
-}
-const open1 = () => {
-  ElNotification({
-    title: '删除',
-    message: '删除成功',
-    type: 'success',
-  })
-}
-const open2 = () => {
-  ElNotification({
-    title: '新增',
-    message: '新增成功',
-    type: 'success',
-  })
-}
-//刷新
-const reload = inject('reload')
+  function chaxun(rzbh){
+    console.log("用户id2222222222"+rzbh)
+    axios.get("/selectidd/"+rzbh)
+        //.then相当于ajax中的success:function成功回调函数
+        .then(function(response){
+          //获取后端传入的数据
+          data.cx=response.data.data//简单来说就是把修改后的数据重新赋值给data.cx对象
+        })
+  }
 
 </script>
-<template >
 
+<template>
+  <br>
+  <el-button style="position: relative;right: -166px;" @click="mohuchaxun()">查询</el-button>
+  <el-input v-model="data.rzname" placeholder="请输入姓名" clearable style="width: 200px;position: relative;right: 105px;" />
   <div>
+  <el-table :data="data.Recruit" height="350" style="width: 100%">
+    <el-table-column prop="rid" label="编号"  />
+    <el-table-column prop="ybh" label="操作员工编号"  />
+    <el-table-column prop="zwbh" label="职位表id"  />
+    <el-table-column prop="rzbh" label="人才子表编号"  />
+    <el-table-column prop="rzt" label="状态"  />
+    <el-table-column prop="rsj" label="入库时间"  />
+<!--    <el-table-column prop="rsf" label="身份"  />-->
+    <el-table-column label="操作" >
+      <template #default=scope v-slot="scope">
+        <el-button size="10px" type="success" plain @click="dialogFormVisible=true,chaxun(scope.row.rzbh)">查看</el-button><!--          查看招聘者个人信息以及修改-->
+        <el-button size="10px" type="success" plain >预面试</el-button>
+      </template>
 
-    <br>
-    <el-button @click="dialogFormVisible2=true" style="position: relative;right: -710px;">新增</el-button>
-
-    <el-button style="position: relative;right: -166px;" @click="mohuchaxunyghmd">查询</el-button>
-    <el-input v-model="data.rzname" placeholder="请输入姓名" clearable style="width: 200px;position: relative;right: 105px;" />
+    </el-table-column>
+  </el-table>
   </div>
-  <div>
-    <!-- 员工展示 -->
-    <el-table v-bind:data="data.users" style="width: 100%" height="400">
-      <el-table-column prop="ybh"   label="员工编号" />
-      <el-table-column prop="rzname" label="姓名" />
-      <el-table-column prop="rzsex" label="性别" />
-      <el-table-column prop="rzcsrq" label="出生日期" />
-      <el-table-column prop="rzhyzk" label="婚姻状况" />
-      <el-table-column prop="rzzzmm" label="政治面貌" />
-      <el-table-column prop="rzxl" label="学历" />
-      <el-table-column prop="rsj" label="录取时间" />
-      <el-table-column prop="rzgzjl" label="工作经历" />
-      <el-table-column prop="ygzt" label="员工状态" />
-      <el-table-column  label="操作" width="200">
-
-        <template #default=scope v-slot="scope">
-          <!-- 删除 -->
-          <el-button type="primary" :icon="Delete" plain @click="delUser(scope.row.ybh),open1(),reload()" />
-          <!--          <el-button size="20px"  type="success" @click="a(scope.row.ybh),dialogFormVisible=true" >编辑</el-button>-->
-          <el-button size="20px" type="success" plain @click="dialogFormVisible=true,a(scope.row.rzbh)">查看</el-button>
-        </template>
-
-      </el-table-column>
-
-    </el-table>
-    <!--分页 -->
-    <el-pagination style="position: relative;right: -490px;" v-model:currentPage="this.data.pageNum"
-                   v-model:page-size="this.data.pageSize" layout="prev,pager,next" :total="this.data.total"
-                   @current-change="page" prev-text="上一页" next-text="下一页" />
-  </div>
-
-  <!-- 弹出的修改页面 -->
+  <el-pagination style="position: relative;right: -520px;" v-model:currentPage="this.data.pageNum"
+                 v-model:page-size="this.data.pageSize" layout="prev,pager,next" :total="this.data.total"
+                 @current-change="page" prev-text="上一页" next-text="下一页" />
   <el-dialog v-model="dialogFormVisible" title="查看员工信息" >
     <el-form :model="data.cx" >
       <el-row>
@@ -324,35 +205,10 @@ const reload = inject('reload')
     <template #footer>
 	  	<span class="dialog-footer">
 	  		<el-button @click="dialogFormVisible = false">关闭</el-button>
-	  	<el-button type="primary" @click="dialogFormVisible = false,xiugai(cx),open(),reload()">确定</el-button>
+	  		<el-button type="primary" @click="dialogFormVisible = false">确定</el-button>
 	  	</span>
 
     </template>
   </el-dialog>
-  <!-- 弹出新增弹窗 -->
-  <el-dialog v-model="dialogFormVisible2" title="新增员工信息" :modal="insers">
-    <el-form>
-      <el-form-item label="员工状态" :label-width="formLabelWidth">
-        <el-input v-model="insers.ygzt"/>
-      </el-form-item>
-      <el-form-item label="账号" :label-width="formLabelWidth">
-        <el-input  v-model="insers.yzh"/>
-      </el-form-item>
-      <el-form-item label="密码" :label-width="formLabelWidth">
-        <el-input v-model="insers.ymm" show-password  maxlength="10"/>
-      </el-form-item>
-    </el-form>
-    <template #footer>
-			<span class="dialog-footer">
-				<el-button @click="dialogFormVisible2 = false">关闭</el-button>
-				<el-button type="primary" @click="dialogFormVisible2 = false,xinzeng(),open2(),reload()">确定</el-button>
-			</span>
-
-    </template>
-
-  </el-dialog>
 </template>
 
-<style>
-
-</style>

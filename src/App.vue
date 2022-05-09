@@ -1,18 +1,21 @@
 <script setup>
-import {reactive, nextTick, provide, ref} from "vue";
+import { reactive, nextTick, provide } from 'vue'
+const state = reactive({
+  showRouter: true
+})
 
-const isRouterAlive=ref(true)
-const reload=()=>{
-  isRouterAlive.value=false;
-  nextTick(()=>{
-    isRouterAlive.value=true
+//刷新事件
+function reload(){
+  state.showRouter = false
+  nextTick( () =>{
+    state.showRouter = true
   })
 }
-provide("reload",reload)
+provide('reload',reload)
 </script>
 
 <template>
-  <router-view v-if="isRouterAlive"></router-view>
+  <router-view v-if="state.showRouter"></router-view>
 </template>
 
 <style>
