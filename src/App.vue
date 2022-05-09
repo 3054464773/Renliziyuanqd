@@ -1,9 +1,18 @@
 <script setup>
+import {reactive, nextTick, provide, ref} from "vue";
 
+const isRouterAlive=ref(true)
+const reload=()=>{
+  isRouterAlive.value=false;
+  nextTick(()=>{
+    isRouterAlive.value=true
+  })
+}
+provide("reload",reload)
 </script>
 
 <template>
-  <router-view></router-view>
+  <router-view v-if="isRouterAlive"></router-view>
 </template>
 
 <style>
