@@ -6,8 +6,14 @@ import canbaorenyuan from '../components/canbaorenyuan.vue'
 import shebaojiaofei from '../components/shebaojiaofei.vue'
 import user from '../components/user.vue'
 import Quanxian from "../components/Quanxian.vue";
+
+import KPIgrade from "../components/KPIgrade.vue"
+import KPIsheet from "../components/KPIsheet.vue";
+import KPIscore from "../components/KPIscore.vue";
+
 import Jiaose from "../components/Jiaose.vue";
 import Bumen from "../components/Bumen.vue";
+
 const routes = [
   {
     path: '/home',
@@ -43,6 +49,20 @@ const routes = [
         path:'/goquanxian',
         name:'quanxian',
         component:Quanxian
+
+      },{
+        path: '/goinsertjixiao',
+        name: 'jixiao',
+        component: KPIgrade
+      },{
+        path: '/gojixiaoGrade',
+        name:'jixiaoGrade',
+        component: KPIsheet
+      },{
+        path:'/gojixiaoScore',
+        name: 'jixiaoScore',
+        component: KPIscore
+
       },
       {
         path:'/gojiaose',
@@ -55,6 +75,7 @@ const routes = [
         //       component:JiaoseQuanxian,
         //     }
         // ]
+
       }
     ]
   },

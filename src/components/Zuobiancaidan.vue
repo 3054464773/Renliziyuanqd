@@ -26,6 +26,13 @@
       <el-menu-item index="/gojiaose">角色管理</el-menu-item>
       <el-menu-item index="/gobumen">部门管理</el-menu-item>
     </el-sub-menu>
+    <el-sub-menu index="5">
+      <template #title>绩效管理</template>
+      <el-menu-item index="/goinsertjixiao">绩效名称</el-menu-item>
+      <el-menu-item index="/gojixiaoGrade">绩效评分</el-menu-item>
+      <el-menu-item index="/gojixiaoScore">绩效月报</el-menu-item>
+    </el-sub-menu>
+
   </el-menu>
 </template>
 
