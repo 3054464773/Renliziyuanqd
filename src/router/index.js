@@ -4,6 +4,9 @@ import Home from "../components/Home.vue";
 import shebaofangan from '../components/shebaofangan.vue'
 import user from '../components/user.vue'
 import Quanxian from "../components/Quanxian.vue";
+import KPIgrade from "../components/KPIgrade.vue"
+import KPIsheet from "../components/KPIsheet.vue";
+import KPIscore from "../components/KPIscore.vue";
 const routes = [
   {
     path: '/home',
@@ -24,6 +27,18 @@ const routes = [
         path:'/goquanxian',
         name:'quanxian',
         component:Quanxian
+      },{
+        path: '/goinsertjixiao',
+        name: 'jixiao',
+        component: KPIgrade
+      },{
+        path: '/gojixiaoGrade',
+        name:'jixiaoGrade',
+        component: KPIsheet
+      },{
+        path:'/gojixiaoScore',
+        name: 'jixiaoScore',
+        component: KPIscore
       }
     ]
   },
