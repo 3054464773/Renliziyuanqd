@@ -2,6 +2,7 @@
 //组合式api
 import {
   Delete,
+  Edit
 } from '@element-plus/icons-vue'
 import {ElNotification} from 'element-plus'
 
@@ -20,10 +21,10 @@ const formLabelWidth = '140px'
 //新增数组
 const insers=reactive({
   ybh:'',
-  bcbh:'1',
-  rzbh:'2',
-  zwbh:'1',
-  sbbh:'1',
+  bcbh:'',
+  rzbh:'',
+  zwbh:'',
+  sbbh:'',
   ygzt:'',
   yzh:'',
   ymm:''
@@ -32,7 +33,7 @@ var data = reactive({
   users:[],//存入查询后端响应过来的数据
   total:0,//总页数
   pageNum:1,//当前显示页码
-  pageSize:5,//每一页显示的条数
+  pageSize:4,//每一页显示的条数
   cx:{}, //根据id传后端查询返回的值
   zts:0,
   rzname:'',
@@ -40,7 +41,7 @@ var data = reactive({
 })
 //生命周期s
 onBeforeMount(() => {
-  axios.get("/findusershmd", {
+  axios.get("/finduserssss", {
     params: {
       pageNum: data.pageNum,
       pageSize: data.pageSize
@@ -54,24 +55,14 @@ onBeforeMount(() => {
 
   })
 })
-function xiugai(rzbh){
-  axios.put("/updata",data.cx).then(function(response){
-    if(response.data.code!=200){
-      alert('修改失败'+response.data.code)
-      return
-    }
-  }).catch(function(error){
-    return
-  })
-}
-function mohuchaxunyghmd(){
-  axios.get("/mohuchaxunyghmd?rzname="+data.rzname).then(function(response){
+function mohuchaxun(){
+  axios.get("/mohuRenyygg?rzname="+data.rzname).then(function(response){
     data.users=response.data.data
     console.log(response.data.data.users)
   })
 }
 function page() {
-  axios.get("/findusershmd", {
+  axios.get("/finduserssss", {
     params: {
       pageNum: data.pageNum,
       pageSize: data.pageSize
@@ -84,7 +75,6 @@ function page() {
     console.log(error)
   })
 }
-//根据id查询，将这条数据显示在修改页面中
 function a(rzbh){
   console.log("用户id2222222222"+rzbh)
   axios.get("/selectidd/"+rzbh)
@@ -95,7 +85,15 @@ function a(rzbh){
       })
 }
 //根据id查询
-
+function b(ybh){
+  console.log("用户id2222222222"+ybh)
+  axios.get("/user/"+ybh)
+      //.then相当于ajax中的success:function成功回调函数
+      .then(function(response){
+        //获取后端传入的数据
+        data.users=response.data.data//简单来说就是把修改后的数据重新赋值给data.users对象
+      })
+}
 function delUser(ybh){
   console.log(ybh)
   axios.post("/delete/"+ybh).then(function(response){
@@ -105,7 +103,19 @@ function delUser(ybh){
   })
 }
 
+//修改方法
+function xiugai(ybh){
+  axios.put("/user",data.cx).then(function(response){
+    if(response.data.code!=200){
+      alert('修改失败'+response.data.code)
+      return
+    }
 
+  }).catch(function(error){
+
+    return
+  })
+}
 //新增方法
 function xinzeng(){
   axios.post("/adddept",insers).then(function(response){
@@ -152,7 +162,6 @@ const open2 = () => {
     type: 'success',
   })
 }
-//刷新
 const reload = inject('reload')
 
 </script>
@@ -163,7 +172,7 @@ const reload = inject('reload')
     <br>
     <el-button @click="dialogFormVisible2=true" style="position: relative;right: -710px;">新增</el-button>
 
-    <el-button style="position: relative;right: -166px;" @click="mohuchaxunyghmd">查询</el-button>
+    <el-button style="position: relative;right: -166px;" @click="mohuchaxun">查询</el-button>
     <el-input v-model="data.rzname" placeholder="请输入姓名" clearable style="width: 200px;position: relative;right: 105px;" />
   </div>
   <div>
@@ -324,7 +333,7 @@ const reload = inject('reload')
     <template #footer>
 	  	<span class="dialog-footer">
 	  		<el-button @click="dialogFormVisible = false">关闭</el-button>
-	  	<el-button type="primary" @click="dialogFormVisible = false,xiugai(cx),open(),reload()">确定</el-button>
+	  		<el-button type="primary" @click="dialogFormVisible = false,xiugai(cx),open(),reload()">确定</el-button>
 	  	</span>
 
     </template>
@@ -332,14 +341,32 @@ const reload = inject('reload')
   <!-- 弹出新增弹窗 -->
   <el-dialog v-model="dialogFormVisible2" title="新增员工信息" :modal="insers">
     <el-form>
-      <el-form-item label="员工状态" :label-width="formLabelWidth">
-        <el-input v-model="insers.ygzt"/>
+
+      <el-form-item label="员工状态:" :label-width="formLabelWidth">
+        <el-select v-model="insers.ygzt" placeholder="员工状态"  >
+          <el-option label="黑名单" value="黑名单" />
+          <el-option label="实习" value="实习" />
+          <el-option label="正式员工" value="正式员工" />
+          <el-option label="离职" value="离职" />
+        </el-select>
       </el-form-item>
       <el-form-item label="账号" :label-width="formLabelWidth">
         <el-input  v-model="insers.yzh"/>
       </el-form-item>
       <el-form-item label="密码" :label-width="formLabelWidth">
         <el-input v-model="insers.ymm" show-password  maxlength="10"/>
+      </el-form-item>
+      <el-form-item label="人才子表编号" :label-width="formLabelWidth">
+        <el-input  v-model="insers.rzbh"/>
+      </el-form-item>
+      <el-form-item label="职位表id" :label-width="formLabelWidth">
+        <el-input v-model="insers.zwbh" show-password  maxlength="10"/>
+      </el-form-item>
+      <el-form-item label="班次表编号" :label-width="formLabelWidth">
+        <el-input  v-model="insers.bcbh"/>
+      </el-form-item>
+      <el-form-item label="社保方案编号" :label-width="formLabelWidth">
+        <el-input v-model="insers.sbbh" show-password  maxlength="10"/>
       </el-form-item>
     </el-form>
     <template #footer>
