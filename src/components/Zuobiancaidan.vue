@@ -11,7 +11,9 @@
 
     <el-sub-menu index="2">
       <template #title>社保管理</template>
-      <el-menu-item index="/goshebao">社保</el-menu-item>
+      <el-menu-item index="/goshebao">社保方案</el-menu-item>
+      <el-menu-item index="/goshebaopeople">参保人员</el-menu-item>
+      <el-menu-item index="/goshebaojiaofei">社保缴费</el-menu-item>
     </el-sub-menu>
 
     <el-sub-menu index="3">
