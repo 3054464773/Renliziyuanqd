@@ -3,7 +3,12 @@ import Login from '../components/Login.vue'
 import Home from "../components/Home.vue";
 import shebaofangan from '../components/shebaofangan.vue'
 import user from '../components/user.vue'
+import recruit from '../components/recruit.vue'
+import interview from '../components/interview.vue'
 import Quanxian from "../components/Quanxian.vue";
+import rencaizhub from '../components/rencaizhub.vue'
+import  usersss from '../components/usersss.vue'
+import UsersXz from '../components/UsersXz.vue'
 const routes = [
   {
     path: '/home',
@@ -24,7 +29,33 @@ const routes = [
         path:'/goquanxian',
         name:'quanxian',
         component:Quanxian
-      }
+      },
+      {
+        path:'/gorecruit',
+        name:'recruit',
+        component:recruit
+      },
+      {
+        path:'/gointerview',
+        name:'interview',
+        component:interview
+      },
+      {
+        path:'/gorencaizhub',
+        name:'rencaizhub',
+        component:rencaizhub
+      },
+      {
+        path:'/gousersss',
+        name:'usersss',
+        component:usersss
+      },
+
+      {
+        path:'/goUsersXz',
+        name:'UsersXz',
+        component:UsersXz
+      },
     ]
   },
 
