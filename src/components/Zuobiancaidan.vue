@@ -21,6 +21,8 @@
     <el-sub-menu index="4">
       <template #title>系统设置</template>
       <el-menu-item index="/goquanxian">权限管理</el-menu-item>
+      <el-menu-item index="/gojiaose">角色管理</el-menu-item>
+      <el-menu-item index="/gobumen">部门管理</el-menu-item>
     </el-sub-menu>
   </el-menu>
 </template>
