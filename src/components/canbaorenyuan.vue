@@ -43,6 +43,7 @@
     <!--表格-->
     <el-table
             :data="tableData"
+            height="450px"
     >
         <el-table-column type="selection" width="55" />
         <el-table-column property="ybh" label="员工编号" width="120px" sortable/>
