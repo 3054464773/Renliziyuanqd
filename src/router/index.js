@@ -21,7 +21,7 @@ import KPIscore from "../components/KPIscore.vue";
 import Jiaose from "../components/Jiaose.vue";
 import Bumen from "../components/Bumen.vue";
 
-
+import Shezhiyhjs from "../components/Shezhiyhjs.vue";
 const routes = [
   {
     path: '/home',
@@ -111,6 +111,11 @@ const routes = [
         //     }
         // ]
 
+      },
+      {
+        path: '/goshezhiyhjs',
+        name: 'szyhjs',
+        component: Shezhiyhjs
       }
 
     ]
