@@ -66,6 +66,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   await formEl.validate((valid, fields) => {
     if (valid) {
      axios.post("/YuangongLogin",userinfo).then((e)=>{
+       console.log(e)
           if(e.data.data){
             stores.commit('setdtly',e.data.data)
             console.log(stores["getters"].getdtly)

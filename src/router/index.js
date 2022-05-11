@@ -12,6 +12,7 @@ import Quanxian from "../components/Quanxian.vue";
 import rencaizhub from '../components/rencaizhub.vue'
 import  usersss from '../components/usersss.vue'
 import UsersXz from '../components/UsersXz.vue'
+import  Userwdg from '../components/Userwdg.vue'
 
 
 import KPIgrade from "../components/KPIgrade.vue"
@@ -21,7 +22,12 @@ import KPIscore from "../components/KPIscore.vue";
 import Jiaose from "../components/Jiaose.vue";
 import Bumen from "../components/Bumen.vue";
 
+
+import  Yhlz from '../components/Yhlz.vue'
+import Zpjh from '../components/Zpjh.vue'
+
 import Shezhiyhjs from "../components/Shezhiyhjs.vue";
+
 const routes = [
   {
     path: '/home',
@@ -98,7 +104,14 @@ const routes = [
         name: 'jixiaoScore',
         component: KPIscore
 
+      }
+      ,{
+        path:'/goYhlz',
+        name:'Yhlz',
+        component:Yhlz
+
       },
+
       {
         path:'/gojiaose',
         name:'jiaose',
@@ -111,11 +124,25 @@ const routes = [
         //     }
         // ]
 
+
+      },{
+        path:'/goUserwdg',
+        name: 'Userwdg',
+        component: Userwdg
+
+      },
+      {
+        path:'/goZpjh',
+        name: 'Zpjh',
+        component: Zpjh
+
+
       },
       {
         path: '/goshezhiyhjs',
         name: 'szyhjs',
         component: Shezhiyhjs
+
       }
 
     ]

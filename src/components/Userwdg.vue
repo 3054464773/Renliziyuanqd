@@ -2,7 +2,6 @@
 //组合式api
 import {
   Delete,
-  Edit
 } from '@element-plus/icons-vue'
 import {ElNotification} from 'element-plus'
 
@@ -17,8 +16,8 @@ import axios from '../axios'
 
 const dialogFormVisible = ref(false)
 const dialogFormVisible2 = ref(false)
-const dialogFormVisible3 = ref(false)
 const formLabelWidth = '140px'
+
 //新增数组
 const insers=reactive({
   ybh:'',
@@ -34,14 +33,15 @@ var data = reactive({
   users:[],//存入查询后端响应过来的数据
   total:0,//总页数
   pageNum:1,//当前显示页码
-  pageSize:4,//每一页显示的条数
+  pageSize:5,//每一页显示的条数
   cx:{}, //根据id传后端查询返回的值
+  zts:0,
   rzname:'',
-  cx2:{}
+  zs:0
 })
 //生命周期s
 onBeforeMount(() => {
-  axios.get("/finduserssss", {
+  axios.get("/findwdg", {
     params: {
       pageNum: data.pageNum,
       pageSize: data.pageSize
@@ -55,14 +55,39 @@ onBeforeMount(() => {
 
   })
 })
-function mohuchaxun(){
-  axios.get("/mohuRenyygg?rzname="+data.rzname).then(function(response){
+//修改员工信息
+function xiugai(rzbh){
+  axios.put("/updata",data.cx).then(function(response){
+    if(response.data.code!=200){
+      alert('修改失败'+response.data.code)
+      return
+    }
+  }).catch(function(error){
+    return
+  })
+}
+//修改员工状态
+function xiugairuzhi(ybh){
+  axios.get("/xgtgrz?yhb="+ybh).then(function(response){
+    console.log("7777777"+ybh);
+    if(response.data.code!=200){
+      alert('修改失败'+response.data.code)
+      return
+    }
+  }).catch(function(error){
+    return
+  })
+}
+//模糊查询
+function mohuchaxunyghmd(){
+  axios.get("/mohuchaxunygwbd?rzname="+data.rzname).then(function(response){
     data.users=response.data.data
     console.log(response.data.data.users)
   })
 }
+//查询所有以及分页
 function page() {
-  axios.get("/finduserssss", {
+  axios.get("/findwdg", {
     params: {
       pageNum: data.pageNum,
       pageSize: data.pageSize
@@ -75,28 +100,7 @@ function page() {
     console.log(error)
   })
 }
-//修改方法
-function xiugai2(rzbh){
-  axios.put("/user",data.cx2).then(function(response){
-    if(response.data.code!=200){
-      alert('修改失败'+response.data.code)
-      return
-    }
-
-  }).catch(function(error){
-
-    return
-  })
-}
-function cc(ybh){
-  console.log("用户id99999999"+ybh)
-  axios.get("/findcxid/"+ybh)
-      //.then相当于ajax中的success:function成功回调函数
-      .then(function(response){
-        //获取后端传入的数据
-        data.cx2=response.data.data//简单来说就是把修改后的数据重新赋值给data.cx对象
-      })
-}
+//根据id查询，将这条数据显示在修改页面中
 function a(rzbh){
   console.log("用户id2222222222"+rzbh)
   axios.get("/selectidd/"+rzbh)
@@ -106,6 +110,7 @@ function a(rzbh){
         data.cx=response.data.data//简单来说就是把修改后的数据重新赋值给data.cx对象
       })
 }
+//根据id查询
 
 function delUser(ybh){
   console.log(ybh)
@@ -116,19 +121,7 @@ function delUser(ybh){
   })
 }
 
-//修改方法
-function xiugai(rzbh){
-  axios.put("/updata",data.cx).then(function(response){
-    if(response.data.code!=200){
-      alert('修改失败'+response.data.code)
-      return
-    }
 
-  }).catch(function(error){
-
-    return
-  })
-}
 //新增方法
 function xinzeng(){
   axios.post("/adddept",insers).then(function(response){
@@ -175,6 +168,7 @@ const open2 = () => {
     type: 'success',
   })
 }
+//刷新
 const reload = inject('reload')
 
 </script>
@@ -183,9 +177,8 @@ const reload = inject('reload')
   <div>
 
     <br>
-    <el-button @click="dialogFormVisible2=true" style="position: relative;right: -710px;">新增</el-button>
 
-    <el-button style="position: relative;right: -166px;" @click="mohuchaxun">查询</el-button>
+    <el-button style="position: relative;right: -166px;" @click="mohuchaxunyghmd">查询</el-button>
     <el-input v-model="data.rzname" placeholder="请输入姓名" clearable style="width: 200px;position: relative;right: 105px;" />
   </div>
   <div>
@@ -203,14 +196,12 @@ const reload = inject('reload')
       <el-table-column prop="ygzt" label="员工状态" />
       <el-table-column  label="操作" >
         <template #default=scope v-slot="scope">
-          <el-button size="20px" type="success" plain @click="dialogFormVisible3=true,cc(scope.row.ybh)">编辑</el-button>
+        <el-button size="20px" type="success" plain @click="xiugairuzhi(scope.row.ybh),reload()">报道</el-button>
         </template>
       </el-table-column>
       <el-table-column  label="操作" width="200">
-
         <template #default=scope v-slot="scope">
           <!-- 删除 -->
-
           <el-button type="primary" :icon="Delete" plain @click="delUser(scope.row.ybh),open1(),reload()" />
           <!--          <el-button size="20px"  type="success" @click="a(scope.row.ybh),dialogFormVisible=true" >编辑</el-button>-->
           <el-button size="20px" type="success" plain @click="dialogFormVisible=true,a(scope.row.rzbh)">查看</el-button>
@@ -219,37 +210,7 @@ const reload = inject('reload')
       </el-table-column>
 
     </el-table>
-<!--    编辑员工-->
-    <el-dialog v-model="dialogFormVisible3" title="编辑员工信息" :modal="data.cx2">
-      <el-form>
-        <el-form-item label="员工状态:">
-          <el-select v-model="data.cx2.ygzt" placeholder="员工状态">
-            <el-option label="1" value="1" />
-            <el-option label="2" value="2" />
-            <el-option label="3" value="3" />
-            <el-option label="4" value="4" />
-            <el-option label="5" value="5" />
-          </el-select>
-        </el-form-item>
-
-        <!--        <el-form-item label="账号" :label-width="formLabelWidth">-->
-<!--          <el-input  v-model="insers.yzh"/>-->
-<!--        </el-form-item>-->
-<!--        <el-form-item label="密码" :label-width="formLabelWidth">-->
-<!--          <el-input v-model="insers.ymm" show-password  maxlength="10"/>-->
-<!--        </el-form-item>-->
-      </el-form>
-      <template #footer>
-			<span class="dialog-footer">
-				<el-button @click="dialogFormVisible3 = false">关闭</el-button>
-				<el-button type="primary" @click="dialogFormVisible3 = false,open2(),reload(),xiugai2(cx2)">确定</el-button>
-			</span>
-
-      </template>
-
-    </el-dialog>
-
-<!--分页 -->
+    <!--分页 -->
     <el-pagination style="position: relative;right: -490px;" v-model:currentPage="this.data.pageNum"
                    v-model:page-size="this.data.pageSize" layout="prev,pager,next" :total="this.data.total"
                    @current-change="page" prev-text="上一页" next-text="下一页" />
@@ -382,7 +343,7 @@ const reload = inject('reload')
     <template #footer>
 	  	<span class="dialog-footer">
 	  		<el-button @click="dialogFormVisible = false">关闭</el-button>
-	  		<el-button type="primary" @click="dialogFormVisible = false,xiugai(cx),open(),reload()">确定</el-button>
+	  	<el-button type="primary" @click="dialogFormVisible = false,xiugai(cx),open(),reload()">确定</el-button>
 	  	</span>
 
     </template>
@@ -390,32 +351,14 @@ const reload = inject('reload')
   <!-- 弹出新增弹窗 -->
   <el-dialog v-model="dialogFormVisible2" title="新增员工信息" :modal="insers">
     <el-form>
-
-      <el-form-item label="员工状态:" :label-width="formLabelWidth">
-        <el-select v-model="insers.ygzt" placeholder="员工状态"  >
-          <el-option label="黑名单" value="黑名单" />
-          <el-option label="实习" value="实习" />
-          <el-option label="正式员工" value="正式员工" />
-          <el-option label="离职" value="离职" />
-        </el-select>
+      <el-form-item label="员工状态" :label-width="formLabelWidth">
+        <el-input v-model="insers.ygzt"/>
       </el-form-item>
       <el-form-item label="账号" :label-width="formLabelWidth">
         <el-input  v-model="insers.yzh"/>
       </el-form-item>
       <el-form-item label="密码" :label-width="formLabelWidth">
         <el-input v-model="insers.ymm" show-password  maxlength="10"/>
-      </el-form-item>
-      <el-form-item label="人才子表编号" :label-width="formLabelWidth">
-        <el-input  v-model="insers.rzbh"/>
-      </el-form-item>
-      <el-form-item label="职位表id" :label-width="formLabelWidth">
-        <el-input v-model="insers.zwbh" show-password  maxlength="10"/>
-      </el-form-item>
-      <el-form-item label="班次表编号" :label-width="formLabelWidth">
-        <el-input  v-model="insers.bcbh"/>
-      </el-form-item>
-      <el-form-item label="社保方案编号" :label-width="formLabelWidth">
-        <el-input v-model="insers.sbbh" show-password  maxlength="10"/>
       </el-form-item>
     </el-form>
     <template #footer>
