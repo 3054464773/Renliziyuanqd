@@ -22,8 +22,12 @@ import KPIscore from "../components/KPIscore.vue";
 import Jiaose from "../components/Jiaose.vue";
 import Bumen from "../components/Bumen.vue";
 
+
 import  Yhlz from '../components/Yhlz.vue'
 import Zpjh from '../components/Zpjh.vue'
+
+import Shezhiyhjs from "../components/Shezhiyhjs.vue";
+
 const routes = [
   {
     path: '/home',
@@ -120,6 +124,7 @@ const routes = [
         //     }
         // ]
 
+
       },{
         path:'/goUserwdg',
         name: 'Userwdg',
@@ -130,6 +135,13 @@ const routes = [
         path:'/goZpjh',
         name: 'Zpjh',
         component: Zpjh
+
+
+      },
+      {
+        path: '/goshezhiyhjs',
+        name: 'szyhjs',
+        component: Shezhiyhjs
 
       }
 
