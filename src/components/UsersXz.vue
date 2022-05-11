@@ -1,10 +1,9 @@
 <template>
   <br>
   <div>
-  <el-button  style="position: relative;right: -710px;">新增</el-button>
 
-  <el-button style="position: relative;right: -166px;">查询</el-button>
-  <el-input placeholder="请输入姓名" clearable style="width: 200px;position: relative;right: 105px;" />
+    <el-button style="position: relative;right: -166px;" @click="mohuchaxunyghxz">查询</el-button>
+    <el-input v-model="data.rzname" placeholder="请输入姓名" clearable style="width: 200px;position: relative;right: 105px;" />
   </div>
   <div>
   <el-table :data="data.Recruit" height="350" style="width: 100%">
@@ -176,7 +175,8 @@ var data = reactive({
   total: 0,//总页数
   pageNum: 1,//当前显示页码
   pageSize: 4,
-  cx:{}
+  cx:{},
+  rzname:''
 
 })
 const open1 = () => {
@@ -201,6 +201,12 @@ onBeforeMount(() => {
     console.log(error)
   })
 })
+function mohuchaxunyghxz(){
+  axios.get("/mohuchaxunyghxzzz?rzname="+data.rzname).then(function(response){
+    data.Recruit=response.data.data
+    console.log(response.data.data.users)
+  })
+}
 function delUser(ybh){
   console.log(ybh)
   axios.post("/delete/"+ybh).then(function(response){

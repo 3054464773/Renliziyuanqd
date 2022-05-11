@@ -53,7 +53,7 @@
       rzzzmm:''
     })
 	onBeforeMount(() => {
-		axios.get("/selectRecruit", {
+		axios.get("/selectMs", {
 			params: {
 				pageNum: data.pageNum,
 				pageSize: data.pageSize
@@ -68,7 +68,7 @@
 		})
 	})
 	function page() {
-		axios.get("/selectRecruit", {
+		axios.get("/selectMs", {
 			params: {
 				pageNum: data.pageNum,
 				pageSize: data.pageSize
@@ -121,6 +121,19 @@
       return
     })
   }
+  //修改面试状态
+  //修改员工状态
+  function xiugairuzhi(rid){
+    axios.get("/xgmszt?rid="+rid).then(function(response){
+      console.log("7777777"+rid);
+      if(response.data.code!=200){
+        alert('修改失败'+response.data.code)
+        return
+      }
+    }).catch(function(error){
+      return
+    })
+  }
   //新增
   function xinzeng(){
     axios.post("/insert",insers).then(function(response){
@@ -170,10 +183,18 @@
 <!--			<el-table-column prop="rzphone" label="联系电话" />-->nnnnnnnm
 <!--			<el-table-column prop="rzdz" label="现居地址" />-->
 			<el-table-column prop="rzgzjl"  label="工作经历" />
+
 <!--			<el-table-column prop="rzhyzk" label="婚姻状况" />-->
 			<el-table-column prop="rzmz" label="名族" />
 			<el-table-column prop="rzzzmm" label="政治面貌" />
-			<el-table-column label="操作" >
+      <el-table-column prop="rzt"  label="状态" />
+      <el-table-column label="操作" >
+        <template #default=scope v-slot="scope">
+          <el-button size="10px" type="success" plain  @click="xiugairuzhi(scope.row.rid),reload()">预面试</el-button><!--          查看招聘者个人信息以及修改-->
+        </template>
+
+      </el-table-column>
+			<el-table-column label="操作"  width="200">
 				<template #default=scope v-slot="scope">
           <el-button type="primary" :icon="Delete" plain  @click="delRe(scope.row.rzbh),reload()"/>	<!-- 删除 -->
           <el-button size="10px" type="success" plain @click="dialogFormVisible=true,a(scope.row.rzbh)">查看</el-button><!--          查看招聘者个人信息以及修改-->

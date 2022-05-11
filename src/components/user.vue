@@ -16,6 +16,7 @@ import axios from '../axios'
 
 const dialogFormVisible = ref(false)
 const dialogFormVisible2 = ref(false)
+const dialogFormVisible3 = ref(false)
 const formLabelWidth = '140px'
 //新增数组
 const insers=reactive({
@@ -34,9 +35,8 @@ var data = reactive({
   pageNum:1,//当前显示页码
   pageSize:5,//每一页显示的条数
   cx:{}, //根据id传后端查询返回的值
-  zts:0,
   rzname:'',
-  zs:0
+  cx2:{}
 })
 //生命周期s
 onBeforeMount(() => {
@@ -63,6 +63,28 @@ function xiugai(rzbh){
   }).catch(function(error){
     return
   })
+}
+//修改方法
+function xiugai2(rzbh){
+  axios.put("/user",data.cx2).then(function(response){
+    if(response.data.code!=200){
+      alert('修改失败'+response.data.code)
+      return
+    }
+
+  }).catch(function(error){
+
+    return
+  })
+}
+function cc(ybh){
+  console.log("用户id99999999"+ybh)
+  axios.get("/findcxid/"+ybh)
+      //.then相当于ajax中的success:function成功回调函数
+      .then(function(response){
+        //获取后端传入的数据
+        data.cx2=response.data.data//简单来说就是把修改后的数据重新赋值给data.cx对象
+      })
 }
 function mohuchaxunyghmd(){
   axios.get("/mohuchaxunyghmd?rzname="+data.rzname).then(function(response){
@@ -94,7 +116,6 @@ function a(rzbh){
         data.cx=response.data.data//简单来说就是把修改后的数据重新赋值给data.cx对象
       })
 }
-//根据id查询
 
 function delUser(ybh){
   console.log(ybh)
@@ -161,7 +182,7 @@ const reload = inject('reload')
   <div>
 
     <br>
-    <el-button @click="dialogFormVisible2=true" style="position: relative;right: -710px;">新增</el-button>
+
 
     <el-button style="position: relative;right: -166px;" @click="mohuchaxunyghmd">查询</el-button>
     <el-input v-model="data.rzname" placeholder="请输入姓名" clearable style="width: 200px;position: relative;right: 105px;" />
@@ -179,8 +200,12 @@ const reload = inject('reload')
       <el-table-column prop="rsj" label="录取时间" />
       <el-table-column prop="rzgzjl" label="工作经历" />
       <el-table-column prop="ygzt" label="员工状态" />
+      <el-table-column  label="操作" >
+        <template #default=scope v-slot="scope">
+          <el-button size="20px" type="success" plain @click="dialogFormVisible3=true,cc(scope.row.ybh)">编辑</el-button>
+        </template>
+      </el-table-column>
       <el-table-column  label="操作" width="200">
-
         <template #default=scope v-slot="scope">
           <!-- 删除 -->
           <el-button type="primary" :icon="Delete" plain @click="delUser(scope.row.ybh),open1(),reload()" />
@@ -328,6 +353,34 @@ const reload = inject('reload')
 	  	</span>
 
     </template>
+  </el-dialog>
+  <el-dialog v-model="dialogFormVisible3" title="编辑员工信息" :modal="data.cx2">
+    <el-form>
+      <el-form-item label="员工状态:">
+        <el-select v-model="data.cx2.ygzt" placeholder="员工状态">
+          <el-option label="1" value="1" />
+          <el-option label="2" value="2" />
+          <el-option label="3" value="3" />
+          <el-option label="4" value="4" />
+          <el-option label="5" value="5" />
+        </el-select>
+      </el-form-item>
+
+      <!--        <el-form-item label="账号" :label-width="formLabelWidth">-->
+      <!--          <el-input  v-model="insers.yzh"/>-->
+      <!--        </el-form-item>-->
+      <!--        <el-form-item label="密码" :label-width="formLabelWidth">-->
+      <!--          <el-input v-model="insers.ymm" show-password  maxlength="10"/>-->
+      <!--        </el-form-item>-->
+    </el-form>
+    <template #footer>
+			<span class="dialog-footer">
+				<el-button @click="dialogFormVisible3 = false">关闭</el-button>
+				<el-button type="primary" @click="dialogFormVisible3 = false,open2(),reload(),xiugai2(cx2)">确定</el-button>
+			</span>
+
+    </template>
+
   </el-dialog>
   <!-- 弹出新增弹窗 -->
   <el-dialog v-model="dialogFormVisible2" title="新增员工信息" :modal="insers">
