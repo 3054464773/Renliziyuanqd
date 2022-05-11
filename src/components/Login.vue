@@ -18,7 +18,7 @@
           <el-input v-model="userinfo.ymm" />
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="submitForm(ruleFormRef)">登录</el-button>
+          <el-button type="primary" @click="submitForm(ruleFormRef)"  @keyup.enter.native="submitForm(ruleFormRef)">登录</el-button>
         </el-form-item>
       </el-form></el-col>
     </el-row>
@@ -26,18 +26,30 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from 'vue'
+import { reactive, ref ,onMounted } from 'vue'
 import type { FormInstance, FormRules } from 'element-plus'
 import axios from '../axios'
 import stores from '../store/index'
 import router from '../router/index'
+
+onMounted(() => {
+  searchEnterFun()
+})
+
 const formSize = ref('default')
 const ruleFormRef = ref<FormInstance>()
 const userinfo = reactive({
   yzh:'',
   ymm:''
 })
+function searchEnterFun(){
+  document.onkeyup = e =>{
 
+    if (e.keyCode === 13 ) {
+      submitForm(ruleFormRef.value);
+    }
+  }
+}
 const rules = reactive<FormRules>({
   yzh: [
     { required: true, message: '请输入账号！', trigger: 'blur' },
