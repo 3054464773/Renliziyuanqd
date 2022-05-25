@@ -2,6 +2,7 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import Login from '../components/Login.vue'
 import Home from "../components/Home.vue";
 import shebaofangan from '../components/shebaofangan.vue'
+import ShebaoJishu from '../components/ShebaoJishu.vue'
 import canbaorenyuan from '../components/canbaorenyuan.vue'
 import shebaojiaofei from '../components/shebaojiaofei.vue'
 import user from '../components/user.vue'
@@ -44,6 +45,11 @@ const routes = [
           name:'shebao',
           component:shebaofangan
         },
+      {
+        path:'/goshebaojishu',
+        name:'shebaojishu',
+        component:ShebaoJishu
+      },
       {
         path:'/goshebaopeople',
         name:'shebaopeople',
