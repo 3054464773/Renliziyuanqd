@@ -103,6 +103,7 @@ function a(rzbh){
       //.then相当于ajax中的success:function成功回调函数
       .then(function(response){
         //获取后端传入的数据
+        console.log(response)
         data.cx=response.data.data//简单来说就是把修改后的数据重新赋值给data.cx对象
       })
 }
