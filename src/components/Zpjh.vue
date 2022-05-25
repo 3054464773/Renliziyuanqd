@@ -1,6 +1,5 @@
 <script  setup>
 import {
-  Delete,
   Edit
 } from '@element-plus/icons-vue'
 import {
@@ -9,6 +8,7 @@ import {
   onBeforeMount,
   inject
 } from 'vue'
+import { ElMessageBox } from 'element-plus'
 import axios from '../axios'
 import {ElNotification} from "element-plus"
 
@@ -21,11 +21,11 @@ const open = () => {
   })
 }
 
-//刷新
-const reload = inject('reload')
+
 
 const dialogFormVisible2 = ref(false)
 const dialogFormVisible = ref(false)
+
 
 //新增数组
 const insers=reactive({
@@ -44,11 +44,13 @@ var data = reactive({
   pageSize: 4,//每一页显示的条数
   cx:{}, //根据id传后端查询返回的值
   rzname:'',
+  zhiweiname:''
 
 })
 //修改方法
 function xiugai(zhb){
   axios.put("/xxxxgai",data.cx).then(function(response){
+    reload()
     if(response.data.code!=200){
       alert('修改失败'+response.data.code)
       return
@@ -69,6 +71,21 @@ function a(zhb){
         data.cx=response.data.data//简单来说就是把修改后的数据重新赋值给data.cx对象
       })
 }
+function reload(){
+  axios.get("/findszpjh", {
+    params: {
+      pageNum: data.pageNum,
+      pageSize: data.pageSize
+    }
+  }).then(function(response) {
+    console.log(response.data.data)
+    data.zpjhr = response.data.data.list
+    data.total = response.data.data.total
+    console.log(data.users)
+  }).catch(function(error) {
+
+  })
+}
 onBeforeMount(() => {
   axios.get("/findszpjh", {
     params: {
@@ -84,6 +101,7 @@ onBeforeMount(() => {
     console.log(error)
   })
 })
+
 function page() {
   axios.get("/findszpjh", {
     params: {
@@ -98,13 +116,37 @@ function page() {
     console.log(error)
   })
 }
-//根据id删除
-function delRe(zhb){
-  console.log(zhb)
-  axios.post("/delectzhb/"+zhb).then(function(response){
-  }).catch(function(error){
-    alert("删除失败")
-    return
+const open1 = () => {
+  ElNotification({
+    title: '删除',
+    message: '删除成功',
+    type: 'success',
+  })
+}
+const del=(zhb)=>{
+  ElMessageBox.confirm('是否确认删除?','提示',{
+    confirmButtonText:'确定',
+    cancelButtonText:'取消',
+    type:'warning'
+  }).then(()=>{
+    axios.post("/delectzhb/"+zhb).then(function(response){
+      if (response.data.code==200){
+        console.log(response.data.data)
+        open1()
+        reload()
+      }
+
+    }).catch(function(error){
+
+    })
+  })
+}
+function zhiwei(){
+  axios.get("/zhiweiw").then(function (c){
+
+    data.zhiweiname=c.data.data;
+  }).catch(function (error){
+    console.log(error)
   })
 }
 
@@ -118,23 +160,39 @@ const open2 = () => {
 
 function xinzeng(){
   axios.post("/addzpjh",insers).then(function(response){
-
-    insers.zbh=response.data.users.zbh
-    insers.shjlbh=response.data.users.shjlbh
-    insers.shbid=response.data.users.shbid
-    insers.zwbh=response.data.users.zwbh
-    insers.zrs=response.data.users.zrs
-    insers.zmc=response.data.users.zmc
+    reload()
+    insers.zbh=""
+    insers.shjlbh=""
+    insers.shbid=""
+    insers.zwbh=""
+    insers.zrs=""
+    insers.zmc=""
 
   }).catch(function(error) {
     console.log(Error)
   })
 }
+//验证
+const rules=reactive({
+  shjlbh:[
+    {required:true,message:'请输入审核记录表id',trigger:'blur'}
+  ],
+  shbid:[
+    {required:true,message:'请输入审核表id',trigger:'blur'}
+  ],
+  zrs:[
+    {required:true,message:'请输入人数',trigger:'blur'}
+  ]
+  ,
+  zmc:[
+    {required:true,message:'请输入招聘计划名称',trigger:'blur'}
+  ]
 
+})
 </script>
 <template>
   <br>
-  <el-icon  @click="dialogFormVisible2=true" style="position: relative;right: -750px;"><edit /></el-icon>
+  <el-icon  @click="dialogFormVisible2=true,zhiwei()" style="position: relative;right: -750px;"><edit /></el-icon>
   <el-button style="position: relative;right: -166px;">查询</el-button>
   <el-input v-model="data.rzname" placeholder="请输入姓名" clearable style="width: 200px;position: relative;right: 105px;" />
   <div>
@@ -150,7 +208,7 @@ function xinzeng(){
 
       <el-table-column label="操作"  width="200">
         <template #default=scope v-slot="scope">
-          <el-button size="10px" type="success" plain  @click="delRe(scope.row.zbh),reload()">删除	</el-button><!-- 删除 -->
+          <el-button size="10px" type="success" plain  @click="del(scope.row.zbh)">删除	</el-button><!-- 删除 -->
           <el-button size="10px" type="success" plain @click="dialogFormVisible=true,a(scope.row.zbh)">查看</el-button>
 
         </template>
@@ -163,31 +221,41 @@ function xinzeng(){
   </div>
 
   <!-- 弹出新增弹窗 -->
-  <el-dialog v-model="dialogFormVisible2" title="新增员工信息" :modal="insers">
-    <el-form>
-      <el-form-item label="审核记录表id" :label-width="formLabelWidth">
-        <el-input v-model="insers.shjlbh"/>
+  <el-dialog v-model="dialogFormVisible2" title="新增计划信息" >
+    <div>
+    <el-form :model="insers" :rules="rules">
+      <el-row>
+      <el-col :span="11">
+      <el-form-item label="审核记录表id"  prop="shjlbh">
+        <el-input v-model="insers.shjlbh" style="width: 200px;"/>
       </el-form-item>
-      <el-form-item label="审核表id" :label-width="formLabelWidth">
-        <el-input  v-model="insers.shbid"/>
-      </el-form-item>
-      <el-form-item label="职位表id" :label-width="formLabelWidth">
-        <el-input v-model="insers.zwbh" show-password  maxlength="10"/>
-      </el-form-item>
-      <el-form-item label="人数" :label-width="formLabelWidth">
-        <el-input v-model="insers.zrs"/>
+      </el-col>
+      <el-form-item label="审核表id" prop="shbid">
+        <el-input  v-model="insers.shbid" style="width: 200px;"/>
       </el-form-item>
 
-        <el-form-item label="招聘计划名称:" :label-width="formLabelWidth">
-          <el-input v-model="insers.zmc" style="width: 200px;" type="textarea" />
+      <el-col :span="11">
+        <el-form-item label="人数"  prop="zrs">
+          <el-input v-model="insers.zrs" style="width: 200px;"/>
         </el-form-item>
+      </el-col>
+      <el-form-item label="职位:" prop="zwbh">
+        <el-select v-model="insers.zwbh" placeholder="职位">
+          <el-option v-for="cc in data.zhiweiname" :key="cc.zwbh" :label="cc.zwmc" :value="cc.zwbh" />
+        </el-select>
+      </el-form-item>
 
+        <el-form-item label="招聘计划名称:" prop="zmc">
+          <el-input v-model="insers.zmc" style="width: 400px;" type="textarea" />
+        </el-form-item>
+      </el-row>  
 
     </el-form>
+    </div>
     <template #footer>
 			<span class="dialog-footer">
 				<el-button @click="dialogFormVisible2 = false">关闭</el-button>
-				<el-button type="primary" @click="dialogFormVisible2 = false,xinzeng(),open2(),reload()">确定</el-button>
+				<el-button type="primary" @click="dialogFormVisible2 = false,xinzeng(),open2()">确定</el-button>
 			</span>
 
     </template>
@@ -217,7 +285,7 @@ function xinzeng(){
     <template #footer>
 	  	<span class="dialog-footer">
 	  		<el-button @click="dialogFormVisible = false">关闭</el-button>
-	  	<el-button type="primary" @click="dialogFormVisible = false,xiugai(cx),open(),reload()">确定</el-button>
+	  	<el-button type="primary" @click="dialogFormVisible = false,xiugai(cx),open()">确定</el-button>
 	  	</span>
 
     </template>

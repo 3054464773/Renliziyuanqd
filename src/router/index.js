@@ -14,7 +14,7 @@ import  usersss from '../components/usersss.vue'
 import UsersXz from '../components/UsersXz.vue'
 import  Userwdg from '../components/Userwdg.vue'
 
-
+import CCSS from '../components/CCSS.vue'
 import KPIgrade from "../components/KPIgrade.vue"
 import KPIsheet from "../components/KPIsheet.vue";
 import KPIscore from "../components/KPIscore.vue";
@@ -25,18 +25,57 @@ import Bumen from "../components/Bumen.vue";
 
 import  Yhlz from '../components/Yhlz.vue'
 import Zpjh from '../components/Zpjh.vue'
-
+import  xxxx from '../components/xxxx.vue'
 import Shezhiyhjs from "../components/Shezhiyhjs.vue";
+
 
 import salary from "../components/salary.vue";
 import salaryElement from "../components/salaryElement.vue"
 import payroll from "../components/payroll.vue"
+
+import Tongzhi from "../components/Tongzhi.vue";
+import Gonggao from "../components/Gonggao.vue";
+import Jiaqishezhi from "../components/Jiaqishezhi.vue";
+import PaiBanSheZhi from "../components/PaiBanSheZhi.vue";
+import Kaoqingjilu from "../components/Kaoqingjilu.vue";
+import Shenheshezhi from "../components/Shenheshezhi.vue";
+
 const routes = [
   {
     path: '/home',
     name: 'home',
     component: Home,
     children:[
+      {
+        path: '/goshenheshezhi',
+        name: 'shenheshezhi',
+        component: Shenheshezhi
+      },
+      {
+        path: '/gokaoqingjilu',
+        name: 'kaoqingjilu',
+        component: Kaoqingjilu
+      },
+      {
+        path: '/gopaibansz',
+        name: 'paibansz',
+        component: PaiBanSheZhi
+      },
+      {
+        path: '/gojiaqishezhi',
+        name: 'jiaqishezhi',
+        component: Jiaqishezhi
+      },
+      {
+        path: '/gogonggao',
+        name: 'gonggao',
+        component: Gonggao
+      },
+      {
+        path: '/gotongzhi',
+        name: 'tongzhi',
+        component: Tongzhi
+      },
       {
         path:'/gobumen',
         name:'bumen',
@@ -141,6 +180,14 @@ const routes = [
 
 
       },
+
+      {
+        path:'/goCCSS',
+        name: 'CCSS',
+        component: CCSS
+
+
+      },
       {
         path: '/goshezhiyhjs',
         name: 'szyhjs',
@@ -148,6 +195,7 @@ const routes = [
 
       },
       {
+
         path: '/gosalary',
         name: 'salary',
         component:salary

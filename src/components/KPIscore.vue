@@ -44,15 +44,15 @@ export default {
       options:[
         {
           value:1,
-          label:'开发部',
+          label:'保安部',
         },
         {
           value:2,
-          label:'营销部',
+          label:'市场部',
         },
         {
           value:3,
-          label:'市场部',
+          label:'研发部',
         }
       ],
       tableData : []
