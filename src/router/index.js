@@ -27,13 +27,48 @@ import  Yhlz from '../components/Yhlz.vue'
 import Zpjh from '../components/Zpjh.vue'
 
 import Shezhiyhjs from "../components/Shezhiyhjs.vue";
-
+import Tongzhi from "../components/Tongzhi.vue";
+import Gonggao from "../components/Gonggao.vue";
+import Jiaqishezhi from "../components/Jiaqishezhi.vue";
+import PaiBanSheZhi from "../components/PaiBanSheZhi.vue";
+import Kaoqingjilu from "../components/Kaoqingjilu.vue";
+import Shenheshezhi from "../components/Shenheshezhi.vue";
 const routes = [
   {
     path: '/home',
     name: 'home',
     component: Home,
     children:[
+      {
+        path: '/goshenheshezhi',
+        name: 'shenheshezhi',
+        component: Shenheshezhi
+      },
+      {
+        path: '/gokaoqingjilu',
+        name: 'kaoqingjilu',
+        component: Kaoqingjilu
+      },
+      {
+        path: '/gopaibansz',
+        name: 'paibansz',
+        component: PaiBanSheZhi
+      },
+      {
+        path: '/gojiaqishezhi',
+        name: 'jiaqishezhi',
+        component: Jiaqishezhi
+      },
+      {
+        path: '/gogonggao',
+        name: 'gonggao',
+        component: Gonggao
+      },
+      {
+        path: '/gotongzhi',
+        name: 'tongzhi',
+        component: Tongzhi
+      },
       {
         path:'/gobumen',
         name:'bumen',
