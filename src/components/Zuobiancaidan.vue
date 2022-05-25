@@ -56,17 +56,24 @@
     </el-sub-menu>
 
     <el-sub-menu index="7">
+      <template #title>薪资管理</template>
+      <el-menu-item index="/gosalary">基本工资</el-menu-item>
+      <el-menu-item index="/gosalaryElement">薪资要素项</el-menu-item>
+      <el-menu-item index="/gopayroll">工资条</el-menu-item>
+     </el-sub-menu>
+
+   <el-sub-menu index="8">
       <template #title>考勤管理</template>
       <el-menu-item index="/gojiaqishezhi">设置假期类型</el-menu-item>
       <el-menu-item index="/gopaibansz">班次设置</el-menu-item>
       <el-menu-item index="/gokaoqingjilu">考勤记录</el-menu-item>
     </el-sub-menu>
 
-    <el-sub-menu index="8">
+    <el-sub-menu index="9">
       <template #title>审核管理</template>
       <el-menu-item index="/goshenheshezhi">审核设置</el-menu-item>
-
     </el-sub-menu>
+    
   </el-menu>
 </template>
 

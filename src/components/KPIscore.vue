@@ -17,9 +17,15 @@
       </div>
    </el-card>
 
-<!--    <el-card>-->
-<!--      <div id="main2"></div>-->
-<!--    </el-card>-->
+    <el-card>
+      <div id="main2">
+        <el-table :data="tableData" style="width: 100% ;margin-top: 50px">
+
+          <el-table-column prop="name" label="名称" width="180" />
+          <el-table-column property="num" label="人数" />
+        </el-table>
+      </div>
+    </el-card>
 
   </div>
 </template>
@@ -48,7 +54,8 @@ export default {
           value:3,
           label:'研发部',
         }
-      ]
+      ],
+      tableData : []
     }
   },
    mounted() {
@@ -58,6 +65,7 @@ export default {
   methods:{
     ScaleHandleChange(value){
       this.scalelates=value
+      this.tableData=[]
       this.setChart();
     },
 
@@ -91,10 +99,14 @@ export default {
         axios.get("findAllScore").then(res => {
           //console.log(this.item.value)
           console.log('访问后台');
-          console.log(res.data);
+          console.log(res.data.data);
+          for(var i=0;i<res.data.data.num.length;i++){
+            this.tableData.push({num:res.data.data.num[i],name:res.data.data.name[i]})
+          }
+          console.log(this.tableData)
+          this.name=res.data.data.name
+          this.num=res.data.data.num
           //后台取值赋值给前端
-          this.name = res.data.data.name
-          this.num = res.data.data.num
           //后台取值过来赋给echarts实例
           this.chart.setOption({
             xAxis: {
@@ -141,8 +153,12 @@ export default {
       if(this.scalelates==1) {
         axios.get("findAllScoreByBmbh?bmbh=1").then(res => {
           console.log('访问后台');
-          console.log(res.data);
+          console.log(res.data.data);
           //后台取值赋值给前端
+          console.log(this.tableData)
+          for(var i=0;i<res.data.data.num.length;i++){
+            this.tableData.push({num:res.data.data.num[i],name:res.data.data.name[i]})
+          }
           this.name = res.data.data.name
           this.num = res.data.data.num
           this.chart.setOption({
@@ -164,6 +180,9 @@ export default {
           console.log('访问后台');
           console.log(res.data);
           //后台取值赋值给前端
+          for(var i=0;i<res.data.data.num.length;i++){
+            this.tableData.push({num:res.data.data.num[i],name:res.data.data.name[i]})
+          }
           this.name = res.data.data.name
           this.num = res.data.data.num
           this.chart.setOption({
@@ -185,6 +204,9 @@ export default {
           console.log('访问后台');
           console.log(res.data);
           //后台取值赋值给前端
+          for(var i=0;i<res.data.data.num.length;i++){
+            this.tableData.push({num:res.data.data.num[i],name:res.data.data.name[i]})
+          }
           this.name = res.data.data.name
           this.num = res.data.data.num
           this.chart.setOption({
@@ -206,6 +228,9 @@ export default {
           console.log('访问后台');
           console.log(res.data);
           //后台取值赋值给前端
+          for(var i=0;i<res.data.data.num.length;i++){
+            this.tableData.push({num:res.data.data.num[i],name:res.data.data.name[i]})
+          }
           this.name = res.data.data.name
           this.num = res.data.data.num
           this.chart.setOption({
@@ -236,16 +261,15 @@ export default {
 }
 
 .dataView .el-card {
-  width: 100%;
-  height: 680px;
-}
-.score{
   width: 50%;
-  height: 600px;
-  margin-left: 200px;
 }
+/*.score{*/
+/*  width: 50%;*/
+/*  height: 600px;*/
+/*  margin-left: 200px;*/
+/*}*/
 
-.dataView .el-card #main1{
+.dataView .el-card #main1,#main2{
   height: 500px;
 }
 

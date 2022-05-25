@@ -27,12 +27,19 @@ import  Yhlz from '../components/Yhlz.vue'
 import Zpjh from '../components/Zpjh.vue'
 import  xxxx from '../components/xxxx.vue'
 import Shezhiyhjs from "../components/Shezhiyhjs.vue";
+
+
+import salary from "../components/salary.vue";
+import salaryElement from "../components/salaryElement.vue"
+import payroll from "../components/payroll.vue"
+
 import Tongzhi from "../components/Tongzhi.vue";
 import Gonggao from "../components/Gonggao.vue";
 import Jiaqishezhi from "../components/Jiaqishezhi.vue";
 import PaiBanSheZhi from "../components/PaiBanSheZhi.vue";
 import Kaoqingjilu from "../components/Kaoqingjilu.vue";
 import Shenheshezhi from "../components/Shenheshezhi.vue";
+
 const routes = [
   {
     path: '/home',
@@ -188,10 +195,20 @@ const routes = [
 
       },
       {
-        path: '/goxxxx',
-        name: 'xxxx',
-        component: xxxx
 
+        path: '/gosalary',
+        name: 'salary',
+        component:salary
+      },
+      {
+        path: '/gosalaryElement',
+        name: 'salaryElement',
+        component:salaryElement
+      },
+      {
+        path: '/gopayroll',
+        name: 'payroll',
+        component:payroll
       }
 
     ]
