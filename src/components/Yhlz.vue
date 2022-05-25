@@ -38,6 +38,21 @@ var data = reactive({
   rzname:'',
   cx2:{}
 })
+function reload(){
+  axios.get("/finduserslz", {
+    params: {
+      pageNum: data.pageNum,
+      pageSize: data.pageSize
+    }
+  }).then(function(response) {
+    console.log(response.data.data)
+    data.users = response.data.data.list
+    data.total = response.data.data.total
+    console.log(data.users)
+  }).catch(function(error) {
+
+  })
+}
 //生命周期s
 onBeforeMount(() => {
   axios.get("/finduserslz", {
@@ -56,6 +71,7 @@ onBeforeMount(() => {
 })
 function xiugai(rzbh){
   axios.put("/updata",data.cx).then(function(response){
+    reload()
     if(response.data.code!=200){
       alert('修改失败'+response.data.code)
       return
@@ -67,6 +83,7 @@ function xiugai(rzbh){
 //修改方法
 function xiugai2(rzbh){
   axios.put("/user",data.cx2).then(function(response){
+    reload()
     if(response.data.code!=200){
       alert('修改失败'+response.data.code)
       return
@@ -107,6 +124,7 @@ function page() {
     console.log(error)
   })
 }
+import { ElMessageBox } from 'element-plus'
 //根据id查询，将这条数据显示在修改页面中
 function a(rzbh){
   console.log("用户id2222222222"+rzbh)
@@ -118,12 +136,21 @@ function a(rzbh){
       })
 }
 
-function delUser(ybh){
-  console.log(ybh)
-  axios.post("/delete/"+ybh).then(function(response){
-  }).catch(function(error){
-    alert("删除失败")
-    return
+const del=(ybh)=>{
+  ElMessageBox.confirm('是否确认删除?','提示',{
+    confirmButtonText:'确定',
+    cancelButtonText:'取消',
+    type:'warning'
+  }).then(()=>{
+    axios.post("/delete/"+ybh).then(function(response){
+      reload()
+    }).catch(function(error){
+      if (response.data.code==200){
+        console.log(response.data.data)
+        open1()
+        refresh()
+      }
+    })
   })
 }
 
@@ -174,8 +201,7 @@ const open2 = () => {
     type: 'success',
   })
 }
-//刷新
-const reload = inject('reload')
+
 
 </script>
 <template >
@@ -198,9 +224,12 @@ const reload = inject('reload')
       <el-table-column prop="rzhyzk" label="婚姻状况" />
       <el-table-column prop="rzzzmm" label="政治面貌" />
       <el-table-column prop="rzxl" label="学历" />
-      <el-table-column prop="rsj" label="录取时间" />
       <el-table-column prop="rzgzjl" label="工作经历" />
-      <el-table-column prop="ygzt" label="员工状态" />
+      <el-table-column  label="员工状态" >
+        <template #default="scope">
+          <span v-if="scope.row.ygzt==4">离职员工</span>
+        </template>
+      </el-table-column>
       <el-table-column  label="操作" >
         <template #default=scope v-slot="scope">
           <el-button size="20px" type="success" plain @click="dialogFormVisible3=true,cc(scope.row.ybh)">编辑</el-button>
@@ -209,7 +238,7 @@ const reload = inject('reload')
       <el-table-column  label="操作" width="200">
         <template #default=scope v-slot="scope">
           <!-- 删除 -->
-          <el-button type="primary" :icon="Delete" plain @click="delUser(scope.row.ybh),open1(),reload()" />
+          <el-button type="primary" :icon="Delete" plain @click="del(scope.row.ybh)" />
           <!--          <el-button size="20px"  type="success" @click="a(scope.row.ybh),dialogFormVisible=true" >编辑</el-button>-->
           <el-button size="20px" type="success" plain @click="dialogFormVisible=true,a(scope.row.rzbh)">查看</el-button>
         </template>
@@ -350,7 +379,7 @@ const reload = inject('reload')
     <template #footer>
 	  	<span class="dialog-footer">
 	  		<el-button @click="dialogFormVisible = false">关闭</el-button>
-	  	<el-button type="primary" @click="dialogFormVisible = false,xiugai(cx),open(),reload()">确定</el-button>
+	  	<el-button type="primary" @click="dialogFormVisible = false,xiugai(cx),open()">确定</el-button>
 	  	</span>
 
     </template>
@@ -377,7 +406,7 @@ const reload = inject('reload')
     <template #footer>
 			<span class="dialog-footer">
 				<el-button @click="dialogFormVisible3 = false">关闭</el-button>
-				<el-button type="primary" @click="dialogFormVisible3 = false,open2(),reload(),xiugai2(cx2)">确定</el-button>
+				<el-button type="primary" @click="dialogFormVisible3 = false,open2(),xiugai2(cx2)">确定</el-button>
 			</span>
 
     </template>
@@ -399,7 +428,7 @@ const reload = inject('reload')
     <template #footer>
 			<span class="dialog-footer">
 				<el-button @click="dialogFormVisible2 = false">关闭</el-button>
-				<el-button type="primary" @click="dialogFormVisible2 = false,xinzeng(),open2(),reload()">确定</el-button>
+				<el-button type="primary" @click="dialogFormVisible2 = false,xinzeng(),open2()">确定</el-button>
 			</span>
 
     </template>
