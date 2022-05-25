@@ -16,7 +16,7 @@
     <el-table-column prop="szjlsj" label="时间"  />
     <el-table-column label="操作" width="200" >
       <template #default=scope v-slot="scope">
-        <el-button type="primary" :icon="Delete" plain @click="delUser(scope.row.ybh),open1(),reload()" />	<!-- 删除 -->
+        <el-button type="primary" :icon="Delete" plain @click="del(scope.row.ybh)" />	<!-- 删除 -->
         <el-button size="20px"  type="success" plain @click="dialogFormVisible=true,a(scope.row.rzbh)">查看</el-button>
       </template>
     </el-table-column>
@@ -151,7 +151,7 @@
     <template #footer>
 	  	<span class="dialog-footer">
 	  		<el-button @click="dialogFormVisible = false">关闭</el-button>
-	  		<el-button type="primary" @click="dialogFormVisible = false,xiugai(cx),open(),reload()">确定</el-button>
+	  		<el-button type="primary" @click="dialogFormVisible = false,xiugai(cx),open()">确定</el-button>
 	  	</span>
 
     </template>
@@ -162,14 +162,14 @@
 import {onBeforeMount, reactive} from "vue";
 import axios from '../axios'
 import {
-  ref,
-  inject
+  ref
 } from 'vue'
 import {
   Delete
 } from '@element-plus/icons-vue'
 const dialogFormVisible = ref(false)
-const reload = inject('reload')
+import {ElNotification} from 'element-plus'
+
 var data = reactive({
   Recruit: [],//存入查询后端响应过来的数据
   total: 0,//总页数
@@ -184,6 +184,21 @@ const open1 = () => {
     title: '删除',
     message: '删除成功',
     type: 'success',
+  })
+}
+function  reload(){
+  axios.get("/findusersxinzi", {
+    params: {
+      pageNum: data.pageNum,
+      pageSize: data.pageSize
+    }
+  }).then(function(response) {
+    console.log(response.data.data)
+    data.Recruit = response.data.data.list
+    data.total = response.data.data.total
+
+  }).catch(function(error) {
+    console.log(error)
   })
 }
 onBeforeMount(() => {
@@ -207,16 +222,27 @@ function mohuchaxunyghxz(){
     console.log(response.data.data.users)
   })
 }
-function delUser(ybh){
-  console.log(ybh)
-  axios.post("/delete/"+ybh).then(function(response){
-  }).catch(function(error){
-    alert("删除失败")
-    return
+const del=(ybh)=>{
+  ElMessageBox.confirm('是否确认删除?','提示',{
+    confirmButtonText:'确定',
+    cancelButtonText:'取消',
+    type:'warning'
+  }).then(()=>{
+    axios.post("/delete/"+ybh).then(function(response){
+      reload()
+    }).catch(function(error){
+      if (response.data.code==200){
+        console.log(response.data.data)
+        open1()
+        refresh()
+      }
+    })
   })
 }
+
 function xiugai(rzbh){
   axios.put("/updata",data.cx).then(function(response){
+    reload()
     if(response.data.code!=200){
       alert('修改失败'+response.data.code)
       return
@@ -225,6 +251,7 @@ function xiugai(rzbh){
     return
   })
 }
+import { ElMessageBox } from 'element-plus'
 //根据id查询，将这条数据显示在修改页面中
 function a(rzbh){
   console.log("用户id2222222222"+rzbh)

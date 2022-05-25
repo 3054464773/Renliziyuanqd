@@ -1,8 +1,5 @@
 <script  setup>
-import {
-  Delete,
-  Edit
-} from '@element-plus/icons-vue'
+
 import {
   ref,
   reactive,
@@ -21,8 +18,7 @@ const open = () => {
   })
 }
 
-//刷新
-const reload = inject('reload')
+
 
 const dialogFormVisible2 = ref(false)
 const dialogFormVisible = ref(false)
@@ -35,7 +31,8 @@ var data = reactive({
   cx:{}, //根据id传后端查询返回的值
   zts:0,
   rzname:'',
-  zs:0
+  zs:0,
+  isShow2:false
 })
 const insers=reactive({
   rzbh:'',
@@ -50,9 +47,16 @@ const insers=reactive({
   rzgzjl:'',
   rzhyzk:'',
   rzmz:'',
-  rzzzmm:''
+  rzzzmm:'',
+  rzt:'',
+  rsj:'',
+  rsf:'',
+  ybh:'',
+  mmc:'',
+  rid:'',
+  mzbh:''
 })
-onBeforeMount(() => {
+function reload(){
   axios.get("/selectMsss", {
     params: {
       pageNum: data.pageNum,
@@ -62,7 +66,23 @@ onBeforeMount(() => {
     console.log(response.data.data)
     data.Recruit = response.data.data.list
     data.total = response.data.data.total
-    console.log(data.users)
+    console.log(data.Recruit)
+  }).catch(function(error) {
+
+  })
+}
+
+onBeforeMount(() => {
+  axios.get("/selectMsss", {
+    params: {
+      pageNum: data.pageNum,
+      pageSize: data.pageSize
+    }
+  }).then(function(response) {
+    console.log(response.data.data.Recruit)
+    data.Recruit = response.data.data.list
+    data.total = response.data.data.total
+    console.log(data.Recruit)
   }).catch(function(error) {
     console.log(error)
   })
@@ -104,6 +124,7 @@ function a(rzbh){
 //修改
 function xiugai(rzbh){
   axios.put("/updata",data.cx).then(function(response){
+    reload()
     if(response.data.code!=200){
       alert('修改失败'+response.data.code)
       return
@@ -116,6 +137,7 @@ function xiugai(rzbh){
 function delRe(rzbh){
   console.log(rzbh)
   axios.post("/delecte/"+rzbh).then(function(response){
+    reload()
   }).catch(function(error){
     alert("删除失败")
     return
@@ -124,7 +146,8 @@ function delRe(rzbh){
 //修改面试状态
 //修改员工状态
 function xiugairuzhi(rid){
-  axios.get("/xgmszt?rid="+rid).then(function(response){
+  axios.get("/xgmsztt?rid="+rid).then(function(response){
+    reload()
     console.log("7777777"+rid);
     if(response.data.code!=200){
       alert('修改失败'+response.data.code)
@@ -134,40 +157,45 @@ function xiugairuzhi(rid){
     return
   })
 }
-//新增
-function xinzeng(){
-  axios.post("/insert",insers).then(function(response){
-    insers.rzbh=response.data.Recruit.rzbh
-    insers.rzname=response.data.Recruit.rzname
-    insers.rzsex=response.data.Recruit.rzsex
-    insers.rzcsrq=response.data.Recruit.rzcsrq
-    insers.rzage=response.data.Recruit.rzage
-    insers.rzxl=response.data.Recruit.rzxl
-    insers.rzsfz=response.data.Recruit.rzsfz
-    insers.rzphone=response.data.Recruit.rzphone
-    insers.rzdz=response.data.Recruit.rzdz
-    insers.rzgzjl=response.data.Recruit.rzgzjl
-    insers.rzhyzk=response.data.Recruit.rzhyzk
-    insers.rzmz=response.data.Recruit.rzmz
-    insers.rzzzmm=response.data.Recruit.rzzzmm
+//入职员工
 
+function ruzhiyg(a){
+  axios.post("/ruzhiyg",a).then(function(response){
+
+    reload()
   }).catch(function(error) {
     console.log(Error)
   })
 }
-function mohuchaxun(){
-  axios.get("/mohuRencaizibiao?page=1&rzname="+data.rzname).then(function(response){
-    data.Recruit=response.data.data.list
-    data.zs=parseInt(response.data.data.xxx)*5
+//面试记录新增
+function insetmsjl(e){
+  axios.post("/insetmsjl",e).then(function(response){
 
-    console.log(response.data.data)
+    reload()
+  }).catch(function(error) {
+    console.log(Error)
+  })
+}
+//面试记录淘汰
+function insetmsjlmg(y){
+  axios.post("/insetmsjlmg",y).then(function(response){
+
+    reload()
+  }).catch(function(error) {
+    console.log(Error)
+  })
+}
+
+function mohuchaxun(){
+  axios.get("/mohudiyci?rzname="+data.rzname).then(function(response){
+    data.Recruit=response.data.data
+    console.log(response.data.data.Recruit)
   })
 }
 
 </script>
 <template>
   <br>
-  <el-icon  @click="dialogFormVisible2=true" style="position: relative;right: -750px;"><edit /></el-icon>
   <el-button style="position: relative;right: -166px;" @click="mohuchaxun()">查询</el-button>
   <el-input v-model="data.rzname" placeholder="请输入姓名" clearable style="width: 200px;position: relative;right: 105px;" />
   <div>
@@ -176,18 +204,16 @@ function mohuchaxun(){
       <el-table-column prop="rzbh" label="人才id" />
       <el-table-column prop="rzname" label="姓名" />
       <el-table-column prop="rzsex" label="性别" />
-      <el-table-column prop="rzcsrq" label="出生日期" />
-      <!--			<el-table-column prop="rzage" label="年龄" />-->
+<!--      <el-table-column prop="rzcsrq" label="出生日期" />-->
+<!--      <el-table-column prop="rzage" label="年龄" />-->
       <el-table-column prop="rzxl" label="学历" />
-      <!--			<el-table-column prop="rzsfz" label="身份证" />-->
-      <!--			<el-table-column prop="rzphone" label="联系电话" />-->nnnnnnnm
-      <!--			<el-table-column prop="rzdz" label="现居地址" />-->
-      <el-table-column prop="rzgzjl"  label="工作经历" />
-
-      <!--			<el-table-column prop="rzhyzk" label="婚姻状况" />-->
-      <el-table-column prop="rzmz" label="名族" />
+<!--      <el-table-column prop="rzmz" label="名族" />-->
       <el-table-column prop="rzzzmm" label="政治面貌" />
-      <el-table-column prop="rzt"  label="状态" />
+      <el-table-column prop="mmc" label="职位" />
+<!--      <el-table-column prop="ybh"  label="提问人" />-->
+      <el-table-column prop="mzwt" label="面试问题" />
+      <el-table-column prop="mjsj" label="面试时间" />
+<!--      <el-table-column prop="rzt"  label="状态" />-->
       <el-table-column label="操作" >
         <template #default=scope v-slot="scope">
           <el-button size="10px" type="success" plain @click="dialogFormVisible=true,a(scope.row.rzbh)">查看</el-button><!--          查看招聘者个人信息以及修改-->
@@ -195,12 +221,13 @@ function mohuchaxun(){
       </el-table-column>
       <el-table-column label="操作"  width="200">
         <template #default=scope v-slot="scope">
-          <el-button size="10px" type="success" plain  @click="delRe(scope.row.rzbh),reload()">拒绝	</el-button><!-- 删除 -->
-          <el-button size="10px" type="success" plain  @click="xiugairuzhi(scope.row.rid),reload()">通过</el-button>
+          <el-button size="10px" type="success" plain  @click="insetmsjlmg(scope.row),xiugairuzhi(scope.row.rid)">拒绝</el-button><!-- 删除 -->
+          <el-button size="10px" type="success" plain  @click="insetmsjl(scope.row),ruzhiyg(scope.row),xiugairuzhi(scope.row.rid)">通过</el-button>
 
         </template>
 
       </el-table-column>
+      <el-empty description="没有找到相关数据！" v-if="data.isShow2"/>
     </el-table>
     <el-pagination style="position: relative;right: -520px;" v-model:currentPage="this.data.pageNum"
                    v-model:page-size="this.data.pageSize" layout="prev,pager,next" :total="this.data.total"
@@ -333,12 +360,12 @@ function mohuchaxun(){
     <template #footer>
 	  	<span class="dialog-footer">
 	  		<el-button @click="dialogFormVisible2 = false">关闭</el-button>
-	  		<el-button type="primary" @click="dialogFormVisible2 = false,xinzeng(),reload()">确定</el-button>
+	  		<el-button type="primary" @click="dialogFormVisible2 = false,xinzeng()">确定</el-button>
 	  	</span>
 
     </template>
   </el-dialog>
-  <el-dialog v-model="dialogFormVisible" title="查看员工信息" >
+  <el-dialog v-model="dialogFormVisible" title="查看招聘者信息" >
     <el-form :model="data.cx" >
       <el-row>
         <el-col :span="11">
@@ -464,7 +491,7 @@ function mohuchaxun(){
     <template #footer>
 	  	<span class="dialog-footer">
 	  		<el-button @click="dialogFormVisible = false">关闭</el-button>
-	  		<el-button type="primary" @click="dialogFormVisible = false,xiugai(cx),open(),reload()">确定</el-button>
+	  		<el-button type="primary" @click="dialogFormVisible = false,xiugai(cx),open()">确定</el-button>
 	  	</span>
 
     </template>

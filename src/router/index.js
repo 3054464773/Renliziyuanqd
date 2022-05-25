@@ -14,7 +14,7 @@ import  usersss from '../components/usersss.vue'
 import UsersXz from '../components/UsersXz.vue'
 import  Userwdg from '../components/Userwdg.vue'
 
-
+import CCSS from '../components/CCSS.vue'
 import KPIgrade from "../components/KPIgrade.vue"
 import KPIsheet from "../components/KPIsheet.vue";
 import KPIscore from "../components/KPIscore.vue";
@@ -25,7 +25,7 @@ import Bumen from "../components/Bumen.vue";
 
 import  Yhlz from '../components/Yhlz.vue'
 import Zpjh from '../components/Zpjh.vue'
-
+import  xxxx from '../components/xxxx.vue'
 import Shezhiyhjs from "../components/Shezhiyhjs.vue";
 import Tongzhi from "../components/Tongzhi.vue";
 import Gonggao from "../components/Gonggao.vue";
@@ -173,10 +173,24 @@ const routes = [
 
 
       },
+
+      {
+        path:'/goCCSS',
+        name: 'CCSS',
+        component: CCSS
+
+
+      },
       {
         path: '/goshezhiyhjs',
         name: 'szyhjs',
         component: Shezhiyhjs
+
+      },
+      {
+        path: '/goxxxx',
+        name: 'xxxx',
+        component: xxxx
 
       }
 
