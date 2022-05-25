@@ -48,6 +48,14 @@
       <el-menu-item index="/gojixiaoGrade">绩效评分</el-menu-item>
       <el-menu-item index="/gojixiaoScore">绩效月报</el-menu-item>
     </el-sub-menu>
+
+    <el-sub-menu index="7">
+
+      <template #title>薪资管理</template>
+      <el-menu-item index="/gosalary">基本工资</el-menu-item>
+      <el-menu-item index="/gosalaryElement">薪资要素项</el-menu-item>
+      <el-menu-item index="/gopayroll">工资条</el-menu-item>
+    </el-sub-menu>
   </el-menu>
 </template>
 

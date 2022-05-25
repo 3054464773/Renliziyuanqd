@@ -7,7 +7,7 @@
       <div class="btn">
           <div class="select">
               <el-input v-model="data1.jmc"  placeholder="请输入绩效名称" style="width: 200px;margin-left: 80px" />
-              <el-button class="btnSelect" :icon="Search" @click="selectJixiaoByName" type="primary" round>
+              <el-button class="btnSelect" :icon="Search" @click="selectJixiaoByName" @keyup.enter="selectJixiaoByName" type="primary" round>
                <span style="vertical-align: middle" >查询</span>
               </el-button>
               <el-button class="btnadd" type="success" :icon="DocumentAdd" @click="dialogVisible = true" round>
@@ -40,7 +40,7 @@
         <template #footer>
       <span class="dialog-footer">
         <el-button @click="dialogVisible = false">关闭</el-button>
-        <el-button type="primary" @click="insert();dialogVisible=false;open()">保存</el-button>
+        <el-button type="primary" @click="insert()" >保存</el-button>
       </span>
         </template>
       </el-dialog>
@@ -71,7 +71,7 @@
         <template #footer>
       <span class="dialog-footer">
         <el-button @click="dialogVisible2 = false">关闭</el-button>
-        <el-button type="primary" @click="updateJixiao();dialogVisible2=false;open2()">保存</el-button>
+        <el-button type="primary" @click="updateJixiao()">保存</el-button>
       </span>
         </template>
       </el-dialog>
@@ -122,7 +122,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import {ref, reactive, inject} from 'vue'
+import {ref, reactive, inject, onMounted} from 'vue'
 import {onBeforeMount} from "vue";
 import type { ElTable } from 'element-plus'
 import axios from "../axios";
@@ -151,6 +151,21 @@ onBeforeMount(()=>{
     console.log(error)
   })
 })
+//刷新页面用
+function findAllJixiao(){
+  axios.get("/findJixiao",{
+    params:{pageNum:data1.pageNum,pageSize:data1.pageSize}
+  }).then(function (res) {
+    console.log(res.data.data)
+
+    data1.jixiao=res.data.data.list
+    data1.total=res.data.data.total
+    data1.jmc=res.data.data.list.jmc
+    data1.jbh=res.data.data.list.jbh
+  }).catch(function (error) {
+    console.log(error)
+  })
+}
 //分页
 function page(pageNum) {
   console.log(pageNum)
@@ -203,7 +218,9 @@ function insert() {
     form.jnr=res.data.jnr
     form.jmc=res.data.jmc
     console.log(res.data)
-    refresh()
+    dialogVisible.value=false
+    open()
+    findAllJixiao()
   }).catch(function (error) {
     console.log(error)
   })
@@ -227,13 +244,6 @@ function selectOne(e) {
 
 
 //删除方法
-// function del(e){
-//   axios.delete("/deleteJixiao?jbh="+e).then(function (res) {
-//     if (res.data.code!=200){
-//       console.log("删除失败！")
-//     }
-//   })
-// }
 const del=()=>{
   ElMessageBox.confirm('是否确认删除?','提示',{
     confirmButtonText:'确定',
@@ -244,7 +254,7 @@ const del=()=>{
       if (res.data.code==200){
         console.log(res.data.data)
         open3()
-        refresh()
+        findAllJixiao()
       }
     })
   })
@@ -270,7 +280,9 @@ function updateJixiao(){
     selectForm.jnr=res.data.data.jnr
     selectForm.jmc=res.data.data.jmc
     console.log(res.data.data)
-    refresh()//修改完成刷新页面
+    dialogVisible2.value=false
+    open2()
+    findAllJixiao()//修改完成刷新页面
   }).catch(function (error) {
     console.log(error)
   })
@@ -311,8 +323,19 @@ const open3 = () =>{
   })
 }
 
-//局部刷新
-const refresh=inject('reload')
+onMounted(()=>{
+  Listener()
+})
+//键盘事件
+function Listener(){
+  document.onkeyup = e =>{
+
+    if (e.keyCode === 13 ) {
+      selectJixiaoByName()
+    }
+  }
+}
+
 
 </script>
 <style>

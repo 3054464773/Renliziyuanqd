@@ -28,6 +28,9 @@ import Zpjh from '../components/Zpjh.vue'
 
 import Shezhiyhjs from "../components/Shezhiyhjs.vue";
 
+import salary from "../components/salary.vue";
+import salaryElement from "../components/salaryElement.vue"
+import payroll from "../components/payroll.vue"
 const routes = [
   {
     path: '/home',
@@ -143,6 +146,21 @@ const routes = [
         name: 'szyhjs',
         component: Shezhiyhjs
 
+      },
+      {
+        path: '/gosalary',
+        name: 'salary',
+        component:salary
+      },
+      {
+        path: '/gosalaryElement',
+        name: 'salaryElement',
+        component:salaryElement
+      },
+      {
+        path: '/gopayroll',
+        name: 'payroll',
+        component:payroll
       }
 
     ]
