@@ -41,7 +41,9 @@
         fab: {},//方案表
         check: [], //社保基数多选框的值
         sbjslist:[], //社保基数集合
-      sbjslists:[], //所有社保基数信息
+
+        sbjslists:[], //所有社保基数信息
+        facount:0,
 
 
     })
@@ -112,6 +114,14 @@
             showClose: true,
             message: '社保状态修改成功！',
             type: 'success'
+        })
+    }
+    //6、社保已被绑定
+    const sbybd = () => {
+        ElMessage({
+            showClose: true,
+            message: '社保方案已被绑定，不能禁用！',
+            type:'warning'
         })
     }
 
@@ -266,6 +276,39 @@
         }
     }
 
+    //判断社保方案
+    function pdsbfaCount(sbbh) {
+        axios.get("/pdsbfaCount",{
+            params:{
+                sbbh:sbbh
+            }
+        }).then(function (response) {
+            console.log("faid："+sbbh)
+            data.facount=response.data.data
+            if(data.facount==0){
+                if(confirm("确认删除吗？")){
+                    axios.get("/deletesbfa", {
+                        params: {
+                            sbbh: sbbh
+                        }
+                    }).then(function (response) {
+                        sc()
+                        refresh()
+                    }).catch(function (error) {
+                        console.log(error)
+                    })
+                }else{
+                    console.log("已取消！")
+                    qx()
+                }
+            }else{
+                confirm("社保方案已被绑定，不可删除！")
+            }
+        }).catch(function (error) {
+            console.log(error)
+        })
+    }
+
     //修改社保方案
     function xgsbfa() {
         console.log(data.xgform.sbjslistss)
@@ -273,6 +316,41 @@
             console.log(response)
             xg()
             refresh()
+        }).catch(function (error) {
+            console.log(error)
+        })
+    }
+
+    //社保状态改变--加了验证
+    function gaibian(val, sbbh) {
+        axios.get("/pdsbfaCount", {
+            params: {
+                sbbh: sbbh
+            }
+        }).then(function (response) {
+            console.log("faid：" + sbbh)
+            data.facount = response.data.data
+            if (data.facount == 0) {
+                if (confirm("确定要修改状态吗？")) {
+                    data.fab = {
+                        sbbh: sbbh,
+                        sbzt: val
+                    }
+                    axios.put("/xgzt", data.fab).then(function (response) {
+                        sbzt()
+                        refresh()
+                    }).catch(function (error) {
+                        console.log(error)
+                    })
+                } else {
+                    console.log("已取消！")
+                    qx()
+                    refresh()
+                }
+            } else {
+                sbybd()
+                refresh()
+            }
         }).catch(function (error) {
             console.log(error)
         })
@@ -301,7 +379,6 @@
 
 <template>
     <div id="head">
-        <span id="title">社保方案</span>
         <input type="text" placeholder="请输入方案名称" v-model="data.sbmc" id="txt">
         <el-button type="primary" :icon="Search" class="cx" @click="cxfabbyidorname">查询</el-button>
         <el-button type="primary" :icon="Plus" @click="selectsbjsxx(),insert= true;" class="btns">新增</el-button>
@@ -335,10 +412,10 @@
         <el-dialog v-model="update" title="修改社保方案" width="50%" center>
             <el-form label-width="120px" :model="data.xgform">
                 <el-form-item label="社保方案编号">
-                    <el-input v-model="data.xgform.sbbh" disabled/>
+                    <el-input v-model="data.xgform.sbbh" class="wbk" disabled/>
                 </el-form-item>
                 <el-form-item label="社保名称">
-                    <el-input v-model="data.xgform.sbmc"/>
+                    <el-input v-model="data.xgform.sbmc" class="wbk"/>
                 </el-form-item>
                <!-- <el-form-item label="社保基数">
                     <el-checkbox-group v-model="data.check" v-for="item in data.check">
@@ -365,6 +442,7 @@
     <el-table
             :data="tableData"
             @row-dblclick="dj"
+            height="400px"
     >
         <el-table-column property="sbbh" label="社保方案id" sortable/>
         <el-table-column property="sbmc" label="方案名称"/>
@@ -372,7 +450,7 @@
             <template #default="scope" v-solt="scope">
                 <el-switch
                         v-model="scope.row.sbzt"
-                        @change="change(scope.row.sbzt,scope.row.sbbh)"
+                        @change="gaibian(scope.row.sbzt,scope.row.sbbh)"
                         active-color="#13ce66"
                         inactive-color="#ff4949"
                         active-text="启用"
@@ -385,7 +463,7 @@
         <el-table-column align="center">
             <template #default="scope">
                 <el-button size="default" type="primary" :icon="Edit" @click="update= true,selectsbjsxx(),selectsbfa(scope.row.sbbh)">编辑</el-button>
-                <el-button size="default" type="danger" :icon="Delete" @click="deletesbfa(scope.row.sbbh)"
+                <el-button size="default" type="danger" :icon="Delete" @click="pdsbfaCount(scope.row.sbbh)"
                            :disabled="scope.row.sbzt==1?true:false">删除
                 </el-button>
             </template>
@@ -419,19 +497,12 @@
 
 <style scoped>
     #head {
-        margin: 10px;
-    }
-
-    #title {
-        font-weight: bold;
-        font-size: 18px;
-        margin-left: -180px;
+        margin: 15px;
     }
 
     #txt {
         width: 200px;
         height: 20px;
-        margin: 0px 0px 0px 50%;
     }
 
     .cx {
@@ -452,5 +523,9 @@
 
     .example-demonstration {
         margin: 1em;
+    }
+
+    .wbk{
+        width: 520px;
     }
 </style>

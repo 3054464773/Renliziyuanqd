@@ -26,7 +26,7 @@
           <el-table-column label="操作">
             <template #default="scope">
               <el-button type="danger" :icon="Delete" circle @click="deleteshenhe(scope.row.shbid)"/>
-              <el-button type="primary" :icon="Edit" circle />
+              <el-button type="primary" :icon="Edit" circle @click="tk(scope.row.shbid)" />
             </template>
           </el-table-column>
         </el-table>
@@ -60,6 +60,28 @@
     </el-row>
 
 
+  <el-dialog
+      v-model="dialogVisible"
+      title="添加审核所需流程"
+      width="30%"
+
+  >
+    <el-select v-model="shstl2.jsbhh" :multiple="true"  placeholder="选择所需权限" style="margin-right: 30px">
+      <el-option v-for="a in jslist2" :value="a.jsbh" :label="a.jsmc"/>
+    </el-select>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="dialogVisible = false,shstl2={
+        shbid:'',
+        jsbh:[]
+      }">取消</el-button>
+        <el-button type="primary" @click="insertsxqxx"
+        >确定</el-button
+        >
+      </span>
+    </template>
+  </el-dialog>
+
 
 </template>
 
@@ -81,6 +103,12 @@ export default {
       shstl:{
         shbmc:'',
         jsbh:''
+      },
+      dialogVisible:false,
+      jslist2:[],
+      shstl2:{
+        shbid:'',
+        jsbhh:[]
       }
 
     }
@@ -129,6 +157,23 @@ export default {
                 this.findsxqx(row);
               }
         })
+    },
+    tk(id){
+        this.dialogVisible=true;
+        this.shstl2.shbid=id;
+        axios.get("/insertsxqx?id="+id).then((e)=>{
+              this.jslist2=e.data.data
+        })
+    },
+    insertsxqxx(){
+        console.log(this.shstl2)
+       axios.post("/insertsxqxx",this.shstl2).then((e)=>{
+            this.$message.success("添加成功！");
+            this.shstl2={
+                shbid:'',
+                jsbhh:[]
+         }
+       })
     }
   },
   created() {
