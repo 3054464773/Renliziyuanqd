@@ -20,12 +20,13 @@
 
     <el-sub-menu index="3">
       <template #title>员工管理</template>
-      <el-menu-item index="/goCCSS">员工记录</el-menu-item>
-      <el-menu-item index="/gousersss">员工到岗信息</el-menu-item>
-<!--      <el-menu-item index="/goUsersXz">员工薪资信息</el-menu-item>-->
-      <el-menu-item index="/goUserwdg">未到岗人员</el-menu-item>
-      <el-menu-item index="/goYhlz">离职员工</el-menu-item>
+<!--      <el-menu-item index="/goCCSS">员工记录</el-menu-item>-->
+      <el-menu-item index="/gousersss">在职</el-menu-item>
+      <el-menu-item index="/goSxusers">实习</el-menu-item>
+      <el-menu-item index="/goUserwdg">未到岗</el-menu-item>
+      <el-menu-item index="/goYhlz">离职</el-menu-item>
       <el-menu-item index="/gouser">黑名单</el-menu-item>
+
 ‘
     </el-sub-menu>
     <el-sub-menu index="4">
@@ -42,8 +43,9 @@
       <template #title>招聘管理</template>
       <el-menu-item index="/gorecruit">简历信息</el-menu-item>
       <el-menu-item index="/gorencaizhub">应聘者面试</el-menu-item>
-      <el-menu-item index="/gointerview">面试规章</el-menu-item>
+      <el-menu-item index="/gointerview">面试流程</el-menu-item>
       <el-menu-item index="/goZpjh">招聘计划</el-menu-item>
+      <el-menu-item index="/gowuwuwu">导入</el-menu-item>
 <!--      <el-menu-item index="/goxxxx">招聘计划</el-menu-item>-->
 
 

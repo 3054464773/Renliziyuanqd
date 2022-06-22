@@ -40,6 +40,8 @@ import Jiaqishezhi from "../components/Jiaqishezhi.vue";
 import PaiBanSheZhi from "../components/PaiBanSheZhi.vue";
 import Kaoqingjilu from "../components/Kaoqingjilu.vue";
 import Shenheshezhi from "../components/Shenheshezhi.vue";
+import  wuwuwu  from "../components/wuwuwu.vue"
+import Sxusers from "../components/Sxusers.vue"
 
 const routes = [
   {
@@ -211,11 +213,23 @@ const routes = [
         name: 'salaryElement',
         component:salaryElement
       },
+
+      {
+        path: '/gowuwuwu',
+        name: 'wuwuwu',
+        component:wuwuwu
+      },
       {
         path: '/gopayroll',
         name: 'payroll',
         component:payroll
+      },
+      {
+        path: '/goSxusers',
+        name: 'Sxusers',
+        component:Sxusers
       }
+
 
     ]
   },
