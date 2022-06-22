@@ -44,7 +44,9 @@ var data = reactive({
   pageSize: 4,//每一页显示的条数
   cx:{}, //根据id传后端查询返回的值
   rzname:'',
-  zhiweiname:''
+  zhiweiname:'',
+  bumen:'',
+  bbbmmm:''
 
 })
 //修改方法
@@ -96,6 +98,7 @@ onBeforeMount(() => {
     console.log(response.data.data)
     data.zpjhr = response.data.data.list
     data.total = response.data.data.total
+    bumenn()
     console.log(data.users)
   }).catch(function(error) {
     console.log(error)
@@ -157,10 +160,38 @@ const open2 = () => {
     type: 'success',
   })
 }
+import {ElMessage} from "element-plus"
+function xinzeng(insers){
+  if(this.insers.shjlbh==""){
+    ElMessage({
+      message:'审核记录表不能为空',
+      type:'warning',
+    })
+  }else if(this.insers.shbid==""){
+    ElMessage({
+      message:'审核表不能为空',
+      type:'warning',
+    })
+  }else if(this.insers.zrs==""){
+    ElMessage({
+      message:'人数不能为空',
+      type:'warning',
+    })
+  }else if(this.insers.zwbh==""){
+    ElMessage({
+      message:'职位不能为空',
+      type:'warning',
+    })
+  }else if(this.insers.zmc==""){
+    ElMessage({
+      message:'招聘计划名称不能为空',
+      type:'warning',
+    })
+  }else{
 
-function xinzeng(){
   axios.post("/addzpjh",insers).then(function(response){
     reload()
+    open2()
     insers.zbh=""
     insers.shjlbh=""
     insers.shbid=""
@@ -171,6 +202,7 @@ function xinzeng(){
   }).catch(function(error) {
     console.log(Error)
   })
+}
 }
 //验证
 const rules=reactive({
@@ -189,20 +221,53 @@ const rules=reactive({
   ]
 
 })
+function bumenn(){
+  axios.get("/suoybumen").then(function (c){
+
+    data.bumen=c.data.data;
+
+  }).catch(function (error){
+    console.log(error)
+  })
+}
+//根据部门查询
+function bumenchauxnhmd(){
+  axios.get("/bumenzpjh",{
+    params:{pageNum:data.pageNum,pageSize:data.pageSize,bmmc:data.bbbmmm}
+  }).then(function(response){
+    data.zpjhr=response.data.data.list
+    data.total=response.data.data.total
+
+  })
+}
+//模糊招聘计划名称
+function mohuzpjh(){
+  axios.get("/mohuzpjh",{
+    params:{pageNum:data.pageNum,pageSize:data.pageSize,zmc:data.rzname}
+  }).then(function(response){
+    data.zpjhr=response.data.data.list
+    data.total=response.data.data.total
+    console.log(response.data.data.users)
+  })
+}
+
 </script>
 <template>
   <br>
-  <el-icon  @click="dialogFormVisible2=true,zhiwei()" style="position: relative;right: -750px;"><edit /></el-icon>
-  <el-button style="position: relative;right: -166px;">查询</el-button>
-  <el-input v-model="data.rzname" placeholder="请输入姓名" clearable style="width: 200px;position: relative;right: 105px;" />
+  <el-button  @click="dialogFormVisible2=true,zhiwei()" style="position: relative;right: -750px;" type="success">新增</el-button>
+  <el-button style="position: relative;right: -166px;" @click="mohuzpjh()">查询</el-button>
+  <el-input v-model="data.rzname" placeholder="请输入招聘计划" clearable style="width: 200px;position: relative;right: 105px;" />
+
+
+  <span>部门:</span>  <el-select   placeholder="部门"  v-model="data.bbbmmm"  @change="bumenchauxnhmd" clearable>
+  <el-option v-for="cc in data.bumen"  :value="cc.bmmc" :label="cc.bmmc" />
+</el-select>
   <div>
 
     <el-table :data="data.zpjhr" style="width: 100%" height="400">
-      <el-table-column prop="zbh" label="招聘计划id" />
-      <el-table-column prop="shjlbh" label="审计表id" />
-      <el-table-column prop="shbid" label="审核表id" />
-      <el-table-column prop="zwbh" label="职位表id" />
-
+      <el-table-column prop="zbh" label="id" />
+      <el-table-column prop="zwmc" label="职位" />
+      <el-table-column prop="bmmc" label="部门" />
       <el-table-column prop="zrs"  label="人数" />
       <el-table-column prop="zmc"  label="招聘计划内容" />
 
@@ -255,29 +320,35 @@ const rules=reactive({
     <template #footer>
 			<span class="dialog-footer">
 				<el-button @click="dialogFormVisible2 = false">关闭</el-button>
-				<el-button type="primary" @click="dialogFormVisible2 = false,xinzeng(),open2()">确定</el-button>
+				<el-button type="primary" @click="dialogFormVisible2 = false,xinzeng(insers)">确定</el-button>
 			</span>
 
     </template>
 
   </el-dialog>
-  <el-dialog v-model="dialogFormVisible" title="查看员工信息" >
+  <el-dialog v-model="dialogFormVisible" title="查看招聘计划信息" >
     <el-form :model="data.cx">
-      <el-form-item label="审核记录表id" :label-width="formLabelWidth">
+      <el-col :span="14">
+      <el-form-item label="审核记录表id:" >
         <el-input v-model="data.cx.shjlbh"/>
       </el-form-item>
-      <el-form-item label="审核表id" :label-width="formLabelWidth">
+      </el-col>
+      <el-form-item label="审核表id:">
         <el-input  v-model="data.cx.shbid"/>
       </el-form-item>
-      <el-form-item label="职位表id" :label-width="formLabelWidth">
-        <el-input v-model="data.cx.zwbh" show-password  maxlength="10"/>
+
+      <el-col :span="14">
+      <el-form-item label="职位表id:" >
+        <el-input v-model="data.cx.zwbh" />
       </el-form-item>
-      <el-form-item label="人数" :label-width="formLabelWidth">
+
+      </el-col>
+      <el-form-item label="人数" >
         <el-input v-model="data.cx.zrs"/>
       </el-form-item>
 
       <el-form-item label="招聘计划名称:" :label-width="formLabelWidth">
-        <el-input v-model="data.cx.zmc" style="width: 200px;" type="textarea" />
+        <el-input v-model="data.cx.zmc" style="width: 400px;" type="textarea" />
       </el-form-item>
 
 

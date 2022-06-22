@@ -8,8 +8,9 @@
       @tab-click="handoff"
   >
     <el-tab-pane label="已评分" name="first">
-      <div class="big">
-        <div class="big-2">
+      <div class="big-sheet">
+        <div class="big-2-sheet">
+
 
           <div class="btn">
             <div class="select">
@@ -21,8 +22,12 @@
                   @change="findGradeByJxsj"
                   placeholder="请选择月份"
               />
+
+          <div class="btn-sheet">
+            <div class="select-sheet">
+
               <el-input v-model="data.rzname" placeholder="请输入员工姓名查询"  style="width: 200px;margin-left: 80px"></el-input>
-              <el-button class="btnSelect" :icon="Search" @click="selectGradeByName()" @keyup.enter="selectGradeByName"  type="primary" round>
+              <el-button class="btnSelect-sheet" :icon="Search" @click="selectGradeByName()" @keyup.enter="selectGradeByName"  type="primary" round>
                 <span style="vertical-align: middle" >搜索</span>
               </el-button>
             </div>
@@ -100,7 +105,7 @@
         </div>
 
       <!--  分页-->
-        <div class="page">
+        <div class="page-sheet">
           <el-pagination background layout="prev, pager, next"
                          v-model:current-page="this.data.pageNum"
                          v-model:page-size="this.data.pageSize"
@@ -499,26 +504,37 @@ function Listener(){
 </script>
 
 <style scoped>
-.big{
+.demo-tabs{
   margin: 0px auto;
   width: 100%;
 }
-.big-2{
+.big-sheet{
+  margin: 0px auto;
+  width: 100%;
+}
+.big-2-sheet{
+  margin-top: -40px;
   width: 100%;
   height: 457px;
 }
-.btn{
+.btn-sheet{
   margin-top: 10px;
   margin-left: -260px;
 }
-.select{
+.select-sheet{
   margin-top: 10px;
   margin-left: 120px;
 }
-.btnSelect{
+.btnSelect-sheet{
   margin-left: 10px;
 }
+
 .page{
   margin-top: -10px;
+
+.page-sheet{
+  margin-left: 560px;
+  margin-top: 88px;
+
 }
 </style>
