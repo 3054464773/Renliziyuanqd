@@ -4,7 +4,15 @@
 
     <el-card>
       <div class="score">
-            <el-select clearable placeholder="按部门查看" v-model="value" style="width: 120px;margin-left: 300px" @change="ScaleHandleChange">
+            <el-date-picker
+                value-format="YYYY-MM"
+                v-model="this.jxsj"
+                type="month"
+                @change="findAllScoreByJxsj"
+                style="width:200px;"
+                placeholder="请选择月份"
+            />
+            <el-select clearable placeholder="按部门查看" v-model="value" style="width: 120px;margin-left: 370px" @change="ScaleHandleChange">
               <el-option
                   :label="item.label"
                   :value="item.value"
@@ -37,6 +45,7 @@ export default {
   name:'KPIscore',
   data() {
     return {
+      jxsj:'',
       name:[],
       num:[],
       value:'',
@@ -53,6 +62,30 @@ export default {
         {
           value:3,
           label:'研发部',
+        },
+        {
+          value:4,
+          label:'财务部'
+        },
+        {
+          value:5,
+          label:'考勤部'
+        },
+        {
+          value:6,
+          label:'傻逼部'
+        },
+        {
+          value:7,
+          label:'武装部'
+        },
+        {
+          value:8,
+          label:'人事部'
+        },
+        {
+          value:9,
+          label:'采购部2'
         }
       ],
       tableData : []
@@ -68,6 +101,35 @@ export default {
       this.tableData=[]
       this.setChart();
     },
+
+    findAllScoreByJxsj(){
+      if(this.jxsj!=null) {
+        axios.get("/findAllScoreByJxsj?jxsj="+this.jxsj).then(function (res) {
+          console.log('访问后台');
+          console.log(res.data.data);
+          //后台取值赋值给前端
+          console.log(this.tableData)
+          for (var i = 0; i < res.data.data.num.length; i++) {
+            this.tableData.push({num: res.data.data.num[i], name: res.data.data.name[i]})
+          }
+          this.name = res.data.data.name
+          this.num = res.data.data.num
+          this.chart.setOption({
+            xAxis: {
+              data: this.name
+            },
+            series: [
+              {
+                name: "人数",
+                type: "bar",
+                data: this.num
+              }
+            ]
+          })
+        })
+      }
+    },
+
 
     //查询所有部门绩效的方法
     initChart(){
@@ -148,6 +210,7 @@ export default {
           }
         ],
       });
+
 
       //选择框的value值传给后端
       if(this.scalelates==1) {
@@ -261,7 +324,7 @@ export default {
 }
 
 .dataView .el-card {
-  width: 50%;
+  width: 60%;
 }
 /*.score{*/
 /*  width: 50%;*/
