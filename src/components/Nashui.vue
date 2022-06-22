@@ -93,14 +93,12 @@
         Delete
     } from '@element-plus/icons-vue'
     import axios from '../axios.js'
-    import {reactive, ref, onBeforeMount, inject} from 'vue'
+    import {reactive, ref, onBeforeMount} from 'vue'
     import type {
         FormRules
     } from '@element-plus'
     import {ElMessage} from 'element-plus'
 
-    //局部刷新
-    const refresh = inject('reload')
     let insertNashui = ref(false)//新增纳税弹窗
     const updateNashui = ref(false)//修改纳税弹窗
     const data = reactive({
@@ -180,6 +178,19 @@
             console.log(error)
         })
     })
+    function nsshuaxin() {
+        axios.get("/selectnashuixx", {
+            params: {
+                pageNum: data.pageNum,
+                pageSize: data.pageSize
+            }
+        }).then(function (response) {
+            data.NashuiData = response.data.data.list
+            data.total = response.data.data.total
+        }).catch(function (error) {
+            console.log(error)
+        })
+    }
 
     //查询所有纳税信息——分页
     function page() {
@@ -200,10 +211,11 @@
     function xznashui(ruleForm) {
         axios.post("/insertnashuixx", ruleForm).then(function (response) {
             xz()
-            refresh()
+            nsshuaxin()
         }).catch(function (error) {
             console.log(error)
         })
+        insertNashui.value=false
     }
 
     //模糊查询纳税信息
@@ -237,10 +249,11 @@
         axios.put("/updatensxx", xgnsxx).then(function (response) {
             console.log(response)
             xg()
-            refresh()
+            nsshuaxin()
         }).catch(function (error) {
             console.log(error)
         })
+        updateNashui.value=false
     }
 
     //删除纳税信息
@@ -256,7 +269,7 @@
                     return
                 }
                 sc()
-                refresh()//删除完成刷新界面
+                nsshuaxin()
             }).catch(function (error) {
                 console.log(error)
             })

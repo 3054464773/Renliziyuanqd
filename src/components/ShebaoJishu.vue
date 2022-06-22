@@ -6,14 +6,12 @@
         Delete
     } from '@element-plus/icons-vue'
     import axios from '../axios.js'
-    import {reactive, ref, onBeforeMount, inject} from 'vue'
+    import {reactive, ref, onBeforeMount} from 'vue'
     import type {
         FormRules
     } from '@element-plus'
     import {ElMessage} from 'element-plus'
 
-    //局部刷新
-    const refresh=inject('reload')
     var data = reactive({
         pageNum: 1,//当前显示页码
         pageSize: 5,//每一页显示的条数
@@ -103,6 +101,19 @@
         })
     })
 
+    function sbjsshuaxin() {
+        axios.get("/cxsbjs", {
+            params: {
+                pageNum: data.pageNum,
+                pageSize: data.pageSize
+            }
+        }).then(function (response) {
+            jishuData.value = response.data.data.list
+            data.total = response.data.data.total
+        }).catch(function (error) {
+            console.log(error)
+        })
+    }
     //分页
     function page() {
         axios.get("/cxsbjs", {
@@ -146,7 +157,7 @@
     function xzjsxx(ruleForm) {
         axios.post("/insertjsxx", ruleForm).then(function (response) {
             xz()
-            refresh()
+            sbjsshuaxin()
         }).catch(function (error) {
             console.log(error)
         })
@@ -158,10 +169,11 @@
         axios.put("/updatejsxx",xgform).then(function (response) {
             console.log(response)
             xg()
-            refresh()
+            sbjsshuaxin()
         }).catch(function (error) {
             console.log(error)
         })
+        update.value=false
     }
 
     //删除社保基数信息
@@ -178,7 +190,7 @@
                     return
                 }
                 sc()
-                refresh()//删除完成刷新界面
+                sbjsshuaxin()
             }).catch(function (error) {
                 console.log(error)
             })
@@ -205,7 +217,7 @@
                         }
                     }).then(function (response) {
                         sc()
-                        refresh()
+                        sbjsshuaxin()
                     }).catch(function (error) {
                         console.log(error)
                     })

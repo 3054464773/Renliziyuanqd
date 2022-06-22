@@ -7,12 +7,10 @@
     } from '@element-plus/icons-vue'
     import axios from '../axios.js'
 
-    import {ref, reactive, onBeforeMount, inject} from 'vue'
+    import {ref, reactive, onBeforeMount} from 'vue'
     import {ElMessage} from "element-plus";
     const activeName = ref('first')
 
-    //局部刷新
-    const refresh = inject('reload')
     var data=reactive({
         pageNum: 1,//当前显示页码
         pageSize: 5,//每一页显示的条数
@@ -27,7 +25,6 @@
     const zhengshiData = ref([])
 
     const content=ref(false)
-   /* const ygxx=reactive({})*/
 
     //1、社保方案填写成功
     const xz = () => {
@@ -91,6 +88,33 @@
         })
     }
 
+    function cbryshuaxin() {
+        axios.get("/selectcbryxxSx",{
+            params:{
+                pageNum:data.pageNum,
+                pageSize:data.pageSize
+            }
+        }).then(function (response) {
+            console.log(response)
+            shixiData.value=response.data.data.list
+            data.total = response.data.data.total
+        }).catch(function (error) {
+            console.log(error)
+        })
+        axios.get("/selectcbryxxZs",{
+            params:{
+                pageNum:data.pageNum,
+                pageSize:data.pageSize
+            }
+        }).then(function (response) {
+            console.log(response)
+            zhengshiData.value=response.data.data.list
+            data.total = response.data.data.total
+        }).catch(function (error) {
+            console.log(error)
+        })
+    }
+
     //根据员工姓名模糊查询员工信息--实习员工
     function mohucxSx() {
         axios.get("/selectygBynamesx",{
@@ -143,11 +167,12 @@
         axios.post("/xzygsb",ygxx).then(function (response) {
             console.log(response)
             console.log("ybh:"+data.ygxx.ybh)
-            refresh()
+            cbryshuaxin()
             xz()
         }).catch(function (error) {
             console.log(error)
         })
+        content.value=false
     }
     //查询所有部门信息
     function selectdeptxx(){
