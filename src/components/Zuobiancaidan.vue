@@ -1,4 +1,5 @@
 <template>
+
     <el-menu
             active-text-color="#ffd04b"
             background-color="#545c64"
@@ -37,6 +38,7 @@
             <el-menu-item index="/goshezhiyhjs">设置用户权限</el-menu-item>
             <el-menu-item index="/gotongzhi">发布通知</el-menu-item>
             <el-menu-item index="/gogonggao">发布公告</el-menu-item>
+            <el-menu-item index="/gofpygyemian">设置菜单</el-menu-item>
         </el-sub-menu>
         <el-sub-menu index="5">
 
@@ -63,6 +65,7 @@
             <el-menu-item index="/gopayroll">工资条</el-menu-item>
         </el-sub-menu>
 
+
         <el-sub-menu index="8">
             <template #title>考勤管理</template>
             <el-menu-item index="/gojiaqishezhi">设置假期类型</el-menu-item>
@@ -70,12 +73,16 @@
             <el-menu-item index="/gokaoqingjilu">考勤记录</el-menu-item>
         </el-sub-menu>
 
-        <el-sub-menu index="9">
-            <template #title>审核管理</template>
-            <el-menu-item index="/goshenheshezhi">审核设置</el-menu-item>
-        </el-sub-menu>
+ 
 
-    </el-menu>
+    <el-sub-menu index="9">
+      <template #title>审核管理</template>
+      <el-menu-item index="/goshenheshezhi">审核设置</el-menu-item>
+      <el-menu-item index="/goshebaoshenhe">社保审核</el-menu-item>
+    </el-sub-menu>
+    
+  </el-menu>
+
 </template>
 
 <script>

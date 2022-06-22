@@ -26,7 +26,6 @@ import Bumen from "../components/Bumen.vue";
 
 import  Yhlz from '../components/Yhlz.vue'
 import Zpjh from '../components/Zpjh.vue'
-import  xxxx from '../components/xxxx.vue'
 import Shezhiyhjs from "../components/Shezhiyhjs.vue";
 
 
@@ -40,8 +39,13 @@ import Jiaqishezhi from "../components/Jiaqishezhi.vue";
 import PaiBanSheZhi from "../components/PaiBanSheZhi.vue";
 import Kaoqingjilu from "../components/Kaoqingjilu.vue";
 import Shenheshezhi from "../components/Shenheshezhi.vue";
+
 import YuangongTable from "../components/YuangongTable.vue";
 import Nashui from '../components/Nashui.vue';
+
+import Shebaoshenhe from "../components/Shebaoshenhe.vue";
+import Fpygyemian from "../components/Fpygyemian.vue";
+
 const routes = [
   {
     path: '/home',
@@ -49,6 +53,7 @@ const routes = [
     component: Home,
     children:[
       {
+
         path: '/gotable',
         name: 'yuangongtable',
         component: YuangongTable
@@ -57,6 +62,16 @@ const routes = [
         path: '/gonashui',
         name: 'nashui',
         component: Nashui
+
+        path: '/gofpygyemian',
+        name: 'fpygyemian',
+        component: Fpygyemian
+      },
+      {
+        path: '/goshebaoshenhe',
+        name: 'shebaoshenhe',
+        component: Shebaoshenhe
+
       },
       {
         path: '/goshenheshezhi',
