@@ -322,7 +322,6 @@ function Listener(){
 
     if (e.keyCode === 13 ) {
       findSalaryElementByYsmc()
-      updateSalaryElement()
     }
   }
 }

@@ -1,5 +1,6 @@
 <template>
   <el-menu
+
       active-text-color="#ffd04b"
       background-color="#545c64"
       class="el-menu-vertical-demo"
@@ -10,7 +11,7 @@
   >
     <el-menu-item index="1">首页</el-menu-item>
 
-    <el-sub-menu index="2">
+    <el-sub-menu index="2" >
       <template #title>社保管理</template>
       <el-menu-item index="/goshebao">社保方案</el-menu-item>
       <el-menu-item index="/goshebaojishu">社保基数</el-menu-item>
@@ -26,8 +27,8 @@
       <el-menu-item index="/goUserwdg">未到岗人员</el-menu-item>
       <el-menu-item index="/goYhlz">离职员工</el-menu-item>
       <el-menu-item index="/gouser">黑名单</el-menu-item>
-‘
     </el-sub-menu>
+
     <el-sub-menu index="4">
       <template #title>系统设置</template>
       <el-menu-item index="/goquanxian">权限管理</el-menu-item>
@@ -36,19 +37,18 @@
       <el-menu-item index="/goshezhiyhjs">设置用户权限</el-menu-item>
       <el-menu-item index="/gotongzhi">发布通知</el-menu-item>
       <el-menu-item index="/gogonggao">发布公告</el-menu-item>
+      <el-menu-item index="/gofpygyemian">设置菜单</el-menu-item>
     </el-sub-menu>
-    <el-sub-menu index="5">
 
+    <el-sub-menu index="5">
       <template #title>招聘管理</template>
       <el-menu-item index="/gorecruit">简历信息</el-menu-item>
       <el-menu-item index="/gorencaizhub">应聘者面试</el-menu-item>
       <el-menu-item index="/gointerview">面试规章</el-menu-item>
       <el-menu-item index="/goZpjh">招聘计划</el-menu-item>
 <!--      <el-menu-item index="/goxxxx">招聘计划</el-menu-item>-->
-
-
-
     </el-sub-menu>
+
     <el-sub-menu index="6">
       <template #title>绩效管理</template>
       <el-menu-item index="/goinsertjixiao">绩效名称</el-menu-item>
@@ -73,6 +73,7 @@
     <el-sub-menu index="9">
       <template #title>审核管理</template>
       <el-menu-item index="/goshenheshezhi">审核设置</el-menu-item>
+      <el-menu-item index="/goshebaoshenhe">社保审核</el-menu-item>
     </el-sub-menu>
     
   </el-menu>
