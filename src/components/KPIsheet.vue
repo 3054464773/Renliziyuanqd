@@ -11,8 +11,21 @@
       <div class="big-sheet">
         <div class="big-2-sheet">
 
+
+          <div class="btn">
+            <div class="select">
+
+              <el-date-picker
+                  value-format="YYYY-MM"
+                  v-model="data.jxsj"
+                  type="month"
+                  @change="findGradeByJxsj"
+                  placeholder="请选择月份"
+              />
+
           <div class="btn-sheet">
             <div class="select-sheet">
+
               <el-input v-model="data.rzname" placeholder="请输入员工姓名查询"  style="width: 200px;margin-left: 80px"></el-input>
               <el-button class="btnSelect-sheet" :icon="Search" @click="selectGradeByName()" @keyup.enter="selectGradeByName"  type="primary" round>
                 <span style="vertical-align: middle" >搜索</span>
@@ -194,7 +207,7 @@ import {
 import {ElMessageBox} from "element-plus/es";
 import {ElMessage} from "element-plus";
 import type { TabsPaneContext } from 'element-plus'
-var data=reactive({jixiao:[],pageNum:1,pageSize:5,total:0,rzname:'',isShow:false,value:'first'})
+var data=reactive({jixiao:[],pageNum:1,pageSize:5,total:0,rzname:'',isShow:false,value:'first',jxsj:''})
 var data2=reactive({jixiao:[],pageNum:1,pageSize:5,total:0,rzname:'',isShow:false,value:'first'})
 function handoff(TabsPaneContext,Event){
   if (TabsPaneContext.props.label=='已评分'){
@@ -231,16 +244,43 @@ function findAllGrade(){
   })
 }
 
-//分页
-function page(pageNum){
-  axios.get("/findGrade",{
-    params:{pageNum:data.pageNum,pageSize: data.pageSize}
+function findGradeByJxsj(){
+  console.log(data.jxsj)
+  axios.get("/findGradeByJxsj",{
+    params:{pageNum:data.pageNum,pageSize:data.pageSize,jxsj:data.jxsj}
   }).then(function (res){
-    data.total=res.data.data.total
+    console.log(res.data.data)
+
     data.jixiao=res.data.data.list
-  }).catch(function (error){
-    console.log(error)
+    data.total=res.data.data.total
   })
+}
+
+
+
+//分页
+function page(pageNum) {
+  if (data.jxsj != null) {
+    axios.get("/findGradeByJxsj", {
+      params: {pageNum: data.pageNum, pageSize: data.pageSize, jxsj: data.jxsj}
+    }).then(function (res) {
+      console.log(res.data.data)
+      data.total = res.data.data.total
+      data.jixiao = res.data.data.list
+    }).catch(function (error) {
+      console.log(error)
+    })
+
+  } else {
+    axios.get("/findGrade", {
+      params: {pageNum: data.pageNum, pageSize: data.pageSize}
+    }).then(function (res) {
+      data.total = res.data.data.total
+      data.jixiao = res.data.data.list
+    }).catch(function (error) {
+      console.log(error)
+    })
+  }
 }
 //查全部未评分的员工
 function findAllGrade2(){
@@ -488,8 +528,13 @@ function Listener(){
 .btnSelect-sheet{
   margin-left: 10px;
 }
+
+.page{
+  margin-top: -10px;
+
 .page-sheet{
   margin-left: 560px;
   margin-top: 88px;
+
 }
 </style>
