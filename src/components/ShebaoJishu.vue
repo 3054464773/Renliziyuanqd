@@ -20,7 +20,8 @@
         total: 0,//总条数
         pages: 0,
         sbname: '', //查询文本框的值
-        xgform: {}
+        xgform: {}, //修改表单
+        jscount:0,
     })
     //社保基数数据
     const jishuData = ref([])
@@ -59,6 +60,14 @@
             message: '已取消！',
         })
     }
+    //5、社保基数已被绑定
+    const sbybd = () => {
+        ElMessage({
+            showClose: true,
+            message: '此项社保基数已被绑定，不可删除！',
+            type:'warning'
+        })
+    }
 
     //新增表单
     const formSize = ref('default')
@@ -69,13 +78,13 @@
     })
     //新增表单数据验证
     const rules = reactive<FormRules>({
-        jsname: [
+        sbname: [
             {required: true, message: '请输入社保名称!', trigger: 'blur'},
         ],
-        jsje: [
+        sbjsje: [
             {required: true, message: '请输入基数金额!', trigger: 'blur'},
         ],
-        jnbl: [
+        sbjnbl: [
             {required: true, message: '请输入缴纳比例!', trigger: 'blur'},
         ],
     })
@@ -178,11 +187,43 @@
             qx()
         }
     }
+
+    //判断社保基数被绑定的条数
+    function pdsbjsCount(sbjsbh) {
+        axios.get("/pdsbjsCount",{
+            params:{
+                sbjsbh:sbjsbh
+            }
+        }).then(function (response) {
+            console.log("基数id："+sbjsbh)
+            data.jscount=response.data.data
+            if(data.jscount==0){
+                if(confirm("确认删除吗？")){
+                    axios.delete("/deletejsxx", {
+                        params: {
+                            sbjsbh: sbjsbh
+                        }
+                    }).then(function (response) {
+                        sc()
+                        refresh()
+                    }).catch(function (error) {
+                        console.log(error)
+                    })
+                }else{
+                    console.log("已取消！")
+                    qx()
+                }
+            }else{
+                sbybd()
+            }
+        }).catch(function (error) {
+            console.log(error)
+        })
+    }
 </script>
 
 <template>
     <div id="head">
-        <span id="title">社保基数</span>
         <input type="text" placeholder="请输入社保基数名称" v-model="data.sbname" id="txt">
         <el-button type="primary" :icon="Search" class="cx" @click="mohucxjsxx">查询</el-button>
         <el-button type="primary" :icon="Plus" class="btns" @click="insert=true">新增</el-button>
@@ -201,7 +242,7 @@
                 <el-button size="default" type="primary" :icon="Edit" @click="update=true,findbyjsid(scope.row.sbjsbh)">
                     编辑
                 </el-button>
-                <el-button size="default" type="danger" :icon="Delete" @click="scjsxx(scope.row.sbjsbh)">删除</el-button>
+                <el-button size="default" type="danger" :icon="Delete" @click="pdsbjsCount(scope.row.sbjsbh)">删除</el-button>
             </template>
         </el-table-column>
     </el-table>
@@ -214,13 +255,13 @@
                 :size="formSize"
         >
             <el-form-item label="社保名称" prop="sbname">
-                <el-input v-model="ruleForm.sbname"/>
+                <el-input v-model="ruleForm.sbname" class="wbk"/>
             </el-form-item>
             <el-form-item label="基数金额" prop="sbjsje">
-                <el-input v-model="ruleForm.sbjsje"/>
+                <el-input v-model="ruleForm.sbjsje" class="wbk"/>
             </el-form-item>
             <el-form-item label="缴纳比例" prop="sbjnbl">
-                <el-input v-model="ruleForm.sbjnbl"/>
+                <el-input v-model="ruleForm.sbjnbl" class="wbk"/>
             </el-form-item>
         </el-form>
 
@@ -237,16 +278,16 @@
                 label-width="120px"
         >
             <el-form-item label="社保基数编号">
-                <el-input v-model="data.xgform.sbjsbh" disabled/>
+                <el-input v-model="data.xgform.sbjsbh" class="wbk" disabled/>
             </el-form-item>
             <el-form-item label="社保名称">
-                <el-input v-model="data.xgform.sbname"/>
+                <el-input v-model="data.xgform.sbname" class="wbk"/>
             </el-form-item>
             <el-form-item label="基数金额">
-                <el-input v-model="data.xgform.sbjsje"/>
+                <el-input v-model="data.xgform.sbjsje" class="wbk"/>
             </el-form-item>
             <el-form-item label="缴纳比例">
-                <el-input v-model="data.xgform.sbjnbl"/>
+                <el-input v-model="data.xgform.sbjnbl" class="wbk"/>
             </el-form-item>
         </el-form>
 
@@ -269,19 +310,12 @@
 
 <style scoped>
     #head {
-        margin: 10px;
-    }
-
-    #title {
-        font-weight: bold;
-        font-size: 18px;
-        margin-left: -180px;
+        margin: 15px;
     }
 
     #txt {
         width: 200px;
         height: 20px;
-        margin: 0px 0px 0px 50%;
     }
 
     .cx {
@@ -296,4 +330,7 @@
         margin: 0px 10px 0px 10px;
     }
 
+    .wbk{
+        width: 520px;
+    }
 </style>

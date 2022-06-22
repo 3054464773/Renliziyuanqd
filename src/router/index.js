@@ -40,13 +40,24 @@ import Jiaqishezhi from "../components/Jiaqishezhi.vue";
 import PaiBanSheZhi from "../components/PaiBanSheZhi.vue";
 import Kaoqingjilu from "../components/Kaoqingjilu.vue";
 import Shenheshezhi from "../components/Shenheshezhi.vue";
-
+import YuangongTable from "../components/YuangongTable.vue";
+import Nashui from '../components/Nashui.vue';
 const routes = [
   {
     path: '/home',
     name: 'home',
     component: Home,
     children:[
+      {
+        path: '/gotable',
+        name: 'yuangongtable',
+        component: YuangongTable
+      },
+      {
+        path: '/gonashui',
+        name: 'nashui',
+        component: Nashui
+      },
       {
         path: '/goshenheshezhi',
         name: 'shenheshezhi',
