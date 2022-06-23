@@ -356,7 +356,7 @@ function formatter(row,column) {
   <div>
 
     <el-table :data="data.Recruit" style="width: 100%" height="400">
-      <el-table-column prop="mbh" label="id" />
+      <el-table-column  type="index" label="序号" width="200" />
 <!--      <el-table-column prop="ybh" label="制定员" />-->
       <el-table-column prop="zwmc" label="职位" />
 <!--      <el-table-column prop="bmmc" label="部门" />-->
@@ -390,7 +390,7 @@ function formatter(row,column) {
       <el-table-column label="操作"  width="200">
         <template #default=scope v-slot="scope">
           <el-button  type="success" plain  @click="sahnchumianshiwenti(scope.row.mzbh)">删除</el-button>	<!-- 删除 -->
-          <el-button size="10px" type="success" plain @click="dialogFormVisible=true">编辑</el-button><!--          查看招聘者个人信息以及修改-->
+<!--          <el-button size="10px" type="success" plain @click="dialogFormVisible=true">编辑</el-button>&lt;!&ndash;          查看招聘者个人信息以及修改&ndash;&gt;-->
         </template>
 
       </el-table-column>
