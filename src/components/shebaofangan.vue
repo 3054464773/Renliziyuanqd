@@ -18,7 +18,6 @@
 
     import {ElMessage} from 'element-plus'
 
-
     const total = ref(0)
     const tableData = ref([])
     var data = reactive({
@@ -39,10 +38,8 @@
         fab: {},//方案表
         check: [], //社保基数多选框的值
         sbjslist:[], //社保基数集合
-
         sbjslists:[], //所有社保基数信息
         facount:0,
-
 
     })
     // 新增弹窗
@@ -158,7 +155,6 @@
         })
     })
 
-
     function sbfashuaxin() {
         axios.get("/cxsbfa", {
             params: {
@@ -171,7 +167,7 @@
         }).catch(function (error) {
             console.log(error)
         })
-
+    }
 
     //分页
     function page() {
