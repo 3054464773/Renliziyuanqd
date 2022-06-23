@@ -37,7 +37,7 @@ var data = reactive({
   users:[],//存入查询后端响应过来的数据
   total:0,//总页数
   pageNum:1,//当前显示页码
-  pageSize:4,//每一页显示的条数
+  pageSize:3,//每一页显示的条数
   cx:{}, //根据id传后端查询返回的值
   rzname:'',
   cx2:{},
@@ -98,19 +98,52 @@ function mohuchaxunxxx(){
 //   }
 // }
 function page() {
-  axios.get("/finduserssss", {
-    params: {
-      pageNum: data.pageNum,
-      pageSize: data.pageSize
-    }
-  }).then(function(response) {
-    data.total = response.data.data.total
-    data.users = response.data.data.list
-    console.log(data.users)
-  }).catch(function(error) {
-    console.log(error)
-  })
-}
+  if(data.yyggrzsj!=null){
+    axios.get("/ruzhishijian",{
+      params:{pageNum:data.pageNum,pageSize:data.pageSize,ygrzsj:data.yyggrzsj}
+
+    }).then(function(response){
+      data.users=response.data.data.list
+      data.total=response.data.data.total
+
+      //data.bumen=response.data.data
+      console.log(response.data.data.users)
+    })
+  }else if(data.bbbmmm!=null){
+    axios.get("/bumenccxx",{
+      params:{pageNum:data.pageNum,pageSize:data.pageSize,bmmc:data.bbbmmm}
+    }).then(function(response){
+      data.users=response.data.data.list
+      data.total=response.data.data.total
+
+      //data.bumen=response.data.data
+      console.log(response.data.data.users)
+    })
+  }else if(data.rzname!=null&&data.rzsexxx!=null){
+    axios.get("/mohuRenyygg",{
+      params:{pageNum:data.pageNum,pageSize:data.pageSize,rzname:data.rzname,rzsex:data.rzsexxx}
+    }).then(function(response){
+      data.users=response.data.data.list
+      data.total=response.data.data.total
+      console.log(response.data.data.users)
+    })
+  }else {
+    axios.get("/finduserssss", {
+      params: {
+        pageNum: data.pageNum,
+        pageSize: data.pageSize
+      }
+    }).then(function(response) {
+      data.total = response.data.data.total
+      data.users = response.data.data.list
+      console.log(data.users)
+    }).catch(function(error) {
+      console.log(error)
+    })
+  }
+  }
+
+
 //修改方法
 function xiugai2(rzbh){
   axios.put("/user",data.cx2).then(function(response){
