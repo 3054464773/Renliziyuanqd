@@ -12,8 +12,6 @@
     } from '@element-plus'
     import {ElMessage} from 'element-plus'
 
-    //局部刷新
-    const refresh=inject('reload')
     var data = reactive({
         pageNum: 1,//当前显示页码
         pageSize: 5,//每一页显示的条数
@@ -103,6 +101,19 @@
         })
     })
 
+    function refresh(){
+      axios.get("/cxsbjs", {
+        params: {
+          pageNum: data.pageNum,
+          pageSize: data.pageSize
+        }
+      }).then(function (response) {
+        jishuData.value = response.data.data.list
+        data.total = response.data.data.total
+      }).catch(function (error) {
+        console.log(error)
+      })
+    }
     //分页
     function page() {
         axios.get("/cxsbjs", {

@@ -39,7 +39,7 @@ import Jiaqishezhi from "../components/Jiaqishezhi.vue";
 import PaiBanSheZhi from "../components/PaiBanSheZhi.vue";
 import Kaoqingjilu from "../components/Kaoqingjilu.vue";
 import Shenheshezhi from "../components/Shenheshezhi.vue";
-import  wuwuwu  from "../components/wuwuwu.vue"
+
 import Sxusers from "../components/Sxusers.vue"
 
 import YuangongTable from "../components/YuangongTable.vue";
@@ -64,7 +64,8 @@ const routes = [
         path: '/gonashui',
         name: 'nashui',
         component: Nashui
-
+      },
+      {
         path: '/gofpygyemian',
         name: 'fpygyemian',
         component: Fpygyemian
@@ -240,11 +241,6 @@ const routes = [
         component:salaryElement
       },
 
-      {
-        path: '/gowuwuwu',
-        name: 'wuwuwu',
-        component:wuwuwu
-      },
       {
         path: '/gopayroll',
         name: 'payroll',
