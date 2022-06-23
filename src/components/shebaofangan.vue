@@ -18,8 +18,7 @@
 
     import {ElMessage} from 'element-plus'
 
-    //局部刷新
-    const refresh = inject('reload')
+
 
     const total = ref(0)
     const tableData = ref([])
@@ -159,6 +158,20 @@
             console.log(error)
         })
     })
+
+    function refresh(){
+      axios.get("/cxsbfa", {
+        params: {
+          pageNum: data.pageNum,
+          pageSize: data.pageSize
+        }
+      }).then(function (response) {
+        tableData.value = response.data.data.list
+        data.total = response.data.data.total
+      }).catch(function (error) {
+        console.log(error)
+      })
+    }
 
     //分页
     function page() {

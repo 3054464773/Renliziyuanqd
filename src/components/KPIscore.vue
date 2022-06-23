@@ -8,11 +8,11 @@
                 value-format="YYYY-MM"
                 v-model="this.jxsj"
                 type="month"
-                @change="findAllScoreByJxsj"
-                style="width:200px;"
+                @change="updateScoreByJxsj()"
+                style="width:200px;margin-left: 300px;margin-top: -20px"
                 placeholder="请选择月份"
             />
-            <el-select clearable placeholder="按部门查看" v-model="value" style="width: 120px;margin-left: 370px" @change="ScaleHandleChange">
+            <el-select clearable placeholder="按部门查看" v-model="value" style="width: 120px;margin-left: 380px;margin-top: 20px" @change="ScaleHandleChange">
               <el-option
                   :label="item.label"
                   :value="item.value"
@@ -102,9 +102,18 @@ export default {
       this.setChart();
     },
 
+    updateScoreByJxsj(){
+      this.tableData=[]
+      if(this.jxsj!=null){
+        this.findAllScoreByJxsj()
+      }else {
+        this.setChart()
+      }
+
+    },
     findAllScoreByJxsj(){
-      if(this.jxsj!=null) {
-        axios.get("/findAllScoreByJxsj?jxsj="+this.jxsj).then(function (res) {
+      console.log(this.jxsj)
+        axios.get("/findAllScoreByJxsj?jxsj="+this.jxsj).then(res=> {
           console.log('访问后台');
           console.log(res.data.data);
           //后台取值赋值给前端
@@ -127,7 +136,6 @@ export default {
             ]
           })
         })
-      }
     },
 
 
@@ -320,7 +328,7 @@ export default {
 .dataView {
   width: 100%;
   display: flex;
-  justify-content: space-between;
+
 }
 
 .dataView .el-card {
@@ -334,6 +342,10 @@ export default {
 
 .dataView .el-card #main1,#main2{
   height: 500px;
+}
+#main1{
+  border: 1px red solid;
+  margin-top: 20px;
 }
 
 </style>

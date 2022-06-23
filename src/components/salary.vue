@@ -1,6 +1,6 @@
 <template>
   <el-tabs v-model="data.value" class="demo-tabs" @tab-click="handoff">
-    <el-tab-pane label="薪资档案" name="first">
+    <el-tab-pane label="职位已定薪" name="first">
         <div class="big-salary">
           <div class="big-salary2">
 
@@ -39,7 +39,7 @@
           </div>
         </div>
     </el-tab-pane>
-    <el-tab-pane label="职位定薪" name="second">
+    <el-tab-pane label="未定薪" name="second">
       <div class="big-salary">
         <div class="big-salary2">
 

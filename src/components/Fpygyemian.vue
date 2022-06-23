@@ -60,17 +60,25 @@
 
   <div>
     <div>
-      <el-input style="width: 200px" placeholder="请输入菜单名称"/><el-button>添加菜单</el-button>
+      <el-input style="width: 200px;margin-top: 10px;margin-right: 10px" placeholder="请输入角色名称"/><el-button type="primary">添加菜单</el-button>
     </div>
-    <div>
-      <el-table :data="cdlist" style="width: 100%">
-        <el-table-column prop="date" label="Date" width="180" />
-        <el-table-column prop="name" label="Name" width="180" />
-        <el-table-column prop="address" label="Address" />
+    <div style="height: 238px;margin-top: 10px">
+      <el-table :data="qdlist" style="width: 100%">
+        <el-table-column width="100"/>
+        <el-table-column type="index" label="序号" width="180"/>
+        <el-table-column prop="jsmc" label="角色名称" width="180" />
+        <el-table-column  label="菜单名称"  width="180">
+          <template #default="scope" >
+            <el-tag v-for="a in scope.row.qdlist"   closable>{{a.qdcdmc}}</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作">
+          <el-button  type="success">分配菜单</el-button>
+        </el-table-column>
       </el-table>
     </div>
-    <div>
-      <el-pagination background layout="prev, pager, next" :total="1000" />
+    <div style="display: flex;justify-content: center">
+      <el-pagination background layout="prev, pager, next"  @current-change="xiayiye2" @next-click="xiayiye2" @prev-click="xiayiye2" :total="zts2" />
     </div>
   </div>
 </template>
@@ -84,8 +92,11 @@ export default {
     return{
       Check:Check,
       cdlist:[],
+      qdlist:[],
       zts:0,
+      zts2:0,
       cxtj:'',
+      cxtj2:'',
       dialogVisibletwo:false,
       cdstl:{
         qdlydz:'',
@@ -102,8 +113,17 @@ export default {
         this.zts=e.data.data.zts*10
       })
     },
+    findallqdym(ym,cxtj){
+      axios.get("/findallqdym?ym="+ym+"&cxtj="+cxtj).then((e)=>{
+          this.qdlist=e.data.data.qdlist;
+          this.zts2=e.data.data.zts2*10;
+      })
+    },
     xiayiye(ym){
       this.findallqd(ym,this.cxtj)
+    },
+    xiayiye2(ym){
+      this.findallqdym(ym,this.cxtj2)
     },
     chaxuncd(){
       this.findallqd(1,this.cxtj)
@@ -129,6 +149,7 @@ export default {
   },
   created() {
     this.findallqd(1,this.cxtj)
+    this.findallqdym(1,this.cxtj2);
   }
 }
 </script>

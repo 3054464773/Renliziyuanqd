@@ -11,8 +11,6 @@
     import {ElMessage} from "element-plus";
     const activeName = ref('first')
 
-    //局部刷新
-    const refresh = inject('reload')
     var data=reactive({
         pageNum: 1,//当前显示页码
         pageSize: 5,//每一页显示的条数
@@ -79,6 +77,21 @@
             console.log(error)
         })
     })
+
+    function refresh(){
+      axios.get("/selectcbryxxSx",{
+        params:{
+          pageNum:data.pageNum,
+          pageSize:data.pageSize
+        }
+      }).then(function (response) {
+        console.log(response)
+        shixiData.value=response.data.data.list
+        data.total = response.data.data.total
+      }).catch(function (error) {
+        console.log(error)
+      })
+    }
     //分页--正式员工
     function page1() {
         axios.get("/selectcbryxxZs", {
