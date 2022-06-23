@@ -107,37 +107,7 @@ function mohuchaxunxx(){
 //
 // }
 function page() {
-  if(data.yyggrzsj!=null){
-    axios.get("/ruzhishijiansx",{
-      params:{pageNum:data.pageNum,pageSize:data.pageSize,ygrzsj:data.yyggrzsj}
-
-    }).then(function(response){
-      data.users=response.data.data.list
-      data.total=response.data.data.total
-
-      //data.bumen=response.data.data
-      console.log(response.data.data.users)
-    })
-  }else if(data.bbbmmm!=null){
-    axios.get("/bumenchauxsx",{
-      params:{pageNum:data.pageNum,pageSize:data.pageSize,bmmc:data.bbbmmm}
-    }).then(function(response){
-      data.users=response.data.data.list
-      data.total=response.data.data.total
-
-      //data.bumen=response.data.data
-      console.log(response.data.data.users)
-    })
-  }else if(data.rzname!=null&&data.rzsexxx!=null){
-    axios.get("/mohuchaxunygsx",{
-      params:{pageNum:data.pageNum,pageSize:data.pageSize,rzname:data.rzname,rzsex:data.rzsexxx}
-    }).then(function(response){
-      data.users=response.data.data.list
-      data.total=response.data.data.total
-      console.log(response.data.data.users)
-    })
-  }else{
-    axios.get("/findusersx", {
+  axios.get("/findusersx", {
     params: {
       pageNum: data.pageNum,
       pageSize: data.pageSize
@@ -149,7 +119,6 @@ function page() {
   }).catch(function(error) {
     console.log(error)
   })
-  }
 }
 //修改方法
 function xiugai2(rzbh){
