@@ -390,13 +390,11 @@
 
 <script lang="ts" setup>
     import {
-        ref, reactive, inject, onBeforeMount
+        ref, reactive, onBeforeMount
     } from 'vue'
     import {ElMessage} from 'element-plus'
     import axios from '../axios.js'
 
-    //局部刷新
-    const refresh = inject('reload')
     const Yuangongziliao = ref(false)//个人资料弹窗
     const drawer = ref(false)//通讯录抽屉
     const rizhiDialog = ref(false)//日志弹窗
@@ -503,11 +501,13 @@
         }
         axios.post("/fabiaorz", fabiaoForm).then(function (response) {
             xz()
-            refresh()
+            gztshuaxin()
             return true;
         }).catch(function (error) {
             console.log(error)
         })
+        rizhiDialog.value=false
+        fabiaoForm.gzrznr = null;
     }
 
     //我的日志
@@ -569,6 +569,39 @@
             console.log(error)
         })
     }
+    //刷新
+    function gztshuaxin(){
+        axios.get("/cxkqjlByid").then(function (response) {
+            data.kaoqinData = response.data.data
+            data.rzname=response.data.data[0].rzname
+            var kq = [];
+            for (var i = 0; i < response.data.data.length; i++) {
+                kq.push({
+                    kqsbdkzt: response.data.data[i].kqsbzt,
+                    kqxbdkzt: response.data.data[i].kqxbzt,
+                    xzsj: response.data.data[i].xzsj
+                })
+            }
+            rili.kqzt = kq
+        }).catch(function (error) {
+            console.log(error)
+        })
+        axios.get("/tongzhixx").then(function (response) {
+            data.tongzhiData = response.data.data
+        }).catch(function (error) {
+            console.log(error)
+        })
+        axios.get("/gonggaoxx").then(function (response) {
+            data.gonggaoData = response.data.data
+        }).catch(function (error) {
+            console.log(error)
+        })
+        axios.get("/cxbcxx").then(function (response) {
+            data.bcqk=response.data.data
+        }).catch(function (error) {
+            console.log(error)
+        })
+    }
 
     //根据id查询员工考勤记录
     onBeforeMount(() => {
@@ -606,7 +639,7 @@
         })
     }
 
-    //根据id查询员工薪资记录
+    //根据id查询员工出差记录
     function ccjl(){
         axios.get("/cxccjlByid").then(function (response) {
             data.chuchaiData = response.data.data
@@ -645,10 +678,11 @@
     function updategerenziliao(gerenziliaoxx) {
         axios.put("/updategerenziliao", gerenziliaoxx).then(function (response) {
             xg()
-            refresh()
+            gztshuaxin()
         }).catch(function (error) {
             console.log(error)
         })
+        Yuangongziliao.value=false
     }
 
     //根据员工id查询员工班次情况
@@ -669,7 +703,7 @@
                     axios.post("/ygdaka").then(function (response) {
                         console.log(response.data.data)
                         dk()
-                        refresh()
+                        gztshuaxin()
                     }).catch(function (error) {
                         console.log(error)
                     })
@@ -690,7 +724,7 @@
             axios.post("/ygdaka").then(function (response) {
                 console.log(response.data.data)
                 dk()
-                refresh()
+                gztshuaxin()
             }).catch(function (error) {
                 console.log(error)
             })

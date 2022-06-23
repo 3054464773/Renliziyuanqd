@@ -86,18 +86,31 @@
 </template>
 
 <script lang="ts" setup>
-import {
-  Search,
-  Plus,
-  Edit,
-  Delete
-} from '@element-plus/icons-vue'
-import axios from '../axios.js'
-import {reactive, ref, onBeforeMount, inject} from 'vue'
-import type {
-  FormRules
-} from '@element-plus'
-import {ElMessage} from 'element-plus'
+
+    import {
+        Search,
+        Plus,
+        Edit,
+        Delete
+    } from '@element-plus/icons-vue'
+    import axios from '../axios.js'
+    import {reactive, ref, onBeforeMount} from 'vue'
+    import type {
+        FormRules
+    } from '@element-plus'
+    import {ElMessage} from 'element-plus'
+
+    let insertNashui = ref(false)//新增纳税弹窗
+    const updateNashui = ref(false)//修改纳税弹窗
+    const data = reactive({
+        NashuiData: [],//纳税
+        pageNum: 1,//当前显示页码
+        pageSize: 5,//每一页显示的条数
+        total: 0,//总条数
+        pages: 0,
+        nsjnbl: '',//纳税缴纳比例查询条件
+        xgnsxx: {},//纳税信息修改
+
 
 let insertNashui = ref(false)//新增纳税弹窗
 const updateNashui = ref(false)//修改纳税弹窗
@@ -130,6 +143,35 @@ const rules = reactive<FormRules>({
     {required: true, message: '请输入纳税缴纳比例!', trigger: 'blur'},
   ],
 })
+
+
+    //查询所有纳税信息
+    onBeforeMount(() => {
+        axios.get("/selectnashuixx", {
+            params: {
+                pageNum: data.pageNum,
+                pageSize: data.pageSize
+            }
+        }).then(function (response) {
+            data.NashuiData = response.data.data.list
+            data.total = response.data.data.total
+        }).catch(function (error) {
+            console.log(error)
+        })
+    })
+    function nsshuaxin() {
+        axios.get("/selectnashuixx", {
+            params: {
+                pageNum: data.pageNum,
+                pageSize: data.pageSize
+            }
+        }).then(function (response) {
+            data.NashuiData = response.data.data.list
+            data.total = response.data.data.total
+        }).catch(function (error) {
+            console.log(error)
+        })
+    }
 
 //Message消息提示
 //1、新增成功
@@ -164,6 +206,7 @@ const qx = () => {
   })
 }
 
+
 //查询所有纳税信息
 onBeforeMount(() => {
   axios.get("/selectnashuixx", {
@@ -179,11 +222,17 @@ onBeforeMount(() => {
   })
 })
 
-function refresh() {
-  axios.get("/selectnashuixx", {
-    params: {
-      pageNum: data.pageNum,
-      pageSize: data.pageSize
+
+    //新增纳税信息
+    function xznashui(ruleForm) {
+        axios.post("/insertnashuixx", ruleForm).then(function (response) {
+            xz()
+            nsshuaxin()
+        }).catch(function (error) {
+            console.log(error)
+        })
+        insertNashui.value=false
+
     }
   }).then(function (response) {
     data.NashuiData = response.data.data.list
@@ -218,11 +267,24 @@ function xznashui(ruleForm) {
   })
 }
 
+
+    //修改纳税信息
+    function xgnsxx(xgnsxx) {
+        axios.put("/updatensxx", xgnsxx).then(function (response) {
+            console.log(response)
+            xg()
+            nsshuaxin()
+        }).catch(function (error) {
+            console.log(error)
+        })
+        updateNashui.value=false
+
 //模糊查询纳税信息
 function mohucxnsxx() {
   axios.get("/mhcxnsxx", {
     params: {
       nsjnbl: data.nsjnbl
+
     }
   }).then(function (response) {
     data.NashuiData = response.data.data
@@ -231,11 +293,35 @@ function mohucxnsxx() {
   })
 }
 
+
+    //删除纳税信息
+    function scnsxx(nsbbh) {
+        if (confirm("确认删除吗？")) {
+            axios.delete("/deletensxx", {
+                params: {
+                    nsbbh: nsbbh
+                }
+            }).then(function (response) {
+                if (response.data.code != 200) {
+                    console.log("删除失败！" + response.data.message)
+                    return
+                }
+                sc()
+                nsshuaxin()
+            }).catch(function (error) {
+                console.log(error)
+            })
+        } else {
+            console.log("已取消！")
+            qx()
+        }
+
 //根据纳税id查询纳税信息
 function nashuibyid(nsbbh) {
   axios.get("/cxnashuibyid", {
     params: {
       nsbbh: nsbbh
+
     }
   }).then(function (response) {
     data.xgnsxx = response.data.data

@@ -7,7 +7,7 @@
     } from '@element-plus/icons-vue'
     import {
         reactive,
-        ref, inject, onBeforeMount
+        ref, onBeforeMount
     } from 'vue'
 
     import type {
@@ -17,7 +17,6 @@
     import axios from '../axios.js'
 
     import {ElMessage} from 'element-plus'
-
 
 
     const total = ref(0)
@@ -159,19 +158,20 @@
         })
     })
 
-    function refresh(){
-      axios.get("/cxsbfa", {
-        params: {
-          pageNum: data.pageNum,
-          pageSize: data.pageSize
-        }
-      }).then(function (response) {
-        tableData.value = response.data.data.list
-        data.total = response.data.data.total
-      }).catch(function (error) {
-        console.log(error)
-      })
-    }
+
+    function sbfashuaxin() {
+        axios.get("/cxsbfa", {
+            params: {
+                pageNum: data.pageNum,
+                pageSize: data.pageSize
+            }
+        }).then(function (response) {
+            tableData.value = response.data.data.list
+            data.total = response.data.data.total
+        }).catch(function (error) {
+            console.log(error)
+        })
+
 
     //分页
     function page() {
@@ -258,7 +258,7 @@
             name:ruleForm.name
             options:options.value
             xz()
-            refresh()//新增完成刷新界面
+            sbfashuaxin()
         }).catch(function (error) {
             console.log(error)
         })
@@ -279,7 +279,7 @@
                     return
                 }
                 sc()
-                refresh()//删除完成刷新界面
+                sbfashuaxin()
             }).catch(function (error) {
                 console.log(error)
             })
@@ -306,7 +306,7 @@
                         }
                     }).then(function (response) {
                         sc()
-                        refresh()
+                        sbfashuaxin()
                     }).catch(function (error) {
                         console.log(error)
                     })
@@ -326,12 +326,12 @@
     function xgsbfa() {
         console.log(data.xgform.sbjslistss)
         axios.put("/xgsbfa", data.xgform).then(function (response) {
-            console.log(response)
             xg()
-            refresh()
+            sbfashuaxin()
         }).catch(function (error) {
             console.log(error)
         })
+        update.value=false;
     }
 
     //社保状态改变--加了验证
@@ -351,18 +351,18 @@
                     }
                     axios.put("/xgzt", data.fab).then(function (response) {
                         sbzt()
-                        refresh()
+                        sbfashuaxin()
                     }).catch(function (error) {
                         console.log(error)
                     })
                 } else {
                     console.log("已取消！")
                     qx()
-                    refresh()
+                    sbfashuaxin()
                 }
             } else {
                 sbybd()
-                refresh()
+                sbfashuaxin()
             }
         }).catch(function (error) {
             console.log(error)
@@ -378,14 +378,14 @@
             }
             axios.put("/xgzt", data.fab).then(function (response) {
                 sbzt()
-                refresh()
+                sbfashuaxin()
             }).catch(function (error) {
                 console.log(error)
             })
         } else {
             console.log("已取消！")
             qx()
-            refresh()
+            sbfashuaxin()
         }
     }
 </script>
