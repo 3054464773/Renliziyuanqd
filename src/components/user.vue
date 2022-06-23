@@ -254,49 +254,18 @@ function mohuchaxunyghmddd(){
 //   }
 // }
 function page() {
-  if(data.yyggrzsj!=null){
-    axios.get("/ruzhishijianhmd",{
-      params:{pageNum:data.pageNum,pageSize:data.pageSize,ygrzsj:data.yyggrzsj}
-
-    }).then(function(response){
-      data.users=response.data.data.list
-      data.total=response.data.data.total
-
-      //data.bumen=response.data.data
-      console.log(response.data.data.users)
-    })
-  }else if(data.bbbmmm!=null){
-    axios.get("/bumenchauxnhmd",{
-      params:{pageNum:data.pageNum,pageSize:data.pageSize,bmmc:data.bbbmmm}
-    }).then(function(response){
-      data.users=response.data.data.list
-      data.total=response.data.data.total
-
-      //data.bumen=response.data.data
-      console.log(response.data.data.users)
-    })
-  }else if(data.rzname!=null&&data.rzsexxx!=null){
-    axios.get("/mohuchaxunyghmd",{
-      params:{pageNum:data.pageNum,pageSize:data.pageSize,rzname:data.rzname,rzsex:data.rzsexxx}
-    }).then(function(response){
-      data.users=response.data.data.list
-      data.total=response.data.data.total
-      console.log(response.data.data.users)
-    })
-  }else {
-    axios.get("/findusershmd", {
-      params: {
-        pageNum: data.pageNum,
-        pageSize: data.pageSize
-      }
-    }).then(function (response) {
-      data.total = response.data.data.total
-      data.users = response.data.data.list
-      console.log(data.users)
-    }).catch(function (error) {
-      console.log(error)
-    })
-  }
+  axios.get("/findusershmd", {
+    params: {
+      pageNum: data.pageNum,
+      pageSize: data.pageSize
+    }
+  }).then(function(response) {
+    data.total = response.data.data.total
+    data.users = response.data.data.list
+    console.log(data.users)
+  }).catch(function(error) {
+    console.log(error)
+  })
 }
 //根据id查询，将这条数据显示在修改页面中
 function a(rzbh){
