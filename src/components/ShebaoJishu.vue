@@ -101,6 +101,7 @@
         })
     })
 
+
     function sbjsshuaxin() {
         axios.get("/cxsbjs", {
             params: {
@@ -113,7 +114,7 @@
         }).catch(function (error) {
             console.log(error)
         })
-    }
+
     //分页
     function page() {
         axios.get("/cxsbjs", {

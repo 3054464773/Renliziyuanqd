@@ -76,6 +76,21 @@
             console.log(error)
         })
     })
+
+    function refresh(){
+      axios.get("/selectcbryxxSx",{
+        params:{
+          pageNum:data.pageNum,
+          pageSize:data.pageSize
+        }
+      }).then(function (response) {
+        console.log(response)
+        shixiData.value=response.data.data.list
+        data.total = response.data.data.total
+      }).catch(function (error) {
+        console.log(error)
+      })
+    }
     //分页--正式员工
     function page1() {
         axios.get("/selectcbryxxZs", {

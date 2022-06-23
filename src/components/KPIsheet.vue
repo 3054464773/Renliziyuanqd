@@ -13,6 +13,14 @@
 
           <div class="btn">
             <div class="select">
+
+              <el-date-picker
+                  value-format="YYYY-MM"
+                  v-model="data.jxsj"
+                  type="month"
+                  @change="findGradeByJxsj"
+                  placeholder="请选择月份"
+              />
               <el-input v-model="data.rzname" placeholder="请输入员工姓名查询"  style="width: 200px;margin-left: 80px"></el-input>
               <el-button class="btnSelect" :icon="Search" @click="selectGradeByName()" @keyup.enter="selectGradeByName"  type="primary" round>
                 <span style="vertical-align: middle" >搜索</span>
@@ -29,11 +37,11 @@
               style="width: 100%"
 
           >
-            <el-table-column prop="jxbh" label="评分编号" width="140"/>
+            <el-table-column prop="jxbh" label="评分编号" width="120"/>
 
-            <el-table-column  prop="jmc" label="绩效名称" width="140"  />
-            <el-table-column prop="jnr"  label="绩效内容" width="200" />
-            <el-table-column prop="rzname"  label="员工姓名" width="140" />
+            <el-table-column  prop="jmc" label="绩效名称" width="120"  />
+            <el-table-column prop="jnr"  label="绩效内容" width="160" />
+            <el-table-column prop="rzname"  label="员工姓名" width="120" />
             <el-table-column prop="jxsj"  label="时间" width="150" />
             <el-table-column  label="分数" width="180" >
               <template #default="scope" v-slot="scope">
@@ -194,7 +202,7 @@ import {
 import {ElMessageBox} from "element-plus/es";
 import {ElMessage} from "element-plus";
 import type { TabsPaneContext } from 'element-plus'
-var data=reactive({jixiao:[],pageNum:1,pageSize:5,total:0,rzname:'',isShow:false,value:'first'})
+var data=reactive({jixiao:[],pageNum:1,pageSize:5,total:0,rzname:'',isShow:false,value:'first',jxsj:''})
 var data2=reactive({jixiao:[],pageNum:1,pageSize:5,total:0,rzname:'',isShow:false,value:'first'})
 function handoff(TabsPaneContext,Event){
   if (TabsPaneContext.props.label=='已评分'){
@@ -231,16 +239,43 @@ function findAllGrade(){
   })
 }
 
-//分页
-function page(pageNum){
-  axios.get("/findGrade",{
-    params:{pageNum:data.pageNum,pageSize: data.pageSize}
+function findGradeByJxsj(){
+  console.log(data.jxsj)
+  axios.get("/findGradeByJxsj",{
+    params:{pageNum:data.pageNum,pageSize:data.pageSize,jxsj:data.jxsj}
   }).then(function (res){
-    data.total=res.data.data.total
+    console.log(res.data.data)
+
     data.jixiao=res.data.data.list
-  }).catch(function (error){
-    console.log(error)
+    data.total=res.data.data.total
   })
+}
+
+
+
+//分页
+function page(pageNum) {
+  if (data.jxsj != null) {
+    axios.get("/findGradeByJxsj", {
+      params: {pageNum: data.pageNum, pageSize: data.pageSize, jxsj: data.jxsj}
+    }).then(function (res) {
+      console.log(res.data.data)
+      data.total = res.data.data.total
+      data.jixiao = res.data.data.list
+    }).catch(function (error) {
+      console.log(error)
+    })
+
+  } else {
+    axios.get("/findGrade", {
+      params: {pageNum: data.pageNum, pageSize: data.pageSize}
+    }).then(function (res) {
+      data.total = res.data.data.total
+      data.jixiao = res.data.data.list
+    }).catch(function (error) {
+      console.log(error)
+    })
+  }
 }
 //查全部未评分的员工
 function findAllGrade2(){
@@ -484,6 +519,6 @@ function Listener(){
   margin-left: 10px;
 }
 .page{
-  margin-top: 78px;
+  margin-top: -10px;
 }
 </style>

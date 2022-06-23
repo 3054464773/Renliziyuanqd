@@ -3,7 +3,6 @@
     <el-tab-pane label="薪资记录" name="lll">
       <br>
       <div>
-
         <el-button style="position: relative;right: -166px;" @click="mohuchaxunyghxz">查询</el-button>
         <el-input v-model="data.rzname" placeholder="请输入姓名" clearable style="width: 200px;position: relative;right: 105px;" />
       </div>
@@ -865,9 +864,7 @@ function mohuchaxunkqjl(){
     console.log(response.data.data.kaoqin)
   })
 }
-const handleClick = (tab: TabsPaneContext, event: Event) => {
-  console.log(tab, event)
-}
+
 function  tym(TabsPaneContext,Event){
   if(TabsPaneContext.props.label=='薪资记录'){
     reload()
@@ -1103,13 +1100,14 @@ const del=(ybh)=>{
     type:'warning'
   }).then(()=>{
     axios.post("/delete/"+ybh).then(function(response){
-      reload()
-    }).catch(function(error){
       if (response.data.code==200){
         console.log(response.data.data)
         open1()
         reload()
       }
+      reload()
+    }).catch(function(error){
+
     })
   })
 }

@@ -33,11 +33,14 @@ var data = reactive({
   users:[],//存入查询后端响应过来的数据
   total:0,//总页数
   pageNum:1,//当前显示页码
-  pageSize:5,//每一页显示的条数
+  pageSize:4,//每一页显示的条数
   cx:{}, //根据id传后端查询返回的值
   zts:0,
   rzname:'',
-  zs:0
+  zs:0,
+  bumen:'',
+  bbbmmm:'',
+  rzsexxx:''
 })
 function reload(){
   axios.get("/findwdg", {
@@ -63,6 +66,7 @@ onBeforeMount(() => {
       pageSize: data.pageSize
     }
   }).then(function(response) {
+    bumenn()
     console.log(response.data.data)
     data.users = response.data.data.list
     data.total = response.data.data.total
@@ -96,13 +100,36 @@ function xiugairuzhi(ybh){
     return
   })
 }
-//模糊查询
-function mohuchaxunyghmd(){
-  axios.get("/mohuchaxunygwbd?rzname="+data.rzname).then(function(response){
-    data.users=response.data.data
+function mohuchaxunyghmdxx(){
+  axios.get("/mohuchaxunygwbd",{
+    params:{pageNum:data.pageNum,pageSize:data.pageSize,rzname:data.rzname,rzsex:data.rzsexxx}
+  }).then(function(response){
+    data.users=response.data.data.list
+    data.total=response.data.data.total
     console.log(response.data.data.users)
   })
 }
+//模糊查询
+// function mohuchaxunyghmd(){
+//   if(data.rzname==""){
+//   axios.get("/mohuchaxunygwbd",{
+//   params:{pageNum:data.pageNum,pageSize:data.pageSize,rzname:data.rzname,rzsex:""}
+// }).then(function(response){
+//   data.users=response.data.data.list
+//   data.total=response.data.data.total
+//     data.rzsexxx=""
+//   console.log(response.data.data.users)
+// })
+//   }else {
+//     axios.get("/mohuchaxunygwbd",{
+//       params:{pageNum:data.pageNum,pageSize:data.pageSize,rzname:data.rzname,rzsex:data.rzsexxx}
+//     }).then(function(response){
+//       data.users=response.data.data.list
+//       data.total=response.data.data.total
+//       console.log(response.data.data.users)
+//     })
+//   }
+// }
 //查询所有以及分页
 function page() {
   axios.get("/findwdg", {
@@ -195,7 +222,26 @@ const open2 = () => {
   })
 }
 
+//部门
+function bumenn(){
+  axios.get("/suoybumen").then(function (c){
 
+    data.bumen=c.data.data;
+
+  }).catch(function (error){
+    console.log(error)
+  })
+}
+//根据部门查询
+function bumenchauxwbd(){
+  axios.get("/bumenchauxwbd",{
+    params:{pageNum:data.pageNum,pageSize:data.pageSize,bmmc:data.bbbmmm}
+  }).then(function(response){
+    data.users=response.data.data.list
+    data.total=response.data.data.total
+
+  })
+}
 </script>
 <template >
 
@@ -203,20 +249,35 @@ const open2 = () => {
 
     <br>
 
-    <el-button style="position: relative;right: -166px;" @click="mohuchaxunyghmd">查询</el-button>
+    <el-button style="position: relative;right: -166px;" @click="mohuchaxunyghmdxx">查询</el-button>
     <el-input v-model="data.rzname" placeholder="请输入姓名" clearable style="width: 200px;position: relative;right: 105px;" />
+
+    <el-select v-model="data.rzsexxx"  @change="mohuchaxunyghmdxx" style="position: relative;right: 10px;"  placeholder="性别" clearable >
+      <el-option label="男"  value="男" />
+      <el-option label="女"   value="女" />
+
+    </el-select>
+    <span>部门:</span>  <el-select   placeholder="部门"  v-model="data.bbbmmm"  @change="bumenchauxwbd" clearable>
+        <el-option v-for="cc in data.bumen"  :value="cc.bmmc" :label="cc.bmmc" />
+      </el-select>
+
   </div>
   <div>
     <!-- 员工展示 -->
     <el-table v-bind:data="data.users" style="width: 100%" height="400">
-      <el-table-column prop="ybh"   label="员工编号" />
+<!--      <el-table-column prop="ybh"   label="员工编号" />-->
+      <el-table-column  type="index" label="序号" width="55" />
       <el-table-column prop="rzname" label="姓名" />
       <el-table-column prop="rzsex" label="性别" />
       <el-table-column prop="rzcsrq" label="出生日期" />
-      <el-table-column prop="rzhyzk" label="婚姻状况" />
+<!--      <el-table-column prop="rzhyzk" label="婚姻状况" />-->
       <el-table-column prop="rzzzmm" label="政治面貌" />
       <el-table-column prop="rzxl" label="学历" />
       <el-table-column prop="rzgzjl" label="工作经历" />
+      <el-table-column prop="bmmc" label="部门" />
+      <el-table-column prop="zwmc" label="职位" />
+
+
       <el-table-column  label="员工状态" >
         <template #default="scope">
           <span v-if="scope.row.ygzt==1">未到岗</span>
@@ -227,15 +288,15 @@ const open2 = () => {
         <el-button size="20px" type="success" plain @click="xiugairuzhi(scope.row.ybh)">报道</el-button>
         </template>
       </el-table-column>
-      <el-table-column  label="操作" width="200">
-        <template #default=scope v-slot="scope">
-          <!-- 删除 -->
-          <el-button type="primary" :icon="Delete" plain @click="del(scope.row.ybh),open1()" />
-          <!--          <el-button size="20px"  type="success" @click="a(scope.row.ybh),dialogFormVisible=true" >编辑</el-button>-->
-          <el-button size="20px" type="success" plain @click="dialogFormVisible=true,a(scope.row.rzbh)">查看</el-button>
-        </template>
+<!--      <el-table-column  label="操作" width="200">-->
+<!--        <template #default=scope v-slot="scope">-->
+<!--          &lt;!&ndash; 删除 &ndash;&gt;-->
+<!--          <el-button type="primary" :icon="Delete" plain @click="del(scope.row.ybh),open1()" />-->
+<!--          &lt;!&ndash;          <el-button size="20px"  type="success" @click="a(scope.row.ybh),dialogFormVisible=true" >编辑</el-button>&ndash;&gt;-->
+<!--          <el-button size="20px" type="success" plain @click="dialogFormVisible=true,a(scope.row.rzbh)">查看</el-button>-->
+<!--        </template>-->
 
-      </el-table-column>
+<!--      </el-table-column>-->
 
     </el-table>
     <!--分页 -->

@@ -1,11 +1,11 @@
 <template>
   <el-tabs v-model="data.value" class="demo-tabs" @tab-click="handoff">
-    <el-tab-pane label="薪资档案" name="first">
+    <el-tab-pane label="职位已定薪" name="first">
         <div class="big-salary">
           <div class="big-salary2">
 
             <div class="btn-salary">
-                <el-input v-model="data.rzname"  placeholder="请输入员工名称" style="width: 200px;margin-left: 80px" />
+                <el-input v-model="data.rzname"  placeholder="请输入职位名称" style="width: 200px;margin-left: 80px" />
                 <el-button class="btnSelect-salary" :icon="Search" @click="findAllBasePayByName" type="primary" round>
                   <span style="vertical-align: middle" >查询</span>
                 </el-button>
@@ -14,16 +14,16 @@
             <el-divider/>
             <div class="table-salary">
                 <el-table :data="data.salary" style="width: 100%">
-                  <el-table-column prop="rzname" label="员工姓名" width="180" />
-                  <el-table-column prop="zwmc" label="职位名称" width="180" />
-                  <el-table-column prop="bmmc" label="部门名称" width="180" />
-                  <el-table-column prop="xzjbgz" label="基本工资" width="180" />
-                  <el-table-column prop="ygzt" label="员工状态" >
+<!--                  <el-table-column prop="rzname" label="员工姓名" width="180" />-->
+                  <el-table-column prop="zwmc" label="职位名称" width="300" />
+                  <el-table-column prop="bmmc" label="部门名称" width="300" />
+                  <el-table-column prop="xzjbgz" label="基本工资" />
+<!--                  <el-table-column prop="ygzt" label="员工状态" >
                     <template #default="scope" >
                       {{scope.row.ygzt==2?"实习人员":(scope.row.ygzt==1?"未到岗"
                         :(scope.row.ygzt==3?"正式人员":(scope.row.ygzt==4?"已离职人员":"黑名单")))}}
                     </template>
-                  </el-table-column>
+                  </el-table-column>-->
                 </el-table>
               <el-empty description="没有找到相关数据！" v-if="data.isShow"/>
             </div>
@@ -39,7 +39,7 @@
           </div>
         </div>
     </el-tab-pane>
-    <el-tab-pane label="职位定薪" name="second">
+    <el-tab-pane label="未定薪" name="second">
       <div class="big-salary">
         <div class="big-salary2">
 
@@ -328,7 +328,7 @@ function Listener(){
   margin-right: 10px;
 }
 .page-salary{
-  margin-top: 78px;
+  margin-top: -10px;
   margin-left: 560px;
 }
 </style>
