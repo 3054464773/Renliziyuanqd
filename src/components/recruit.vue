@@ -101,11 +101,7 @@
     img:'',
     gryx:'',
     byxy:'',
-    zymc:'',
-    yijixk:'',
-    xxxz:'',
-    byssj:'',
-    rxsj:''
+    zymc:''
   })
   const insers2=reactive({
      mjsj:"",
@@ -262,7 +258,102 @@
   }
   //新增
   function xinzeng(){
-
+   //  if(this.insers.rzname==""){
+   //   ElMessage({
+   //       message:'姓名不能为空',
+   //       type:'warning',
+   // })
+   //  }else if(this.insers.rzcsrq==""){
+   //    ElMessage({
+   //      message:'出生日期不能为空',
+   //      type:'warning',
+   //    })
+   //  }else if(this.insers.rzsex==""){
+   //    ElMessage({
+   //      message:'性别不能为空',
+   //      type:'warning',
+   //    })
+   //  }
+   //  else if(this.insers.rzxl==""){
+   //    ElMessage({
+   //      message:'学历不能为空',
+   //      type:'warning',
+   //    })
+   //  }
+   //  else if(this.insers.zymc==""){
+   //    ElMessage({
+   //      message:'专业名称不能为空',
+   //      type:'warning',
+   //    })
+   //  }
+   //  else if(this.insers.byxy==""){
+   //    ElMessage({
+   //      message:'毕业学校不能为空',
+   //      type:'warning',
+   //    })
+   //  }
+   //  else if(this.insers.rzsfz==""){
+   //    ElMessage({
+   //      message:'身份证不能为空',
+   //      type:'warning',
+   //    })
+   //  }
+   //  else if(this.insers.rzphone==""){
+   //    ElMessage({
+   //      message:'联系电话不能为空',
+   //      type:'warning',
+   //    })
+   //  }
+   //  else if(this.insers.rzage==""){
+   //    ElMessage({
+   //      message:'年龄不能为空',
+   //      type:'warning',
+   //    })
+   //  }
+   //  else if(this.insers.rzdz==""){
+   //    ElMessage({
+   //      message:'现居地址不能为空',
+   //      type:'warning',
+   //    })
+   //  }
+   //  else if(this.insers.rzgzjl==""){
+   //    ElMessage({
+   //      message:'工作经历不能为空',
+   //      type:'warning',
+   //    })
+   //  }
+   //  else if(this.insers.rzhyzk==""){
+   //    ElMessage({
+   //      message:'婚姻状况不能为空',
+   //      type:'warning',
+   //    })
+   //  }
+   //  else if(this.insers.rzmz==""){
+   //    ElMessage({
+   //      message:'名族不能为空',
+   //      type:'warning',
+   //    })
+   //  }
+   //  else if(this.insers.zwbh==""){
+   //    ElMessage({
+   //      message:'职位不能为空',
+   //      type:'warning',
+   //    })
+   //  }
+   //
+   //
+   //  else if(this.insers.gryx==""){
+   //    ElMessage({
+   //      message:'邮箱不能为空',
+   //      type:'warning',
+   //    })
+   //  }
+   //  else if(this.insers.rzzzmm==""){
+   //    ElMessage({
+   //      message:'名族不能为空',
+   //      type:'warning',
+   //    })
+   //  }else {
 
     axios.post("/inserttttt",insers).then(function(response){
       reload()
@@ -287,12 +378,6 @@
       insers.zwbh=""
       insers.img=""
       insers.gryx=""
-     insers.zymc=""
-      insers.yijixk=""
-      insers.xxxz=""
-      insers.byssj=""
-      insers.rxsj=""
-      insers.byxy=""
       active.value=0;
 
 
