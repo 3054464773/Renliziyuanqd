@@ -250,7 +250,11 @@ function mohuzpjh(){
     console.log(response.data.data.users)
   })
 }
+function bbb(data){
+  dialogFormVisible.value=true,
 
+      a(data.zbh)
+}
 </script>
 <template>
   <br>
@@ -265,7 +269,7 @@ function mohuzpjh(){
   <div>
 
     <el-table :data="data.zpjhr" style="width: 100%" height="400">
-      <el-table-column prop="zbh" label="id" />
+      <el-table-column  type="index" label="序号" width="200" />
       <el-table-column prop="zwmc" label="职位" />
       <el-table-column prop="bmmc" label="部门" />
       <el-table-column prop="zrs"  label="人数" />
@@ -274,7 +278,7 @@ function mohuzpjh(){
       <el-table-column label="操作"  width="200">
         <template #default=scope v-slot="scope">
           <el-button size="10px" type="success" plain  @click="del(scope.row.zbh)">删除	</el-button><!-- 删除 -->
-          <el-button size="10px" type="success" plain @click="dialogFormVisible=true,a(scope.row.zbh)">查看</el-button>
+          <el-button size="10px" type="success" plain @click="bbb(scope.row)">查看</el-button>
 
         </template>
 
@@ -327,32 +331,36 @@ function mohuzpjh(){
 
   </el-dialog>
   <el-dialog v-model="dialogFormVisible" title="查看招聘计划信息" >
-    <el-form :model="data.cx">
-      <el-col :span="14">
-      <el-form-item label="审核记录表id:" >
-        <el-input v-model="data.cx.shjlbh"/>
-      </el-form-item>
-      </el-col>
-      <el-form-item label="审核表id:">
-        <el-input  v-model="data.cx.shbid"/>
+    <el-row>
+    <el-form :model="data.cx" label-width="120px">
+<!--      <el-col :span="14">-->
+<!--      <el-form-item label="审核记录表id:" >-->
+<!--        <el-input v-model="data.cx.shjlbh"/>-->
+<!--      </el-form-item>-->
+<!--      </el-col>-->
+<!--      <el-form-item label="审核表id:">-->
+<!--        <el-input  v-model="data.cx.shbid"/>-->
+<!--      </el-form-item>-->
+
+      <el-col :span="20">
+      <el-form-item label="职位:" >
+        <el-input v-model="data.cx.zwmc"   disabled="disabled"/>
       </el-form-item>
 
-      <el-col :span="14">
-      <el-form-item label="职位表id:" >
-        <el-input v-model="data.cx.zwbh" />
-      </el-form-item>
-
       </el-col>
-      <el-form-item label="人数" >
+      <el-col :span="20">
+      <el-form-item label="人数:" >
         <el-input v-model="data.cx.zrs"/>
       </el-form-item>
-
+      </el-col>
+      <el-col :span="20">
       <el-form-item label="招聘计划名称:" :label-width="formLabelWidth">
         <el-input v-model="data.cx.zmc" style="width: 400px;" type="textarea" />
       </el-form-item>
-
+      </el-col>
 
     </el-form>
+    </el-row>
     <template #footer>
 	  	<span class="dialog-footer">
 	  		<el-button @click="dialogFormVisible = false">关闭</el-button>
