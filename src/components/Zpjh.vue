@@ -319,13 +319,20 @@ function bbb(data){
       <el-table-column prop="bmmc" label="部门" />
       <el-table-column prop="zrs"  label="人数" />
       <el-table-column prop="zmc"  label="招聘计划内容" />
-      <el-table-column  label="审核状态" >
+      <el-table-column prop="zzt" label="计划状态">
         <template #default="scope">
-          <span v-if="scope.row.shjlzt==1">未审核</span>
-          <span v-else-if="scope.row.shjlzt==2">通过</span>
-          <span v-else-if="scope.row.shjlzt==3">未通过</span>
+          <span v-if="scope.row.shjlzt==1"><el-button type="success" round disabled>通过</el-button></span>
+          <span v-if="scope.row.shjlzt==2"><el-button type="danger" round disabled>未通过</el-button></span>
+          <span v-if="scope.row.shjlzt==3"><el-button type="warning" round disabled>未审核</el-button></span>
         </template>
       </el-table-column>
+<!--      <el-table-column  label="审核状态" >-->
+<!--        <template #default="scope">-->
+<!--          <span v-if="scope.row.shjlzt==1">通过</span>-->
+<!--          <span v-else-if="scope.row.shjlzt==2">未通过</span>-->
+<!--          <span v-else-if="scope.row.shjlzt==3">未审核</span>-->
+<!--        </template>-->
+<!--      </el-table-column>-->
 
       <el-table-column label="操作"  width="200">
         <template #default=scope v-slot="scope">
