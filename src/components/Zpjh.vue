@@ -321,9 +321,9 @@ function bbb(data){
       <el-table-column prop="zmc"  label="招聘计划内容" />
       <el-table-column  label="审核状态" >
         <template #default="scope">
-          <span v-if="scope.row.shjlzzt==1">未审核</span>
-          <span v-else-if="scope.row.shjlzzt==2">通过</span>
-          <span v-else-if="scope.row.shjlzzt==3">未通过</span>
+          <span v-if="scope.row.shjlzt==1">未审核</span>
+          <span v-else-if="scope.row.shjlzt==2">通过</span>
+          <span v-else-if="scope.row.shjlzt==3">未通过</span>
         </template>
       </el-table-column>
 
@@ -373,11 +373,11 @@ function bbb(data){
             <el-input v-model="insers.zrs" style="width: 200px;"/>
           </el-form-item>
         </el-col>
-        <el-col :span="11">
-          <el-form-item label="备注:" >
-            <el-input v-model="insers.shjlzbz" style="width: 200px;"/>
-          </el-form-item>
-        </el-col>
+<!--        <el-col :span="11">-->
+<!--          <el-form-item label="备注:" >-->
+<!--            <el-input v-model="insers.shjlzbz" style="width: 200px;"/>-->
+<!--          </el-form-item>-->
+<!--        </el-col>-->
 
         <el-col :span="11">
         <el-form-item label="招聘计划名称:" prop="zmc">

@@ -31,13 +31,22 @@ const insers=reactive({
   sbbh:'',
   ygzt:'',
   yzh:'',
-  ymm:''
+  ymm:'',
+  shbid:''
 })
 const insers2=reactive({
   ybh:'',
   sj:'',
-  rzname:""
+  rzname:"",
+  shbid:''
 })
+function shenhehe(){
+  axios.get("/shenheneir").then(function (c){
+    data.shenhename=c.data.data;
+  }).catch(function (error){
+    console.log(error)
+  })
+}
 var data = reactive({
   users:[],//存入查询后端响应过来的数据
   total:0,//总页数
@@ -51,7 +60,8 @@ var data = reactive({
   bumen:'',
   bbbmmm:'',
   yyggrzsj:'',
-  rzsexxx:''
+  rzsexxx:'',
+  shenhename:''
 })
 //生命周期s
 
@@ -359,10 +369,12 @@ function xinzeng(){
 }
 //转正申请
 function zzsq(){
+  alert(insers2.shbid)
   axios.post("/zzsq",insers2).then(function(response){
 
     insers2.ybh=""
     insers2.sj=""
+    insers2.shbid=""
     open(),
     reload()
   }).catch(function(error) {
@@ -582,7 +594,7 @@ function  ruzhishij(){
 
             <el-table-column  label="操作" width="160">
               <template #default=scope v-slot="scope">
-                <el-button size="10px" type="success" plain @click="zhuanmingzi(scope.row)">转正</el-button><!--cc(scope.row.ybh)-->
+                <el-button size="10px" type="success" plain @click="zhuanmingzi(scope.row),shenhehe()">转正</el-button><!--cc(scope.row.ybh)-->
                 <el-button size="10px" type="success" plain @click="dialogFormVisible=true,a(scope.row.rzbh)">编辑</el-button>
               </template>
             </el-table-column>
@@ -707,22 +719,20 @@ function  ruzhishij(){
     <!--    编辑员工-->
     <el-dialog v-model="dialogFormVisible3" title="转正申请" :modal="insers2">
       <el-form>
+        <el-row>
         <el-col :span="11">
         <el-form-item label="员工:" >
           <el-input  v-model="insers2.rzname" style="width: 200px;"  disabled="disabled" clearable />
         </el-form-item>
         </el-col>
-
-        <el-form-item label="申请时间:" style="position: relative;right: -80px">
-        <el-date-picker
-            value-format="YYYY-MM-DD"
-            v-model="insers2.sj"
-
-            type="date"
-
-
-        />
-        </el-form-item>
+        <el-col :span="11">
+          <el-form-item label="审核内容:">
+            <el-select v-model="insers2.shbid" placeholder="审核内容">
+              <el-option v-for="cc in data.shenhename" :key="cc.shbid" :label="cc.shbmc" :value="cc.shbid"/>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        </el-row>
       </el-form>
       <template #footer>
 			<span class="dialog-footer">
