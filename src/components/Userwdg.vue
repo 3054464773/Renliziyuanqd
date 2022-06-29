@@ -88,18 +88,38 @@ function xiugai(rzbh){
   })
 }
 //修改员工状态
-function xiugairuzhi(ybh){
-  axios.get("/xgtgrz?yhb="+ybh).then(function(response){
-    reload()
-    console.log("7777777"+ybh);
-    if(response.data.code!=200){
-      alert('修改失败'+response.data.code)
+const xiugairuzhi=(ybh)=>{
+  ElMessageBox.confirm('是否确认报道?','提示',{
+    confirmButtonText:'确定',
+    cancelButtonText:'取消',
+    type:'warning'
+  }).then(()=>{
+    axios.get("/xgtgrz?yhb="+ybh).then(function(response){
+      open1111()
+      reload()
+      console.log("7777777"+ybh);
+      if(response.data.code!=200){
+        alert('修改失败'+response.data.code)
+        return
+      }
+    }).catch(function(error){
       return
-    }
-  }).catch(function(error){
-    return
+    })
   })
 }
+
+// function xiugairuzhi(ybh){
+//   axios.get("/xgtgrz?yhb="+ybh).then(function(response){
+//     reload()
+//     console.log("7777777"+ybh);
+//     if(response.data.code!=200){
+//       alert('修改失败'+response.data.code)
+//       return
+//     }
+//   }).catch(function(error){
+//     return
+//   })
+// }
 function mohuchaxunyghmdxx(){
   axios.get("/mohuchaxunygwbd",{
     params:{pageNum:data.pageNum,pageSize:data.pageSize,rzname:data.rzname,rzsex:data.rzsexxx}
@@ -132,6 +152,18 @@ function mohuchaxunyghmdxx(){
 // }
 //查询所有以及分页
 function page() {
+  if(data.bbbmmm!=""){
+    axios.get("/bumenchauxwbd",{
+      params:{pageNum:data.pageNum,pageSize:data.pageSize,bmmc:data.bbbmmm}
+
+    }).then(function(response){
+      data.users=response.data.data.list
+      data.total=response.data.data.total
+
+      //data.bumen=response.data.data
+      console.log(response.data.data.users)
+    })
+  }else{
   axios.get("/findwdg", {
     params: {
       pageNum: data.pageNum,
@@ -144,6 +176,7 @@ function page() {
   }).catch(function(error) {
     console.log(error)
   })
+}
 }
 //根据id查询，将这条数据显示在修改页面中
 function a(rzbh){
@@ -214,6 +247,14 @@ const open1 = () => {
     type: 'success',
   })
 }
+const open1111 = () => {
+  ElNotification({
+    title: '报道',
+    message: '报道成功',
+    type: 'success',
+  })
+}
+
 const open2 = () => {
   ElNotification({
     title: '新增',

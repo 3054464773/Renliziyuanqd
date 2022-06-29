@@ -47,10 +47,11 @@
       <template #title>招聘管理</template>
       <el-menu-item index="/gorecruit">简历信息</el-menu-item>
       <el-menu-item index="/gorencaizhub">应聘者面试</el-menu-item>
-      <el-menu-item index="/gointerview">面试流程</el-menu-item>
+      <el-menu-item index="/gointerview">面试题库</el-menu-item>
       <el-menu-item index="/goZpjh">招聘计划</el-menu-item>
+<!--            <el-menu-item index="/goCCSS">招聘计划</el-menu-item>-->
     </el-sub-menu>
-<!--      <el-menu-item index="/goxxxx">招聘计划</el-menu-item>-->
+
 
         <el-sub-menu index="6">
             <template #title>绩效管理</template>
