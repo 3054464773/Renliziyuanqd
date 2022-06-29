@@ -11,6 +11,7 @@
     >
         <el-menu-item index="/gotable">首页</el-menu-item>
 
+
       <el-sub-menu :index="jg.fcd.qdcdmc"   v-for="jg in tdlysj">
         <template #title>
           <i class="el-icon-location"></i>
@@ -80,6 +81,7 @@
 <!--      <el-menu-item index="/goshenheshezhi">审核设置</el-menu-item>-->
 <!--      <el-menu-item index="/goshebaoshenhe">社保审核</el-menu-item>-->
 <!--    </el-sub-menu>-->
+
     
   </el-menu>
 
