@@ -18,7 +18,7 @@
             <el-menu-item index="/goshebaojishu">社保基数</el-menu-item>
             <el-menu-item index="/goshebaopeople">未参保人员</el-menu-item>
             <el-menu-item index="/goshebaojiaofei">社保缴费</el-menu-item>
-            <el-menu-item index="/gonashui">纳税</el-menu-item>
+            <el-menu-item index="/gonashui">纳税规则</el-menu-item>
         </el-sub-menu>
 
         <el-sub-menu index="3">
