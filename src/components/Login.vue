@@ -66,12 +66,18 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   await formEl.validate((valid, fields) => {
     if (valid) {
      axios.post("/YuangongLogin",userinfo).then((e)=>{
-       console.log(e)
           if(e.data.data){
+            console.log(JSON.parse(e.data.data.dtly).length)
             stores.commit('setdtly',e.data.data)
-            console.log(stores["getters"].getdtly)
-            console.log(sessionStorage.getItem("token"))
-            router.push("/home")
+            router.addRoute({name:'home',path:'/home',  component: () => import('../components/Home.vue')})
+            router.addRoute('home',{name:"table",path:"/gotable",component:() => import('../components/YuangongTable.vue')})
+            for (let item of JSON.parse(e.data.data.dtly)) {
+                if(item.qdfjid!=0){
+                  router.addRoute('home',{name:item.qdlymc,path:item.qdlydz,component:() => import('../components/'+item.qdzjmc+'.vue')})
+                }
+                // this.$router.addRoute('home',{name:item2.qdlyname,path:item2.qdlypath,component:() => import('../components/'+item2.qdzjname+'.vue')})
+            }
+            router.push("/gotable")
           }
 
      })

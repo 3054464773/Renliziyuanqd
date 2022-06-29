@@ -11,84 +11,124 @@
     >
         <el-menu-item index="/gotable">首页</el-menu-item>
 
-
-        <el-sub-menu index="2">
-            <template #title>社保管理</template>
-            <el-menu-item index="/goshebao">社保方案</el-menu-item>
-            <el-menu-item index="/goshebaojishu">社保基数</el-menu-item>
-            <el-menu-item index="/goshebaopeople">未参保人员</el-menu-item>
-            <el-menu-item index="/goshebaojiaofei">社保缴费</el-menu-item>
-            <el-menu-item index="/gonashui">纳税</el-menu-item>
-        </el-sub-menu>
-
-        <el-sub-menu index="3">
-      <template #title>员工管理</template>
-<!--      <el-menu-item index="/goCCSS">员工记录</el-menu-item>-->
-      <el-menu-item index="/gousersss">在职</el-menu-item>
-      <el-menu-item index="/goSxusers">实习</el-menu-item>
-      <el-menu-item index="/goUserwdg">未到岗</el-menu-item>
-      <el-menu-item index="/goYhlz">离职</el-menu-item>
-      <el-menu-item index="/gouser">黑名单</el-menu-item>
-
-‘
-    </el-sub-menu>
-        <el-sub-menu index="4">
-            <template #title>系统设置</template>
-            <el-menu-item index="/goquanxian">权限管理</el-menu-item>
-            <el-menu-item index="/gojiaose">角色管理</el-menu-item>
-            <el-menu-item index="/gobumen">部门管理</el-menu-item>
-            <el-menu-item index="/goshezhiyhjs">设置用户权限</el-menu-item>
-            <el-menu-item index="/gotongzhi">发布通知</el-menu-item>
-            <el-menu-item index="/gogonggao">发布公告</el-menu-item>
-            <el-menu-item index="/gofpygyemian">设置菜单</el-menu-item>
-        </el-sub-menu>
-    <el-sub-menu index="5">
-
-      <template #title>招聘管理</template>
-      <el-menu-item index="/gorecruit">简历信息</el-menu-item>
-      <el-menu-item index="/gorencaizhub">应聘者面试</el-menu-item>
-      <el-menu-item index="/gointerview">面试流程</el-menu-item>
-      <el-menu-item index="/goZpjh">招聘计划</el-menu-item>
-    </el-sub-menu>
-<!--      <el-menu-item index="/goxxxx">招聘计划</el-menu-item>-->
-
-        <el-sub-menu index="6">
-            <template #title>绩效管理</template>
-            <el-menu-item index="/goinsertjixiao">绩效名称</el-menu-item>
-            <el-menu-item index="/gojixiaoGrade">绩效评分</el-menu-item>
-            <el-menu-item index="/gojixiaoScore">绩效月报</el-menu-item>
-        </el-sub-menu>
-
-        <el-sub-menu index="7">
-            <template #title>薪资管理</template>
-            <el-menu-item index="/gosalary">基本工资</el-menu-item>
-            <el-menu-item index="/gosalaryElement">薪资要素项</el-menu-item>
-            <el-menu-item index="/gopayroll">薪资档案</el-menu-item>
-        </el-sub-menu>
+      <el-sub-menu :index="jg.fcd.qdcdmc"   v-for="jg in tdlysj">
+        <template #title>
+          <i class="el-icon-location"></i>
+          <span>{{jg.fcd.qdcdmc}}</span>
+        </template>
+        <el-menu-item v-for="jg2 in jg.zcd" :index="jg2.qdlydz">{{jg2.qdcdmc}}</el-menu-item>
+      </el-sub-menu>
 
 
-        <el-sub-menu index="8">
-            <template #title>考勤管理</template>
-            <el-menu-item index="/gojiaqishezhi">设置假期类型</el-menu-item>
-            <el-menu-item index="/gopaibansz">班次设置</el-menu-item>
-            <el-menu-item index="/gokaoqingjilu">考勤记录</el-menu-item>
-        </el-sub-menu>
+<!--        <el-sub-menu index="2">-->
+<!--            <template #title>社保管理</template>-->
+<!--            <el-menu-item index="/goshebao">社保方案</el-menu-item>-->
+<!--            <el-menu-item index="/goshebaojishu">社保基数</el-menu-item>-->
+<!--            <el-menu-item index="/goshebaopeople">未参保人员</el-menu-item>-->
+<!--            <el-menu-item index="/goshebaojiaofei">社保缴费</el-menu-item>-->
+<!--            <el-menu-item index="/gonashui">纳税</el-menu-item>-->
+<!--        </el-sub-menu>-->
+<!--        <el-sub-menu index="3">-->
+<!--      <template #title>员工管理</template>-->
+<!--&lt;!&ndash;      <el-menu-item index="/goCCSS">员工记录</el-menu-item>&ndash;&gt;-->
+<!--      <el-menu-item index="/gousersss">在职</el-menu-item>-->
+<!--      <el-menu-item index="/goSxusers">实习</el-menu-item>-->
+<!--      <el-menu-item index="/goUserwdg">未到岗</el-menu-item>-->
+<!--      <el-menu-item index="/goYhlz">离职</el-menu-item>-->
+<!--      <el-menu-item index="/gouser">黑名单</el-menu-item>-->
 
- 
+<!--‘-->
+<!--    </el-sub-menu>-->
+<!--        <el-sub-menu index="4">-->
+<!--            <template #title>系统设置</template>-->
+<!--            <el-menu-item index="/goquanxian">权限管理</el-menu-item>-->
+<!--            <el-menu-item index="/gojiaose">角色管理</el-menu-item>-->
+<!--            <el-menu-item index="/gobumen">部门管理</el-menu-item>-->
+<!--            <el-menu-item index="/goshezhiyhjs">设置用户权限</el-menu-item>-->
+<!--            <el-menu-item index="/gotongzhi">发布通知</el-menu-item>-->
+<!--            <el-menu-item index="/gogonggao">发布公告</el-menu-item>-->
+<!--            <el-menu-item index="/gofpygyemian">设置菜单</el-menu-item>-->
+<!--        </el-sub-menu>-->
+<!--        <el-sub-menu index="5">-->
 
-    <el-sub-menu index="9">
-      <template #title>审核管理</template>
-      <el-menu-item index="/goshenheshezhi">审核设置</el-menu-item>
-      <el-menu-item index="/goshebaoshenhe">社保审核</el-menu-item>
-    </el-sub-menu>
+<!--      <template #title>招聘管理</template>-->
+<!--      <el-menu-item index="/gorecruit">简历信息</el-menu-item>-->
+<!--      <el-menu-item index="/gorencaizhub">应聘者面试</el-menu-item>-->
+<!--      <el-menu-item index="/gointerview">面试流程</el-menu-item>-->
+<!--      <el-menu-item index="/goZpjh">招聘计划</el-menu-item>-->
+<!--    </el-sub-menu>-->
+<!--        <el-sub-menu index="6">-->
+<!--            <template #title>绩效管理</template>-->
+<!--            <el-menu-item index="/goinsertjixiao">绩效名称</el-menu-item>-->
+<!--            <el-menu-item index="/gojixiaoGrade">绩效评分</el-menu-item>-->
+<!--            <el-menu-item index="/gojixiaoScore">绩效月报</el-menu-item>-->
+<!--        </el-sub-menu>-->
+<!--        <el-sub-menu index="7">-->
+<!--            <template #title>薪资管理</template>-->
+<!--            <el-menu-item index="/gosalary">基本工资</el-menu-item>-->
+<!--            <el-menu-item index="/gosalaryElement">薪资要素项</el-menu-item>-->
+<!--            <el-menu-item index="/gopayroll">薪资档案</el-menu-item>-->
+<!--        </el-sub-menu>-->
+<!--        <el-sub-menu index="8">-->
+<!--            <template #title>考勤管理</template>-->
+<!--            <el-menu-item index="/gojiaqishezhi">设置假期类型</el-menu-item>-->
+<!--            <el-menu-item index="/gopaibansz">班次设置</el-menu-item>-->
+<!--            <el-menu-item index="/gokaoqingjilu">考勤记录</el-menu-item>-->
+<!--        </el-sub-menu>-->
+<!--        <el-sub-menu index="9">-->
+<!--      <template #title>审核管理</template>-->
+<!--      <el-menu-item index="/goshenheshezhi">审核设置</el-menu-item>-->
+<!--      <el-menu-item index="/goshebaoshenhe">社保审核</el-menu-item>-->
+<!--    </el-sub-menu>-->
     
   </el-menu>
 
 </template>
 
 <script>
+  import store from '../store/index'
     export default {
-        name: "Zuobiancaidan"
+        name: "Zuobiancaidan",
+        data(){
+          return{
+              tdlysj:[],
+                tdly2:[]
+          }
+        },
+        computed:{
+        tdlyy:{
+          get(){
+            return  store.getters.getdtly
+          }
+        }
+      },
+      methods:{
+          js(){
+            console.log(JSON.parse(this.tdlyy.dtly))
+            this.tdly2=JSON.parse(this.tdlyy.dtly)
+            console.log(this.tdly2)
+
+            for (var i=0;i<this.tdly2.length;i++){
+              if(this.tdly2[i].qdfjid==0){
+                this.tdlysj.push({fcd:this.tdly2[i],zcd:[]})
+              }
+            }
+
+            for (var i=0;i<this.tdly2.length;i++){
+              for (var j=0;j<this.tdlysj.length;j++){
+                  if(this.tdly2[i].qdfjid==this.tdlysj[j].fcd.qdbid){
+                    this.tdlysj[j].zcd.push(this.tdly2[i])
+                  }
+              }
+            }
+
+            // console.log(this.tdlysj)
+            // console.log(this.tdly)
+          }
+      },
+      created() {
+          this.js()
+      }
     }
 </script>
 
