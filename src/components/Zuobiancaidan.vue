@@ -61,7 +61,7 @@
 
         <el-sub-menu index="7">
             <template #title>薪资管理</template>
-            <el-menu-item index="/gosalary">基本工资</el-menu-item>
+            <el-menu-item index="/gosalary">职位定薪</el-menu-item>
             <el-menu-item index="/gosalaryElement">薪资要素项</el-menu-item>
             <el-menu-item index="/gopayroll">薪资档案</el-menu-item>
         </el-sub-menu>

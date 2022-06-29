@@ -2,24 +2,103 @@
   <div class="big-payroll">
     <div class="big-payroll2">
 
-      <div>
+      <el-date-picker
+          value-format="YYYY-MM"
+          v-model="data.xzsj"
+          type="month"
+          @change="updateEmpInfoByMonth()"
+          placeholder="请选择月份"
+          style="margin-top: 20px;margin-bottom: 20px;margin-left: -650px"
+      />
+      <el-input v-model="data.bmmc" placeholder="请输入部门名称查询"  style="width: 200px;margin-left: 80px" @change="selectEmpInfoByBmmc"></el-input>
+    <div>
         <!-- 表格-->
         <el-table :data="data.payroll" style="width: 100%">
-          <el-table-column prop="xzjlbh" label="序号" width="150" />
-          <el-table-column prop="rzname" label="姓名" width="120" />
-          <el-table-column prop="bmmc" label="部门" width="120" />
-          <el-table-column prop="szjlsj" label="发放时间" width="120" />
-          <el-table-column prop="xzjljbgz" label="基本工资" width="120" />
-          <el-table-column prop="xzysje" label="薪资要素项" width="600" />
-          <el-table-column prop="zip" label="Zip" width="120" />
-          <el-table-column fixed="right" label="Operations" width="120">
-            <template #default>
-              <el-button link type="primary" size="small" @click="handleClick"
-              >Detail</el-button
-              >
-              <el-button link type="primary" size="small">Edit</el-button>
+<!--          <el-table-column prop="xzjlbh" label="序号" width="120" align="center" />-->
+          <el-table-column prop="rzname" label="姓名" width="120" align="center" fixed="left" />
+          <el-table-column prop="bmmc" label="部门" width="120" align="center" />
+          <el-table-column prop="zwmc" label="职位" width="120" align="center" />
+          <el-table-column prop="szjlsj" label="发放时间" width="120" align="center" />
+          <el-table-column  label="基本工资" width="120" align="center" >
+            <template #default="scope">
+              <span>{{parseFloat(scope.row.xzjljbgz).toFixed(2)}}</span>
             </template>
           </el-table-column>
+
+          <el-table-column  label="应出勤天数" width="120" align="center" >
+            <template #default="scope" v-slot="scope">
+              22
+            </template>
+          </el-table-column>
+          <el-table-column prop="kqCount" label="实际出勤天数" width="120" align="center" />
+          <el-table-column label="薪资要素项" width="120" align="center" >
+            <template #default="scope">
+              <span>{{parseFloat(scope.row.xzysje).toFixed(2)}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="奖金" align="center" width="240">
+            <el-table-column label="加班" align="center" width="120">
+              <template #default="scope" v-slot="scope">
+                0.00
+              </template>
+            </el-table-column>
+            <el-table-column label="全勤" prop="quanqin" align="center" width="120">
+              <template #default="scope">
+                <span>{{parseFloat(scope.row.quanqin).toFixed(2)}}</span>
+              </template>
+            </el-table-column>
+          </el-table-column>
+          <el-table-column align="center" label="应发工资" width="120" >
+            <template #default="scope">
+              <span>{{parseFloat(scope.row.yingfa).toFixed(2)}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="社保缴费"   align="center" width="120">
+            <template #default="scope">
+              <span>-{{parseFloat(scope.row.sbje).toFixed(2)}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="工资扣额" align="center" width="600">
+            <el-table-column label="迟到" prop="chidao" align="center" width="120">
+              <template #default="scope">
+                <span>-{{parseFloat(scope.row.chidao).toFixed(2)}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="早退" prop="zaotui" align="center" width="120">
+              <template #default="scope">
+                <span>-{{parseFloat(scope.row.zaotui).toFixed(2)}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="病假" prop="bingjiamoney" align="center" width="120">
+              <template #default="scope">
+                <span>-{{parseFloat(scope.row.bingjiamoney).toFixed(2)}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="事假" prop="shijiamoney" align="center" width="120">
+              <template #default="scope">
+                <span>-{{parseFloat(scope.row.shijiamoney).toFixed(2)}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="个人所得税" prop="geshui" align="center" width="120">
+              <template #default="scope">
+                <span>-{{parseFloat(scope.row.geshui).toFixed(2)}}</span>
+              </template>
+            </el-table-column>
+          </el-table-column>
+
+          <el-table-column align="center" label="实发工资" width="120" >
+            <template #default="scope">
+              <span>{{parseFloat(scope.row.shifa).toFixed(2)}}</span>
+            </template>
+          </el-table-column>
+<!--          <el-table-column fixed="right" label="Operations" width="120">-->
+<!--            <template #default>-->
+<!--              <el-button link type="primary" size="small" @click="handleClick"-->
+<!--              >Detail</el-button-->
+<!--              >-->
+<!--              <el-button link type="primary" size="small">Edit</el-button>-->
+<!--            </template>-->
+<!--          </el-table-column>-->
         </el-table>
         <el-empty description="没有找到相关数据！" v-if="data.isShow"/>
       </div>
@@ -55,13 +134,15 @@ import {ElMessageBox} from "element-plus/es";
 
 var data=reactive({
   payroll:[],
+  num:[],
   pages:0,
   pageNum:1,
   pageSize:5,
   total:0,
   isShow:false,
-
-
+  ycqt:22,
+  xzsj:'',
+  bmmc:''
 })
 
 onBeforeMount(()=>{
@@ -77,11 +158,59 @@ onBeforeMount(()=>{
   })
 })
 
+function page(){
+  axios.get("/selectEmpInfo",{
+    params:{pageNum:data.pageNum,pageSize:data.pageSize}
+  }).then(function (res){
+    console.log(res.data.data)
 
+    data.payroll=res.data.data.list
+    data.total=res.data.data.total
+  }).catch(function (err){
+    console.log(err)
+  })
+}
 
+function selectEmpInfoByMonth(){
+  axios.get("/selectEmpInfoByMonth",{
+    params:{pageNum:data.pageNum,pageSize:data.pageSize,szjlsj:data.xzsj}
+  }).then(function (res){
+    console.log(res.data.data)
 
+    data.payroll=res.data.data.list
+    data.total=res.data.data.total
+  }).catch(function (err){
+    console.log(err)
+  })
+}
 
+function updateEmpInfoByMonth(){
+  if (data.xzsj!=null){
+    selectEmpInfoByMonth()
+  }else {
+    axios.get("/selectEmpInfo",{
+      params:{pageNum:data.pageNum,pageSize:data.pageSize}
+    }).then(function (res){
+      console.log(res.data.data)
+      data.payroll=res.data.data.list
+      data.total=res.data.data.total
+    }).catch(function (err){
+      console.log(err)
+    })
+  }
+}
 
+function selectEmpInfoByBmmc(){
+  axios.get("/selectEmpInfoByBmmc",{
+    params:{pageNum:data.pageNum,pageSize:data.pageSize,bmmc:data.bmmc}
+  }).then(function (res){
+    console.log(res.data.data)
+    data.payroll=res.data.data.list
+    data.total=res.data.data.total
+  }).catch(function (err){
+    console.log(err)
+  })
+}
 
 //消息框
 import {ElMessage} from "element-plus";
