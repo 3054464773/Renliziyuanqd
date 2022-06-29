@@ -63,7 +63,7 @@ export default {
               tzbt:'',
               tznr:''
             }
-            this.findallbmandtzjilu(1);
+            this.findallbmandtzjilu(1,"");
             this.$message.success("发布成功！")
           }
         })

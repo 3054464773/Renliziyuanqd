@@ -7,7 +7,7 @@ instance.interceptors.request.use(function (config) {
 });
 instance.interceptors.response.use(function (response) {
     if(response.data.code!=200){
-        alert(response.data.message)
+       alert("权限不足！")
     }
     return response;
 }, function (error) {
