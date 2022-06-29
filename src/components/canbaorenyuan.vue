@@ -9,22 +9,24 @@
 
     import {ref, reactive, onBeforeMount} from 'vue'
     import {ElMessage} from "element-plus";
+
     const activeName = ref('first')
 
-    var data=reactive({
+    var data = reactive({
         pageNum: 1,//当前显示页码
         pageSize: 5,//每一页显示的条数
         total: 0,//总条数
         pages: 0,
-        rzname:'', //员工姓名
-        sbfa:[],//社保方案
-        ygxx:{},//员工信息
-        dept:[], //所有部门信息
+        rzname: '', //员工姓名
+        sbfa: [],//社保方案
+        ygxx: {},//员工信息
+        dept: [], //所有部门信息
+        ygzts: '',//员工状态
     })
     const shixiData = ref([])
     const zhengshiData = ref([])
 
-    const content=ref(false)
+    const content = ref(false)
 
     //1、社保方案填写成功
     const xz = () => {
@@ -37,66 +39,69 @@
 
     //查询参保人员信息--实习员工
     onBeforeMount(() => {
-        axios.get("/selectcbryxxSx",{
-            params:{
-                pageNum:data.pageNum,
-                pageSize:data.pageSize
-            }
-        }).then(function (response) {
-            console.log(response)
-            shixiData.value=response.data.data.list
-            data.total = response.data.data.total
-        }).catch(function (error) {
-            console.log(error)
-        })
-    })
-    //分页--实习员工
-    function page() {
         axios.get("/selectcbryxxSx", {
-            params: {pageNum: data.pageNum, pageSize: data.pageSize}
-        }).then(function (response) {
-            shixiData.value=response.data.data.list
-            data.total = response.data.data.total
-        }).catch(function (error) {
-            console.log(error)
-        })
-    }
-    //查询参保人员信息--正式员工
-    onBeforeMount(() => {
-        axios.get("/selectcbryxxZs",{
-            params:{
-                pageNum:data.pageNum,
-                pageSize:data.pageSize
+            params: {
+                pageNum: data.pageNum,
+                pageSize: data.pageSize
             }
         }).then(function (response) {
             console.log(response)
-            zhengshiData.value=response.data.data.list
+            shixiData.value = response.data.data.list
             data.total = response.data.data.total
         }).catch(function (error) {
             console.log(error)
         })
     })
 
-    function refresh(){
-      axios.get("/selectcbryxxSx",{
-        params:{
-          pageNum:data.pageNum,
-          pageSize:data.pageSize
-        }
-      }).then(function (response) {
-        console.log(response)
-        shixiData.value=response.data.data.list
-        data.total = response.data.data.total
-      }).catch(function (error) {
-        console.log(error)
-      })
+    //分页--实习员工
+    function page() {
+        axios.get("/selectcbryxxSx", {
+            params: {pageNum: data.pageNum, pageSize: data.pageSize}
+        }).then(function (response) {
+            shixiData.value = response.data.data.list
+            data.total = response.data.data.total
+        }).catch(function (error) {
+            console.log(error)
+        })
     }
+
+    //查询参保人员信息--正式员工
+    onBeforeMount(() => {
+        axios.get("/selectcbryxxZs", {
+            params: {
+                pageNum: data.pageNum,
+                pageSize: data.pageSize
+            }
+        }).then(function (response) {
+            console.log(response)
+            zhengshiData.value = response.data.data.list
+            data.total = response.data.data.total
+        }).catch(function (error) {
+            console.log(error)
+        })
+    })
+
+    function refresh() {
+        axios.get("/selectcbryxxSx", {
+            params: {
+                pageNum: data.pageNum,
+                pageSize: data.pageSize
+            }
+        }).then(function (response) {
+            console.log(response)
+            shixiData.value = response.data.data.list
+            data.total = response.data.data.total
+        }).catch(function (error) {
+            console.log(error)
+        })
+    }
+
     //分页--正式员工
     function page1() {
         axios.get("/selectcbryxxZs", {
             params: {pageNum: data.pageNum, pageSize: data.pageSize}
         }).then(function (response) {
-            zhengshiData.value=response.data.data.list
+            zhengshiData.value = response.data.data.list
             data.total = response.data.data.total
         }).catch(function (error) {
             console.log(error)
@@ -104,26 +109,26 @@
     }
 
     function cbryshuaxin() {
-        axios.get("/selectcbryxxSx",{
-            params:{
-                pageNum:data.pageNum,
-                pageSize:data.pageSize
+        axios.get("/selectcbryxxSx", {
+            params: {
+                pageNum: data.pageNum,
+                pageSize: data.pageSize
             }
         }).then(function (response) {
             console.log(response)
-            shixiData.value=response.data.data.list
+            shixiData.value = response.data.data.list
             data.total = response.data.data.total
         }).catch(function (error) {
             console.log(error)
         })
-        axios.get("/selectcbryxxZs",{
-            params:{
-                pageNum:data.pageNum,
-                pageSize:data.pageSize
+        axios.get("/selectcbryxxZs", {
+            params: {
+                pageNum: data.pageNum,
+                pageSize: data.pageSize
             }
         }).then(function (response) {
             console.log(response)
-            zhengshiData.value=response.data.data.list
+            zhengshiData.value = response.data.data.list
             data.total = response.data.data.total
         }).catch(function (error) {
             console.log(error)
@@ -132,9 +137,9 @@
 
     //根据员工姓名模糊查询员工信息--实习员工
     function mohucxSx() {
-        axios.get("/selectygBynamesx",{
-            params:{
-                rzname:data.rzname
+        axios.get("/selectygBynamesx", {
+            params: {
+                rzname: data.rzname
             }
         }).then(function (response) {
             shixiData.value = response.data.data
@@ -142,11 +147,12 @@
             console.log(error)
         })
     }
+
     //根据员工姓名模糊查询员工信息--正式员工
     function mohucxZs() {
-        axios.get("/selectygByname",{
-            params:{
-                rzname:data.rzname
+        axios.get("/selectygByname", {
+            params: {
+                rzname: data.rzname
             }
         }).then(function (response) {
             zhengshiData.value = response.data.data
@@ -154,69 +160,86 @@
             console.log(error)
         })
     }
+
     //根据员工id查询员工信息
     function cxygxxbyid(ybh) {
-        axios.get("/selectygxx",{
-            params:{
-                ybh:ybh
+        axios.get("/selectygxx", {
+            params: {
+                ybh: ybh
             }
         }).then(function (response) {
-            data.ygxx=response.data.data
-            console.log(data.ygxx)
+            data.ygxx = response.data.data
+            data.ygzt = response.data.data.ygzt
+            if (data.ygzt == 1) {
+                data.ygzts = '未到岗'
+            } else if (data.ygzt == 2) {
+                data.ygzts = '实习员工'
+            } else if (data.ygzt == 3) {
+                data.ygzts = '正式员工'
+            } else if (data.ygzt == 4) {
+                data.ygzts = '离职员工'
+            } else if (data.ygzt == 5) {
+                data.ygzts = '黑名单'
+            }
         }).catch(function (error) {
             console.log(error)
         })
     }
+
     //查询社保状态为启用的方案
     function sbztqy() {
         axios.get("/selectsbfaByzt").then(function (response) {
-            data.sbfa=response.data.data
+            data.sbfa = response.data.data
         }).catch(function (error) {
             console.log(error)
         })
     }
+
     //给正式员工（员工状态为3）未参保的人员设置社保方案
-    function xzygsb(ygxx){
-        console.log("下拉框的值：%o",data.ygxx.sbbh)
-        console.log("修改：%o",data.ygxx)
-        axios.post("/xzygsb",ygxx).then(function (response) {
+    function xzygsb(ygxx) {
+        console.log("下拉框的值：%o", data.ygxx.sbbh)
+        console.log("修改：%o", data.ygxx)
+        axios.post("/xzygsb", ygxx).then(function (response) {
             console.log(response)
-            console.log("ybh:"+data.ygxx.ybh)
+            console.log("ybh:" + data.ygxx.ybh)
             cbryshuaxin()
             xz()
         }).catch(function (error) {
             console.log(error)
         })
-        content.value=false
+        content.value = false
     }
+
     //查询所有部门信息
-    function selectdeptxx(){
+    function selectdeptxx() {
         axios.get("/selectdept").then(function (response) {
-            data.dept=response.data.data
+            data.dept = response.data.data
         }).catch(function (error) {
             console.log(error)
         })
     }
+
     //根据部门编号查询员工信息
-    function cxygbybmbh1(bmbh){
-        axios.get("/selectygbybhid1",{
-            params:{
-                bmbh:bmbh
+    function cxygbybmbh1(bmbh) {
+        axios.get("/selectygbybhid1", {
+            params: {
+                bmbh: bmbh
             }
         }).then(function (response) {
-            shixiData.value=response.data.data
+            shixiData.value = response.data.data
         }).catch(function (error) {
             console.log(error)
         })
     }
+
     //根据部门编号查询员工信息
-    function cxygbybmbh2(bmbh){
-        axios.get("/selectygbybhid2",{
-            params:{
-                bmbh:bmbh
+    function cxygbybmbh2(bmbh) {
+        axios.get("/selectygbybhid2", {
+            params: {
+                bmbh: bmbh
             }
         }).then(function (response) {
-            zhengshiData.value=response.data.data
+            zhengshiData.value = response.data.data
         }).catch(function (error) {
             console.log(error)
         })
@@ -224,11 +247,12 @@
 
 </script>
 <template>
-    <el-tabs v-model="activeName" >
+    <el-tabs v-model="activeName">
         <el-tab-pane label="实习员工" name="first">
             <div class="sousuo">
-                <el-select placeholder="请选择部门" v-model="data.dept.bmmc" @click="selectdeptxx" >
-                    <el-option v-for="dept in data.dept" :label="dept.bmmc" :value="dept.bmbh" @click="cxygbybmbh1(dept.bmbh)" />
+                <el-select placeholder="请选择部门" v-model="data.dept.bmmc" @click="selectdeptxx">
+                    <el-option v-for="dept in data.dept" :label="dept.bmmc" :value="dept.bmbh"
+                               @click="cxygbybmbh1(dept.bmbh)"/>
                 </el-select>
                 <input type="text" placeholder="请输入员工姓名" v-model="data.rzname" class="txt">
                 <el-button type="primary" :icon="Search" class="cx" @click="mohucxSx">查询</el-button>
@@ -240,7 +264,7 @@
             >
                 <el-table-column property="ybh" label="员工编号" width="120px" sortable/>
                 <el-table-column property="rzname" label="姓名" width="120px"/>
-                <el-table-column  label="员工状态" width="120px" >
+                <el-table-column label="员工状态" width="120px">
                     <template #default="scope">
                         <span v-if="scope.row.ygzt==2">实习员工</span>
                         <span v-else-if="scope.row.ygzt==3">正式员工</span>
@@ -272,8 +296,9 @@
 
         <el-tab-pane label="正式员工" name="second">
             <div class="sousuo">
-                <el-select placeholder="请选择部门" v-model="data.dept.bmmc" @click="selectdeptxx" >
-                    <el-option v-for="dept in data.dept" :label="dept.bmmc" :value="dept.bmbh" @click="cxygbybmbh2(dept.bmbh)" />
+                <el-select placeholder="请选择部门" v-model="data.dept.bmmc" @click="selectdeptxx">
+                    <el-option v-for="dept in data.dept" :label="dept.bmmc" :value="dept.bmbh"
+                               @click="cxygbybmbh2(dept.bmbh)"/>
                 </el-select>
                 <input type="text" placeholder="请输入员工姓名" v-model="data.rzname" class="txt">
                 <el-button type="primary" :icon="Search" class="cx" @click="mohucxZs">查询</el-button>
@@ -285,7 +310,7 @@
             >
                 <el-table-column property="ybh" label="员工编号" width="120px" sortable/>
                 <el-table-column property="rzname" label="姓名" width="120px"/>
-                <el-table-column  label="员工状态" width="120px" >
+                <el-table-column label="员工状态" width="120px">
                     <template #default="scope">
                         <span v-if="scope.row.ygzt==2">实习员工</span>
                         <span v-else-if="scope.row.ygzt==3">正式员工</span>
@@ -303,9 +328,11 @@
                 <el-table-column property="rzhyzk" label="婚姻状况" width="120px"/>
                 <el-table-column property="rzmz" label="民族" width="120px"/>
                 <el-table-column property="rzzzmm" label="政治面貌" width="120px"/>
-                <el-table-column fixed="right"  align="center" label="操作" width="170px">
+                <el-table-column fixed="right" align="center" label="操作" width="170px">
                     <template #default="scope" v-solt="scope">
-                        <el-button type="primary" :icon="Plus" @click="content=true,sbztqy(),cxygxxbyid(scope.row.ybh)">填写参保信息</el-button>
+                        <el-button type="primary" :icon="Plus" @click="content=true,sbztqy(),cxygxxbyid(scope.row.ybh)">
+                            填写参保信息
+                        </el-button>
                     </template>
                 </el-table-column>
 
@@ -320,7 +347,7 @@
             </div>
             <!-- 参保信息弹窗 -->
             <el-dialog v-model="content" title="参保信息详情填写">
-                <el-form  label-width="120px" :model="data.ygxx">
+                <el-form label-width="120px" :model="data.ygxx">
                     <el-row>
                         <el-col :span="11">
                             <el-form-item label="员工编号">
@@ -339,22 +366,23 @@
                         </el-col>
                         <el-col :span="11">
                             <el-form-item label="社保方案">
-                                <el-select v-model="data.ygxx.sbbh"  placeholder="请选择一项社保方案" >
-                                    <el-option v-for="fa in data.sbfa" :key="fa.sbbh" :label="fa.sbmc" :value="fa.sbbh" />
+                                <el-select v-model="data.ygxx.sbbh" placeholder="请选择一项社保方案">
+                                    <el-option v-for="fa in data.sbfa" :key="fa.sbbh" :label="fa.sbmc"
+                                               :value="fa.sbbh"/>
                                 </el-select>
                             </el-form-item>
                         </el-col>
                         <el-col :span="11">
                             <el-form-item label="员工状态">
-                                <el-input  v-model="data.ygxx.ygzt" disabled/>
+                                <el-input v-model="data.ygzts" disabled/>
                             </el-form-item>
                         </el-col>
 
                         <el-col :span="11">
                             <el-form-item label="性别">
                                 <el-radio-group v-model="data.ygxx.rzsex" disabled>
-                                    <el-radio label="男" />
-                                    <el-radio label="女" />
+                                    <el-radio label="男"/>
+                                    <el-radio label="女"/>
                                 </el-radio-group>
                             </el-form-item>
                         </el-col>
@@ -376,7 +404,7 @@
                         </el-col>
                         <el-col :span="11">
                             <el-form-item label="学历">
-                                <el-input v-model="data.ygxx.rzxl" disabled />
+                                <el-input v-model="data.ygxx.rzxl" disabled/>
                             </el-form-item>
                         </el-col>
                         <el-col :span="11">
@@ -386,7 +414,7 @@
                         </el-col>
                         <el-col :span="11">
                             <el-form-item label="联系电话">
-                                <el-input  v-model="data.ygxx.rzphone" disabled/>
+                                <el-input v-model="data.ygxx.rzphone" disabled/>
                             </el-form-item>
                         </el-col>
                         <el-col :span="11">
@@ -429,7 +457,7 @@
 </template>
 
 <style scoped>
-    .sousuo{
+    .sousuo {
         margin: 15px;
     }
 
