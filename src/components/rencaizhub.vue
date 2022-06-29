@@ -22,7 +22,7 @@ const open = () => {
 const dialogFormVisible2 = ref(false)
 const dialogFormVisible = ref(false)
 const dialogTableVisible666 = ref(false)
-
+const tableDataRefs=ref([]);
 function mianshiwenti(mbh, rid, mjbh) {
   dialogTableVisible666.value = true,
       insers2.rid = rid;
@@ -32,13 +32,15 @@ function mianshiwenti(mbh, rid, mjbh) {
       //.then相当于ajax中的success:function成功回调函数
       .then(function (response) {
         //获取后端传入的数据
-        console.log(response)
-        data.cx2 = response.data.data//简单来说就是把修改后的数据重新赋值给data.cx对象
-        console.log(data.cx2)
+
+        data.cx2= response.data.data//简单来说就是把修改后的数据重新赋值给data.cx对象
+
+        console.log("倒萨的绝杀"+data.cx2.mbh)
       })
 }
 
 var data = reactive({
+  multipleSelection:[],
   Recruit: [],//存入查询后端响应过来的数据
   total: 0,//总页数
   pageNum: 1,//当前显示页码
@@ -49,8 +51,29 @@ var data = reactive({
   zs: 0,
   isShow2: false,
   mssj: '',
-  mianshiguan: ''
+  mianshiguan: '',
+  obtainData:null
 })
+function handleSelectionChange(selection, row) {
+  // 判断长度等于1 获取
+  if (selection.length === 1) {
+    data.obtainData = selection[0]
+  }
+  if (selection.length > 1) {
+    data.obtainData = selection[1]
+    // shift() 方法用于把数组的第一个元素从其中删除，并返回第一个元素的值。
+    // 该方法不创建新数组，而是直接修改原有的 arrayObject。
+    let del_row = selection.shift()
+    // 其余的都 不选中
+          this.$refs.tableDataRefs.toggleRowSelection(del_row, false)
+  }
+  console.log(data.obtainData);
+
+  insers2.mzbh = data.obtainData.mzbh
+  console.log("222222222"+insers2.mzbh);
+
+}
+// this.$refs.tableDataRefs.toggleRowSelection(del_row, false)
 const insers = reactive({
   rzbh: '',
   rzname: '',
@@ -73,6 +96,7 @@ const insers = reactive({
   rid: '',
   mzbh: ''
 })
+
 
 function reload() {
   axios.get("/selectMsss", {
@@ -108,6 +132,15 @@ onBeforeMount(() => {
 })
 
 function page() {
+  if(data.rzname!=""){
+    axios.get("/mohudiyci", {
+      params: {pageNum: data.pageNum, pageSize: data.pageSize, rzname: data.rzname}
+    }).then(function (response) {
+      data.Recruit = response.data.data.list
+      data.total = response.data.data.total
+      console.log(response.data.data.Recruit)
+    })
+  }else{
   axios.get("/selectMsss", {
     params: {
       pageNum: data.pageNum,
@@ -120,6 +153,7 @@ function page() {
   }).catch(function (error) {
     console.log(error)
   })
+}
 }
 
 //查询id为x的这条数据
@@ -233,6 +267,7 @@ const insers2 = reactive({
   mjbh: "",
   mspj: ""
 });
+const defaultTime = new Date(2000, 1, 1, 12, 0, 0)
 function mianshiguaneee(){
   axios.get("/mianshiguaneee").then(function (c){
     console.log(c.data.data)
@@ -270,14 +305,14 @@ function xiugaimszt() {
     return
   })
 }
-
 function fushi() {
-  axios.get("/fushi/" + insers2.mzbh + "/" + insers2.rid + "/" + insers2.ybh + "/" + insers2.mjsj + "/" + insers2.mjbh + "/" + insers2.mspj).then(function (response) {
+  axios.get("/fushi/" + insers2.rid + "/" + insers2.ybh + "/" + insers2.mjsj + "/" + insers2.mjbh + "/" + insers2.mspj).then(function (response) {
     reload()
     insers2.ybh = ""
     insers2.mjsj = ""
     insers2.rid = ""
     insers2.mjbh = ""
+    insers2.mspj=""
     console.log("7777777" + insers2.rid);
     if (response.data.code != 200) {
       alert('复试失败' + response.data.code)
@@ -287,6 +322,23 @@ function fushi() {
     return
   })
 }
+// function fushi() {
+//   axios.get("/fushi/" + insers2.mzbh + "/" + insers2.rid + "/" + insers2.ybh + "/" + insers2.mjsj + "/" + insers2.mjbh + "/" + insers2.mspj).then(function (response) {
+//     reload()
+//     insers2.ybh = ""
+//     insers2.mjsj = ""
+//     insers2.rid = ""
+//     insers2.mjbh = ""
+//     insers2.mspj=""
+//     console.log("7777777" + insers2.rid);
+//     if (response.data.code != 200) {
+//       alert('复试失败' + response.data.code)
+//       return
+//     }
+//   }).catch(function (error) {
+//     return
+//   })
+// }
 
 // alert(insers2.wenti)
 // alert(insers2.mssj)
@@ -298,8 +350,20 @@ function selec(selection, row) {
   console.log(selection);
   console.log(selection[0].mzbh);
   insers2.mzbh = selection[0].mzbh
+
+
+
   console.log(insers2.wenti);
+  // this.$refs.selectTable.clearSelection()
+  // this.$refs.selectTable.toggleRowSelection(row, true)
 }
+function  selectRow(val) {
+  if (val.length > 1) {
+    this.$refs.selectTable.clearSelection()
+    this.$refs.selectTable.toggleRowSelection(val.pop())
+  }
+}
+
 </script>
 <template>
   <br>
@@ -317,12 +381,13 @@ function selec(selection, row) {
       <el-table-column prop="rzxl" label="学历"/>
       <el-table-column prop="byxy" label="毕业学院"/>
       <el-table-column prop="zymc" label="专业名称"/>
-      <!--      <el-table-column prop="rzmz" label="名族" />-->
+            <el-table-column prop="rzmz" label="名族" />
       <el-table-column prop="rzzzmm" label="政治面貌"/>
       <el-table-column prop="zwmc" label="职位"/>
-      <el-table-column prop="bmmc" label="部门"/>
+<!--      <el-table-column prop="bmmc" label="部门"/>-->
 <!--      <el-table-column prop="mzwt" label="面试问题"/>-->
       <el-table-column prop="mjsj" label="面试时间"/>
+      <el-table-column prop="mscs" label="已面试次数" align="center"/>
       <!--      <el-table-column prop="rzt"  label="状态" />-->
       <el-table-column label="操作">
         <template #default=scope v-slot="scope">
@@ -355,35 +420,32 @@ function selec(selection, row) {
     <el-from :model="insers2">
       <el-row>
         <el-col :span="11">
-          <span>面试官</span>:&nbsp;&nbsp;&nbsp;
+          <span>下次面试官</span>:&nbsp;&nbsp;&nbsp;
           <el-select v-model="insers2.ybh" placeholder="面试官">
             <el-option v-for="cc in data.maishiguany" :key="cc.ybh" :label="cc.rzname" :value="cc.ybh"/>
           </el-select>
         </el-col>
         <el-col :span="11">
-          <span>面试时间</span>: &nbsp;&nbsp;&nbsp;
-          <el-date-picker
-              v-model="insers2.mjsj"
-              type="date"
-              style="width: 200px"
-          />
+          <span>下次面试时间：</span> <el-date-picker
+
+            v-model="insers2.mjsj"
+            type="datetime"
+            placeholder="Select date and time"
+            :default-time="defaultTime"
+            style="width: 200px"
+        />
           <br><br>
         </el-col>
         <el-col :span="18">
-          <span>面试评价：</span>
+          <span>本次面试评价：</span>
           <el-input v-model="insers2.mspj" style="width: 300px;" type="textarea"/>
         </el-col>
       </el-row>
-      <el-table :data="data.cx2" @select="selec">
-
-        <el-table-column type="selection"></el-table-column>
-        <el-table-column label="序号" type="index" align="center" width="200"/>
-        <el-table-column prop="mzwt" label="面试问题"/>
-      </el-table>
       <span class="dialog-footer">
 	  		<el-button @click="dialogTableVisible666 = false">关闭</el-button>
 	  		<el-button type="primary"
                    @click="dialogTableVisible666 = false,fushi(insers2),xiugaimszt(insers2)">确定</el-button>
+<!--        ,xiugaimszt(insers2)-->
 	  	</span>
     </el-from>
     <template #footer>
@@ -392,6 +454,54 @@ function selec(selection, row) {
     </template>
 
   </el-dialog>
+<!--  <el-dialog v-model="dialogTableVisible666" title="预约面试">-->
+
+<!--    <el-from :model="insers2">-->
+<!--      <el-row>-->
+<!--        <el-col :span="11">-->
+<!--          <span>下次面试官</span>:&nbsp;&nbsp;&nbsp;-->
+<!--          <el-select v-model="insers2.ybh" placeholder="面试官">-->
+<!--            <el-option v-for="cc in data.maishiguany" :key="cc.ybh" :label="cc.rzname" :value="cc.ybh"/>-->
+<!--          </el-select>-->
+<!--        </el-col>-->
+<!--        <el-col :span="11">-->
+<!--          <span>下次面试时间</span>: &nbsp;&nbsp;&nbsp;-->
+<!--          <el-date-picker-->
+<!--              v-model="insers2.mjsj"-->
+<!--              type="date"-->
+<!--              style="width: 200px"-->
+<!--          />-->
+<!--          <br><br>-->
+<!--        </el-col>-->
+<!--        <el-col :span="18">-->
+<!--          <span>本次面试评价：</span>-->
+<!--          <el-input v-model="insers2.mspj" style="width: 300px;" type="textarea"/>-->
+<!--        </el-col>-->
+<!--      </el-row>-->
+<!--      <el-table :data="data.cx2"   @select="handleSelectionChange"  ref="tableDataRefs" border>&lt;!&ndash;@select="selec"&ndash;&gt;-->
+<!--        <el-table-column type="selection"   label="选择" ></el-table-column>-->
+<!--&lt;!&ndash;        <el-table-column type="radio"  label="选择"  width="200"></el-table-column>&ndash;&gt;-->
+<!--&lt;!&ndash;        <el-table-column width="60px">&ndash;&gt;-->
+<!--&lt;!&ndash;          <template #default=scope v-slot="scope">&ndash;&gt;-->
+<!--&lt;!&ndash;            &lt;!&ndash; label值要与el-table数据id实现绑定 &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;            <el-radio :label="选择"  @change="selection(scope.row)">{{""}}</el-radio>&ndash;&gt;-->
+<!--&lt;!&ndash;          </template>&ndash;&gt;-->
+<!--&lt;!&ndash;        </el-table-column>&ndash;&gt;-->
+<!--        <el-table-column label="序号" type="index" align="center" width="200"/>-->
+<!--        <el-table-column prop="mzwt" label="面试问题"/>-->
+<!--      </el-table>-->
+<!--      <span class="dialog-footer">-->
+<!--	  		<el-button @click="dialogTableVisible666 = false">关闭</el-button>-->
+<!--	  		<el-button type="primary"-->
+<!--                   @click="dialogTableVisible666 = false,fushi(insers2),xiugaimszt(insers2)">确定</el-button>-->
+<!--	  	</span>-->
+<!--    </el-from>-->
+<!--    <template #footer>-->
+
+
+<!--    </template>-->
+
+<!--  </el-dialog>-->
   <el-dialog v-model="dialogFormVisible2" title="新增招聘者信息">
     <el-form :model="insert">
       <el-row>

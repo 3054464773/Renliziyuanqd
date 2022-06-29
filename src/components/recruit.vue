@@ -60,7 +60,8 @@
       zs:0,
     zhiweiname:'',
     rzname:'',
-    maishiguany:''
+    maishiguany:'',
+    bumenname:''
 
 
 	})
@@ -105,7 +106,8 @@
     yijixk:'',
     xxxz:'',
     byssj:'',
-    rxsj:''
+    rxsj:'',
+    bmbh:''
   })
   const insers2=reactive({
      mjsj:"",
@@ -113,7 +115,6 @@
     zwbh:"",
     rid:""
   })
-//面试问题
   function mianshiwenti(){
     dialogTableVisible666 .value= false
     // dialogTableVisible666.value=true,
@@ -131,6 +132,24 @@
           console.log(data.cx2)
         })
   }
+//面试问题
+//   function mianshiwenti(){
+//     dialogTableVisible666 .value= false
+//     // dialogTableVisible666.value=true,
+//
+//     axios.get("/mianshiwenti/"+insers2.zwbh+"/"+insers2.rid+"/"+insers2.ybh+"/"+insers2.mjsj)
+//         //.then相当于ajax中的success:function成功回调函数
+//         .then(function(response){
+//           insers2.ybh=""
+//           insers2.mjsj=""
+//           insers2.rid=""
+//           insers2.zwbh=""
+//           //获取后端传入的数据
+//           console.log(response)
+//
+//           console.log(data.cx2)
+//         })
+//   }
   //刷新
   function reload(){
     axios.get("/selectMs", {
@@ -164,6 +183,15 @@
 		})
 	})
 	function page() {
+    if(data.rzname!=""){
+      axios.get("/mohujianli",{
+        params:{pageNum:data.pageNum,pageSize:data.pageSize,rzname:data.rzname}
+      }).then(function(response){
+        data.Recruit=response.data.data.list
+        data.total=response.data.data.total
+        console.log(response.data.data.users)
+      })
+    }else {
 		axios.get("/selectMs", {
 			params: {
 				pageNum: data.pageNum,
@@ -176,6 +204,7 @@
 		}).catch(function(error) {
 			console.log(error)
 		})
+    }
 	}
   //查询id为x的这条数据
   function b(rzbh){
@@ -195,6 +224,7 @@
         .then(function(response){
           //获取后端传入的数据
           data.cx=response.data.data//简单来说就是把修改后的数据重新赋值给data.cx对象
+
         })
   }
   //修改
@@ -293,6 +323,7 @@
       insers.byssj=""
       insers.rxsj=""
       insers.byxy=""
+      insers.bmbh=""
       active.value=0;
 
 
@@ -343,10 +374,28 @@
       console.log(response.data.data.users)
     })
   }
+  function bumenlalala(){
+    insers.zwbh=''
+  }
   function zhiwei(){
-    axios.get("/zhaoppp").then(function (c){
+    axios.get("/zhaopzhiwei/"+insers.bmbh).then(function (c){
 
       data.zhiweiname=c.data.data;
+    }).catch(function (error){
+      console.log(error)
+    })
+  }
+  // function zhiwei(){
+  //   axios.get("/zhaoppp").then(function (c){
+  //
+  //     data.zhiweiname=c.data.data;
+  //   }).catch(function (error){
+  //     console.log(error)
+  //   })
+  // }
+  function bumenmen(){
+    axios.get("/bububumen").then(function (c){
+      data.bumenname=c.data.data;
     }).catch(function (error){
       console.log(error)
     })
@@ -568,7 +617,7 @@ function daochu(){
 
 
     dialogFormVisible.value = false;
-
+    active.value=0;
     cc.value = true;
     dd.value = false;
   }
@@ -658,6 +707,7 @@ function daochu(){
       }
     }
   }
+  const defaultTime = new Date(2000, 1, 1, 12, 0, 0)
 </script>
 <template>
 
@@ -667,7 +717,7 @@ function daochu(){
 <!--  <el-icon style="position: relative;right: -600px;" @click="daochu"><Top /></el-icon>-->
   <el-button type="success"  style="position: relative;right: -600px;" @click="daoru">导入</el-button>
 
-  <el-button type="success"  @click="dakai(),zhiwei(),reload()" style="position: relative;right: -650px;">新增</el-button>
+  <el-button type="success"  @click="dakai(),bumenmen()" style="position: relative;right: -650px;">新增</el-button>
 <!--  dialogFormVisible2=true-->
 
 	<el-button style="position: relative;right: -40px;" @click="mohuchaxun()" @keyup.enter="mohuchaxun">查询</el-button>
@@ -714,7 +764,7 @@ function daochu(){
 
 	</div>
   <el-dialog v-model="dialogFormVisible7777" title="招聘者信息新增" width="70%">
-    <el-form :model="insers">
+    <el-form :model="insers" :rules="rules" ref="ruleFormRef" :size="formSize">
       <div style="text-align: left">
       <el-steps :active="active" finish-status="success">
         <el-step title="基本信息"/>
@@ -738,7 +788,7 @@ function daochu(){
           </el-col>
           <el-col :span="8">
             <el-form-item label="身份证:" prop="rzsfz">
-              <el-input v-model="insers.rzsfz" style="width: 200px;" clearable/>
+              <el-input v-model="insers.rzsfz" style="width: 200px;" maxlength="18" clearable/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -793,7 +843,6 @@ function daochu(){
           <el-col :span="8">
             <el-form-item label="政治面貌:">
               <el-select v-model="insers.rzzzmm" placeholder="政治面貌">
-                <el-option label="少先队员" value="少先队员"/>
                 <el-option label="共青团员" value="共青团员"/>
                 <el-option label="中共党员" value="中共党员"/>
                 <el-option label="群众" value="群众"/>
@@ -843,11 +892,18 @@ function daochu(){
               </el-select>
             </el-form-item>
           </el-col>
+          <el-col :span="8">
 
+            <el-form-item label="部门:">
+              <el-select v-model="insers.bmbh" placeholder="部门" @change="bumenlalala">
+                <el-option v-for="cc in data.bumenname" :key="cc.bmbh" :label="cc.bmmc" :value="cc.bmbh"/>
+              </el-select>
+            </el-form-item>
+          </el-col>
           <el-col :span="8">
 
             <el-form-item label="职位:">
-              <el-select v-model="insers.zwbh" placeholder="职位">
+              <el-select v-model="insers.zwbh" placeholder="职位" @click="zhiwei">
                 <el-option v-for="cc in data.zhiweiname" :key="cc.zwbh" :label="cc.zwmc" :value="cc.zwbh"/>
               </el-select>
             </el-form-item>
@@ -906,26 +962,43 @@ function daochu(){
               />
             </el-form-item>
           </el-col>
+
           <el-col :span="8">
-            <el-form-item label="一级学科:" prop="rzxl">
-              <el-select v-model="insers.yijixk" placeholder="学科">
+            <el-form-item label="学校性质:" prop="rzxl">
+              <el-select v-model="insers.xxxz" placeholder="性质">
                 <el-option label="985工程大学" value="985工程大学" />
                 <el-option label="211工程大学" value="211工程大学" />
                 <el-option label="普通公办大学" value="普通公办大学" />
                 <el-option label="民办院校" value="民办院校" />
                 <el-option label="海外院校" value="海外院校" />
-
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="8">
-            <el-form-item label="学校性质:">
-              <el-input v-model="insers.xxxz" style="width: 200px;" clearable/>
-            </el-form-item>
-          </el-col>
+<!--          <el-col :span="8">-->
+<!--            <el-form-item label="一级学科:">-->
+<!--              <el-select v-model="insers.yijixk" placeholder="学科" >-->
+<!--                <el-option label="交通运输工程" value="交通运输工程" />-->
+<!--                <el-option label="公共管理" value="公共管理" />-->
+<!--                <el-option label="中国语言文学类" value="中国语言文学类" />-->
+<!--                <el-option label="生物科学类" value="生物科学类" />-->
+<!--                <el-option label="建筑类" value="建筑类" />-->
+<!--                <el-option label="法学类" value="法学类" />-->
+<!--                <el-option label="社会学类" value="社会学类" />-->
+<!--                <el-option label="电气工程" value="电气工程" />-->
+<!--                <el-option label="安全科学与工程" value="安全科学与工程" />-->
+<!--                <el-option label="计算机科学与技术" value="计算机科学与技术" />-->
+<!--                <el-option label="新闻传播学类" value="新闻传播学类" />-->
+<!--                <el-option label="水利工程" value="水利工程" />-->
+<!--                <el-option label="自动化类" value="自动化类" />-->
+<!--                <el-option label="工商管理" value="工商管理" />-->
+<!--                <el-option label="电子商务" value="电子商务" />-->
+<!--                <el-option label="其他" value="其他" />-->
+<!--              </el-select>-->
+<!--            </el-form-item>-->
+<!--          </el-col>-->
         </el-row>
       </div>
-      <div style="border: 1px solid red; width: 100%; height: 200px;" v-if='xs==2'>简历完成</div>
+      <div style="border: 1px solid #ff0000; width: 100%; height: 200px;" v-if='xs==2'>简历完成</div>
 
       <el-button style="margin-top: 12px" @click="ee()" v-show="cc" v-if="active==1">确认</el-button>
       <el-button style="margin-top: 12px" @click="aa()" v-show="cc" v-if="active==0">下一步</el-button>
@@ -950,10 +1023,18 @@ function daochu(){
 
       <span>面试时间：</span> <el-date-picker
 
-              v-model="insers2.mjsj"
-              type="date"
-              style="width: 200px"
-              />
+        v-model="insers2.mjsj"
+        type="datetime"
+        placeholder="Select date and time"
+        :default-time="defaultTime"
+        style="width: 200px"
+    />
+<!--      <span>面试时间：</span> <el-date-picker-->
+
+<!--              v-model="insers2.mjsj"-->
+<!--              type="date"-->
+<!--              style="width: 200px"-->
+<!--              />-->
 
     </el-from>
     <template #footer>
@@ -1205,7 +1286,6 @@ function daochu(){
           <el-col :span="8">
             <el-form-item label="政治面貌:">
               <el-select v-model="data.cx.rzzzmm" placeholder="政治面貌">
-                <el-option label="少先队员" value="少先队员"/>
                 <el-option label="共青团员" value="共青团员"/>
                 <el-option label="中共党员" value="中共党员"/>
                 <el-option label="群众" value="群众"/>
@@ -1262,6 +1342,18 @@ function daochu(){
               <el-input v-model="data.cx.rzdz" style="width: 200px;" type="textarea"/>
             </el-form-item>
           </el-col>
+          <el-col :span="8">
+
+            <el-form-item label="部门:">
+              <el-input v-model="data.cx.bmmc" style="width: 200px;" clearable  disabled="disabled"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+
+            <el-form-item label="职位:">
+              <el-input v-model="data.cx.zwmc" style="width: 200px;" clearable  disabled="disabled"/>
+            </el-form-item>
+          </el-col>
         </el-row>
       </div>
       <div style="width: 100%; height: 200px;" v-if='xs==1'>
@@ -1312,23 +1404,17 @@ function daochu(){
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="一级学科:" prop="rzxl">
-              <el-select v-model="data.cx.yijixk" placeholder="学科">
+            <el-form-item label="学校性质:" prop="rzxl">
+              <el-select v-model="data.cx.xxxz" placeholder="性质">
                 <el-option label="985工程大学" value="985工程大学" />
                 <el-option label="211工程大学" value="211工程大学" />
                 <el-option label="普通公办大学" value="普通公办大学" />
                 <el-option label="民办院校" value="民办院校" />
                 <el-option label="海外院校" value="海外院校" />
-
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="8">
-            <el-form-item label="学校性质:">
-              <el-input v-model="data.cx.xxxz" style="width: 200px;" clearable/>
 
-            </el-form-item>
-          </el-col>
         </el-row>
 
       </div>
