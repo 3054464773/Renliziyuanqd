@@ -131,9 +131,9 @@ var data=reactive({salary:[],pages:0,pageNum:1,pageSize:5,total:0,rzname:'',jbh:
 var data2=reactive({salary:[],pages:0,pageNum:1,pageSize:5,total:0,zwmc:'',jbh:'',isShow:false,value:'first'})
 
 function handoff(TabsPaneContext,Event){
-  if (TabsPaneContext.props.label=='薪资档案'){
+  if (TabsPaneContext.props.label=='职位已定薪'){
     findAllBasePay()
-  }else if (TabsPaneContext.props.label=='职位定薪'){
+  }else if (TabsPaneContext.props.label=='未定薪'){
     findAllPositionSalary()
   }
 }

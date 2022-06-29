@@ -2,15 +2,21 @@
   <div class="big-payroll">
     <div class="big-payroll2">
 
+
       <el-date-picker
           value-format="YYYY-MM"
           v-model="data.xzsj"
           type="month"
           @change="updateEmpInfoByMonth()"
           placeholder="请选择月份"
-          style="margin-top: 20px;margin-bottom: 20px;margin-left: -650px"
+          style="margin-top: 20px;margin-bottom: 20px;margin-left: 0px"
       />
-      <el-input v-model="data.bmmc" placeholder="请输入部门名称查询"  style="width: 200px;margin-left: 80px" @change="selectEmpInfoByBmmc"></el-input>
+      <el-select   placeholder="请选择部门"  v-model="data.bmmc"  @change="bumenchauxnhmd" clearable style="margin-left: 20px">
+      <el-option v-for="cc in data.bumen"  :value="cc.bmmc" :label="cc.bmmc" />
+    </el-select>
+      <el-input v-model="data.empName" placeholder="请输入员工姓名查询"  style="width: 200px;margin-left: 20px" @change="findPayrollByName"></el-input>
+
+
     <div>
         <!-- 表格-->
         <el-table :data="data.payroll" style="width: 100%">
@@ -58,23 +64,27 @@
               <span>-{{parseFloat(scope.row.sbje).toFixed(2)}}</span>
             </template>
           </el-table-column>
-          <el-table-column label="工资扣额" align="center" width="600">
-            <el-table-column label="迟到" prop="chidao" align="center" width="120">
+          <el-table-column label="工资扣额" align="center" width="1080">
+            <el-table-column label="迟到(次数)" prop="kqCount2" align="center" width="120"/>
+            <el-table-column label="扣款（30%）" prop="chidao" align="center" width="120">
               <template #default="scope">
                 <span>-{{parseFloat(scope.row.chidao).toFixed(2)}}</span>
               </template>
             </el-table-column>
-            <el-table-column label="早退" prop="zaotui" align="center" width="120">
+            <el-table-column label="早退(次数)" prop="kqCount3" align="center" width="120"/>
+            <el-table-column label="扣款(30%)" prop="zaotui" align="center" width="120">
               <template #default="scope">
                 <span>-{{parseFloat(scope.row.zaotui).toFixed(2)}}</span>
               </template>
             </el-table-column>
-            <el-table-column label="病假" prop="bingjiamoney" align="center" width="120">
+            <el-table-column label="病假(天数)" prop="bingjia" align="center" width="120"/>
+            <el-table-column label="扣款(20%)" prop="bingjiamoney" align="center" width="120">
               <template #default="scope">
                 <span>-{{parseFloat(scope.row.bingjiamoney).toFixed(2)}}</span>
               </template>
             </el-table-column>
-            <el-table-column label="事假" prop="shijiamoney" align="center" width="120">
+            <el-table-column label="事假(天数)" prop="shijia" align="center" width="120"/>
+            <el-table-column label="扣款(100%)" prop="shijiamoney" align="center" width="120">
               <template #default="scope">
                 <span>-{{parseFloat(scope.row.shijiamoney).toFixed(2)}}</span>
               </template>
@@ -142,7 +152,9 @@ var data=reactive({
   isShow:false,
   ycqt:22,
   xzsj:'',
-  bmmc:''
+  bmmc:'',
+  bumen:'',
+  empName:''
 })
 
 onBeforeMount(()=>{
@@ -153,6 +165,7 @@ onBeforeMount(()=>{
 
     data.payroll=res.data.data.list
     data.total=res.data.data.total
+    bumen()
   }).catch(function (err){
     console.log(err)
   })
@@ -187,7 +200,7 @@ function selectEmpInfoByMonth(){
 function updateEmpInfoByMonth(){
   if (data.xzsj!=null){
     selectEmpInfoByMonth()
-  }else {
+  } else{
     axios.get("/selectEmpInfo",{
       params:{pageNum:data.pageNum,pageSize:data.pageSize}
     }).then(function (res){
@@ -200,15 +213,36 @@ function updateEmpInfoByMonth(){
   }
 }
 
-function selectEmpInfoByBmmc(){
+
+//部门
+function bumen(){
+  axios.get("/suoybumen").then(function (c){
+
+    data.bumen=c.data.data;
+
+  }).catch(function (error){
+    console.log(error)
+  })
+}
+//根据部门查询
+function bumenchauxnhmd(){
   axios.get("/selectEmpInfoByBmmc",{
     params:{pageNum:data.pageNum,pageSize:data.pageSize,bmmc:data.bmmc}
-  }).then(function (res){
-    console.log(res.data.data)
-    data.payroll=res.data.data.list
-    data.total=res.data.data.total
-  }).catch(function (err){
-    console.log(err)
+  }).then(function(response){
+    data.payroll=response.data.data.list
+    data.total=response.data.data.total
+
+  })
+}
+
+
+function findPayrollByName(){
+  axios.get("/selectEmpInfoByName",{
+    params:{pageNum:data.pageNum,pageSize:data.pageSize,rzname:data.empName}
+  }).then(function(response){
+    data.payroll=response.data.data.list
+    data.total=response.data.data.total
+
   })
 }
 

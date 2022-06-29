@@ -321,9 +321,11 @@ function bbb(data){
       <el-table-column prop="zmc"  label="招聘计划内容" />
       <el-table-column prop="zzt" label="计划状态">
         <template #default="scope">
+
           <span v-if="scope.row.shjlzt==1"><el-button type="success" round disabled>通过</el-button></span>
           <span v-if="scope.row.shjlzt==2"><el-button type="danger" round disabled>未通过</el-button></span>
           <span v-if="scope.row.shjlzt==3"><el-button type="warning" round disabled>未审核</el-button></span>
+
         </template>
       </el-table-column>
 <!--      <el-table-column  label="审核状态" >-->
