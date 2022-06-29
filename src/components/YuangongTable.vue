@@ -50,7 +50,7 @@
                 <el-button @click="Yuangongziliao=true,gerenziliao()" class="bianjie">个人资料</el-button>
                 <el-button @click="cxygphone(),selectdeptxx(),drawer=true" class="bianjie">通讯录</el-button>
                 <el-button @click="rizhiDialog=true,merizhi(),yidianpingrz()" class="bianjie">工作日志</el-button>
-                <el-button @click="liuchengsq=true,selectyuangongzt(),selectkqjqlx()" class="bianjie">流程申请</el-button>
+                <el-button @click="liuchengsq=true,selectyuangongzt(),selectkqjqlx(),shenhe()" class="bianjie">流程申请</el-button>
                 <el-button @click="yuangongjilu=true,jxjl(),xzjl(),ccjl()" class="bianjie">个人记录</el-button>
             </div>
             <div style="box-shadow: 5px 5px 5px 5px #B3C0D1;margin-top: 3%;height: 430px; ">
@@ -218,7 +218,6 @@
                 <el-col :span="11">
                     <el-form-item label="政治面貌">
                         <el-select v-model="data.gerenziliaoxx.rzzzmm">
-                            <el-option label="少先队员" value="少先队员"/>
                             <el-option label="共青团员" value="共青团员"/>
                             <el-option label="中共党员" value="中共党员"/>
                             <el-option label="群众" value="群众"/>
@@ -239,7 +238,8 @@
         <el-select placeholder="请选择部门" v-model="data.dept.bmmc" clearable style="width: 200px;height: 30px">
             <el-option v-for="dept in data.dept" :label="dept.bmmc" :value="dept.bmbh" @click="cxygtxlbybm(dept.bmbh)"/>
         </el-select>
-        <el-input placeholder="请输入员工姓名" v-model="data.rzname" style="width: 200px;height: 30px;margin-left: 10px;" clearable/>
+        <el-input placeholder="请输入员工姓名" v-model="data.rzname" style="width: 200px;height: 30px;margin-left: 10px;"
+                  clearable/>
         <el-button @click="mhcxygtxlbyname">查询</el-button>
         <el-table :data="ygphoneTable" height="500px">
             <el-table-column prop="rzname" label="员工姓名"/>
@@ -345,15 +345,19 @@
                                 </el-select>
                             </el-form-item>
                         </el-col>
+                        <el-col :span="11">
+                            <el-form-item label="审核名称">
+                                <el-select v-model="data.paixiu.shbid" placeholder="请选择一项审核名称" style="width: 100%">
+                                    <el-option v-for="qjsh in data.shehes" :key="qjsh.shbid" :label="qjsh.shbmc" :value="qjsh.shbid"/>
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
                     </el-row>
                     <el-button type="primary" @click="sqpaixiu(data.paixiu)" style="float: right;margin-right: 8%;">提交
                     </el-button>
                 </el-form>
             </el-tab-pane>
-            <el-tab-pane label="申请补卡" name="second">
-                申请补卡
-            </el-tab-pane>
-            <el-tab-pane label="申请转正" name="third">
+            <el-tab-pane label="申请转正" name="second">
                 <el-form v-if="data.ygzt==2?true:false" :model="data.zhuanzheng" label-width="100px">
                     <el-row class="wbkpb">
                         <el-col :span="11">
@@ -372,13 +376,10 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="11">
-                            <el-form-item label="申请时间">
-                                <el-date-picker
-                                        type="date"
-                                        placeholder="请选择时间"
-                                        style="width: 100%"
-                                        v-model="data.zhuanzheng.yggzsj"
-                                />
+                            <el-form-item label="审核名称">
+                                <el-select v-model="data.zhuanzheng.shbid" placeholder="请选择一项审核名称" style="width: 100%">
+                                    <el-option v-for="zzsh in data.shehes" :key="zzsh.shbid" :label="zzsh.shbmc" :value="zzsh.shbid"/>
+                                </el-select>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -388,7 +389,7 @@
                 </el-form>
                 <span v-if="data.ygzt==3?true:false" style="font-weight: bold;font-size: 20px;">你是正式员工，不需要转正！</span>
             </el-tab-pane>
-            <el-tab-pane label="申请离职" name="fourth">
+            <el-tab-pane label="申请离职" name="third">
                 <el-form :model="data.lizhi" label-width="100px">
                     <el-row class="wbkpb">
                         <el-col :span="11">
@@ -407,13 +408,10 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="11">
-                            <el-form-item label="申请时间">
-                                <el-date-picker
-                                        type="date"
-                                        placeholder="请选择时间"
-                                        style="width: 100%"
-                                        v-model="data.lizhi.yggzsj"
-                                />
+                            <el-form-item label="审核名称">
+                                <el-select v-model="data.lizhi.shbid" placeholder="请选择一项审核名称" style="width: 100%">
+                                    <el-option v-for="lzsh in data.shehes" :key="lzsh.shbid" :label="lzsh.shbmc" :value="lzsh.shbid"/>
+                                </el-select>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -421,7 +419,7 @@
                     </el-button>
                 </el-form>
             </el-tab-pane>
-            <el-tab-pane label="申请出差" name="fifth">
+            <el-tab-pane label="申请出差" name="fourth">
                 <el-form :model="data.shenqinchuchaiForm" label-width="120px">
                     <el-form-item label="出发地">
                         <el-input v-model="data.shenqinchuchaiForm.ccfd" class="wbk"/>
@@ -451,6 +449,11 @@
                     </el-row>
                     <el-form-item label="出差内容">
                         <el-input type="textarea" v-model="data.shenqinchuchaiForm.cccnr" class="wbk"/>
+                    </el-form-item>
+                    <el-form-item label="审核名称">
+                        <el-select v-model="data.shenqinchuchaiForm.shbid" placeholder="请选择一项审核名称" style="width: 35%">
+                            <el-option v-for="ccsh in data.shehes" :key="ccsh.shbid" :label="ccsh.shbmc" :value="ccsh.shbid"/>
+                        </el-select>
                     </el-form-item>
                 </el-form>
                 <el-button @click="qkchuchaibiaodan()" style="float: right;margin-right: 5%;">重置</el-button>
@@ -528,6 +531,13 @@
                             <span v-else-if="scope.row.czt==3">已回来</span>
                         </template>
                     </el-table-column>
+                    <el-table-column prop="shjlzt" label="审核状态">
+                        <template #default="scope" v-solt="scope">
+                            <span v-if="scope.row.shjlzt==1">通过</span>
+                            <span v-else-if="scope.row.shjlzt==2">未通过</span>
+                            <span v-else-if="scope.row.shjlzt==3">未审核</span>
+                        </template>
+                    </el-table-column>
                 </el-table>
             </el-tab-pane>
         </el-tabs>
@@ -591,7 +601,8 @@
         kqjqlx: [],//考勤假期类型
         dept: [],//所有部门
         ygname: '',//当前登陆人
-        ygzts: '',
+        ygzts: '',//员工状态s
+        shehes:[],//审核集合
     })
     const rili = reactive({
         kqzt: [],//考勤状态
@@ -996,8 +1007,8 @@
                 data.ygzts = '正式员工'
             } else if (data.ygzt == 4) {
                 data.ygzts = '离职员工'
-            }else if(data.ygzt==5){
-                data.ygzts='黑名单'
+            } else if (data.ygzt == 5) {
+                data.ygzts = '黑名单'
             }
         }).catch(function (error) {
             console.log(error)
@@ -1039,7 +1050,9 @@
 
     //申请转正
     function sqzhuanzheng(zhuanzheng) {
+        alert(zhuanzheng.shbid)
         axios.post("/sqzhuanzheng", zhuanzheng).then(function (response) {
+            console.log(zhuanzheng.shbid)
             sqcg()
             gztshuaxin()
         }).catch(function (error) {
@@ -1057,6 +1070,14 @@
             console.log(error)
         })
         liuchengsq.value = false
+    }
+    //所有审核
+    function shenhe(){
+        axios.get("/shenheneir").then(function (response){
+            data.shehes=response.data.data;
+        }).catch(function (error){
+            console.log(error)
+        })
     }
 
 </script>
