@@ -254,7 +254,7 @@ function mohuchaxunyghmddd(){
 //   }
 // }
 function page() {
-  if(data.yyggrzsj!=null){
+  if(data.yyggrzsj!=""){
     axios.get("/ruzhishijianhmd",{
       params:{pageNum:data.pageNum,pageSize:data.pageSize,ygrzsj:data.yyggrzsj}
 
@@ -265,7 +265,7 @@ function page() {
       //data.bumen=response.data.data
       console.log(response.data.data.users)
     })
-  }else if(data.bbbmmm!=null){
+  }else if(data.bbbmmm!=""){
     axios.get("/bumenchauxnhmd",{
       params:{pageNum:data.pageNum,pageSize:data.pageSize,bmmc:data.bbbmmm}
     }).then(function(response){
@@ -275,7 +275,7 @@ function page() {
       //data.bumen=response.data.data
       console.log(response.data.data.users)
     })
-  }else if(data.rzname!=null&&data.rzsexxx!=null){
+  }else if(data.rzname!=""&&data.rzsexxx!=""){
     axios.get("/mohuchaxunyghmd",{
       params:{pageNum:data.pageNum,pageSize:data.pageSize,rzname:data.rzname,rzsex:data.rzsexxx}
     }).then(function(response){
@@ -547,7 +547,7 @@ function  ruzhishij(){
                    v-model:page-size="this.data.pageSize" layout="prev,pager,next" :total="this.data.total"
                    @current-change="page" prev-text="上一页" next-text="下一页" />
   </div>
-  <el-dialog v-model="dialogFormVisible" title="编辑招聘者信息" width="70%">
+  <el-dialog v-model="dialogFormVisible" title="编辑员工信息" width="70%">
     <el-form :model="data.cx">
       <div style="text-align: left">
         <el-steps :active="active" finish-status="success">
@@ -628,7 +628,6 @@ function  ruzhishij(){
           <el-col :span="8">
             <el-form-item label="政治面貌:">
               <el-select v-model="data.cx.rzzzmm" placeholder="政治面貌">
-                <el-option label="少先队员" value="少先队员"/>
                 <el-option label="共青团员" value="共青团员"/>
                 <el-option label="中共党员" value="中共党员"/>
                 <el-option label="群众" value="群众"/>
@@ -685,6 +684,19 @@ function  ruzhishij(){
               <el-input v-model="data.cx.rzdz" style="width: 200px;" type="textarea"/>
             </el-form-item>
           </el-col>
+          <el-col :span="8">
+
+            <el-form-item label="部门:">
+              <el-input v-model="data.cx.bmmc" style="width: 200px;" clearable  disabled="disabled"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+
+            <el-form-item label="职位:">
+              <el-input v-model="data.cx.zwmc" style="width: 200px;" clearable  disabled="disabled"/>
+            </el-form-item>
+          </el-col>
+
         </el-row>
       </div>
       <div style=" width: 100%; height: 200px;" v-if='xs==1'>
@@ -735,23 +747,17 @@ function  ruzhishij(){
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="一级学科:" prop="rzxl">
-              <el-select v-model="data.cx.yijixk" placeholder="学科">
+            <el-form-item label="学校性质:" prop="rzxl">
+              <el-select v-model="data.cx.xxxz" placeholder="性质">
                 <el-option label="985工程大学" value="985工程大学" />
                 <el-option label="211工程大学" value="211工程大学" />
                 <el-option label="普通公办大学" value="普通公办大学" />
                 <el-option label="民办院校" value="民办院校" />
                 <el-option label="海外院校" value="海外院校" />
-
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="8">
-            <el-form-item label="学校性质:">
-              <el-input v-model="data.cx.xxxz" style="width: 200px;" clearable/>
 
-            </el-form-item>
-          </el-col>
         </el-row>
 
       </div>

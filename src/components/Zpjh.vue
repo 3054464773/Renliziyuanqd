@@ -34,7 +34,9 @@ const insers=reactive({
   shbid:'',
   zwbh:'',
   zrs:'',
-  zmc:''
+  zmc:'',
+  bmbh:'',
+  shjlzbz:''
 
 })
 var data = reactive({
@@ -46,9 +48,22 @@ var data = reactive({
   rzname:'',
   zhiweiname:'',
   bumen:'',
-  bbbmmm:''
+  bbbmmm:'',
+  bumenname:'',
+  shenhename:''
 
 })
+function zhiwei(){
+  axios.get("/zhaopjhzhiwei/"+insers.bmbh).then(function (c){
+
+    data.zhiweiname=c.data.data;
+  }).catch(function (error){
+    console.log(error)
+  })
+}
+function bumenlalala(){
+  insers.zwbh=''
+}
 //修改方法
 function xiugai(zhb){
   axios.put("/xxxxgai",data.cx).then(function(response){
@@ -98,14 +113,45 @@ onBeforeMount(() => {
     console.log(response.data.data)
     data.zpjhr = response.data.data.list
     data.total = response.data.data.total
+    console.log("职位编号"+response.data.data.list.zwbh)
     bumenn()
     console.log(data.users)
   }).catch(function(error) {
     console.log(error)
   })
 })
-
+function shenhehe(){
+  axios.get("/shenheneir").then(function (c){
+    data.shenhename=c.data.data;
+  }).catch(function (error){
+    console.log(error)
+  })
+}
+function bumenmen(){
+  axios.get("/bumenmmm").then(function (c){
+    data.bumenname=c.data.data;
+  }).catch(function (error){
+    console.log(error)
+  })
+}
 function page() {
+  if(data.rzname!="") {
+    axios.get("/mohuzpjh", {
+      params: {pageNum: data.pageNum, pageSize: data.pageSize, zmc: data.rzname}
+    }).then(function (response) {
+      data.zpjhr = response.data.data.list
+      data.total = response.data.data.total
+      console.log(response.data.data.users)
+    })
+  }else if(data.bbbmmm){
+    axios.get("/bumenzpjh",{
+      params:{pageNum:data.pageNum,pageSize:data.pageSize,bmmc:data.bbbmmm}
+    }).then(function(response){
+      data.zpjhr=response.data.data.list
+      data.total=response.data.data.total
+
+    })
+  }else{
   axios.get("/findszpjh", {
     params: {
       pageNum: data.pageNum,
@@ -118,6 +164,7 @@ function page() {
   }).catch(function(error) {
     console.log(error)
   })
+}
 }
 const open1 = () => {
   ElNotification({
@@ -144,14 +191,14 @@ const del=(zhb)=>{
     })
   })
 }
-function zhiwei(){
-  axios.get("/zhiweiw").then(function (c){
-
-    data.zhiweiname=c.data.data;
-  }).catch(function (error){
-    console.log(error)
-  })
-}
+// function zhiwei(){
+//   axios.get("/zhiweiw").then(function (c){
+//
+//     data.zhiweiname=c.data.data;
+//   }).catch(function (error){
+//     console.log(error)
+//   })
+// }
 
 const open2 = () => {
   ElNotification({
@@ -162,12 +209,7 @@ const open2 = () => {
 }
 import {ElMessage} from "element-plus"
 function xinzeng(insers){
-  if(this.insers.shjlbh==""){
-    ElMessage({
-      message:'审核记录表不能为空',
-      type:'warning',
-    })
-  }else if(this.insers.shbid==""){
+   if(this.insers.shbid==""){
     ElMessage({
       message:'审核表不能为空',
       type:'warning',
@@ -198,6 +240,9 @@ function xinzeng(insers){
     insers.zwbh=""
     insers.zrs=""
     insers.zmc=""
+    insers.bmbh=""
+    insers.shjlzbz=""
+
 
   }).catch(function(error) {
     console.log(Error)
@@ -258,7 +303,7 @@ function bbb(data){
 </script>
 <template>
   <br>
-  <el-button  @click="dialogFormVisible2=true,zhiwei()" style="position: relative;right: -750px;" type="success">新增</el-button>
+  <el-button  @click="dialogFormVisible2=true,bumenmen(),shenhehe()" style="position: relative;right: -750px;" type="success">新增</el-button>
   <el-button style="position: relative;right: -166px;" @click="mohuzpjh()">查询</el-button>
   <el-input v-model="data.rzname" placeholder="请输入招聘计划" clearable style="width: 200px;position: relative;right: 105px;" />
 
@@ -274,11 +319,18 @@ function bbb(data){
       <el-table-column prop="bmmc" label="部门" />
       <el-table-column prop="zrs"  label="人数" />
       <el-table-column prop="zmc"  label="招聘计划内容" />
+      <el-table-column  label="审核状态" >
+        <template #default="scope">
+          <span v-if="scope.row.shjlzzt==1">未审核</span>
+          <span v-else-if="scope.row.shjlzzt==2">通过</span>
+          <span v-else-if="scope.row.shjlzzt==3">未通过</span>
+        </template>
+      </el-table-column>
 
       <el-table-column label="操作"  width="200">
         <template #default=scope v-slot="scope">
           <el-button size="10px" type="success" plain  @click="del(scope.row.zbh)">删除	</el-button><!-- 删除 -->
-          <el-button size="10px" type="success" plain @click="bbb(scope.row)">查看</el-button>
+          <el-button size="10px" type="success" plain @click="bbb(scope.row)">编辑</el-button>
 
         </template>
 
@@ -294,29 +346,44 @@ function bbb(data){
     <div>
     <el-form :model="insers" :rules="rules">
       <el-row>
-      <el-col :span="11">
-      <el-form-item label="审核记录表id"  prop="shjlbh">
-        <el-input v-model="insers.shjlbh" style="width: 200px;"/>
-      </el-form-item>
-      </el-col>
-      <el-form-item label="审核表id" prop="shbid">
-        <el-input  v-model="insers.shbid" style="width: 200px;"/>
-      </el-form-item>
-
-      <el-col :span="11">
-        <el-form-item label="人数"  prop="zrs">
-          <el-input v-model="insers.zrs" style="width: 200px;"/>
+        <el-col :span="11">
+        <el-form-item label="审核内容:">
+          <el-select v-model="insers.shbid" placeholder="审核内容">
+            <el-option v-for="cc in data.shenhename" :key="cc.shbid" :label="cc.shbmc" :value="cc.shbid"/>
+          </el-select>
         </el-form-item>
-      </el-col>
+        </el-col>
+        <el-col :span="11">
+
+          <el-form-item label="部门:">
+            <el-select v-model="insers.bmbh" placeholder="部门" @change="bumenlalala">
+              <el-option v-for="cc in data.bumenname" :key="cc.bmbh" :label="cc.bmmc" :value="cc.bmbh"/>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="11">
       <el-form-item label="职位:" prop="zwbh">
-        <el-select v-model="insers.zwbh" placeholder="职位">
+        <el-select v-model="insers.zwbh" placeholder="职位" @click="zhiwei">
           <el-option v-for="cc in data.zhiweiname" :key="cc.zwbh" :label="cc.zwmc" :value="cc.zwbh" />
         </el-select>
       </el-form-item>
+        </el-col>
+        <el-col :span="11">
+          <el-form-item label="人数:"  prop="zrs">
+            <el-input v-model="insers.zrs" style="width: 200px;"/>
+          </el-form-item>
+        </el-col>
+        <el-col :span="11">
+          <el-form-item label="备注:" >
+            <el-input v-model="insers.shjlzbz" style="width: 200px;"/>
+          </el-form-item>
+        </el-col>
 
+        <el-col :span="11">
         <el-form-item label="招聘计划名称:" prop="zmc">
-          <el-input v-model="insers.zmc" style="width: 400px;" type="textarea" />
+          <el-input v-model="insers.zmc" style="width: 200px;" type="textarea" />
         </el-form-item>
+        </el-col>
       </el-row>  
 
     </el-form>
@@ -330,7 +397,7 @@ function bbb(data){
     </template>
 
   </el-dialog>
-  <el-dialog v-model="dialogFormVisible" title="查看招聘计划信息" >
+  <el-dialog v-model="dialogFormVisible" title="编辑招聘计划信息" >
     <el-row>
     <el-form :model="data.cx" label-width="120px">
 <!--      <el-col :span="14">-->
@@ -341,21 +408,26 @@ function bbb(data){
 <!--      <el-form-item label="审核表id:">-->
 <!--        <el-input  v-model="data.cx.shbid"/>-->
 <!--      </el-form-item>-->
-
+      <el-col :span="20">
+        <el-form-item label="部门:" >
+          <el-input v-model="data.cx.bmmc"   disabled="disabled"/>
+        </el-form-item>
+      </el-col>
       <el-col :span="20">
       <el-form-item label="职位:" >
         <el-input v-model="data.cx.zwmc"   disabled="disabled"/>
       </el-form-item>
-
       </el-col>
+
+
       <el-col :span="20">
       <el-form-item label="人数:" >
         <el-input v-model="data.cx.zrs"/>
       </el-form-item>
       </el-col>
       <el-col :span="20">
-      <el-form-item label="招聘计划名称:" :label-width="formLabelWidth">
-        <el-input v-model="data.cx.zmc" style="width: 400px;" type="textarea" />
+      <el-form-item label="招聘计划名称:" >
+        <el-input v-model="data.cx.zmc" style="width: 200px;" type="textarea" />
       </el-form-item>
       </el-col>
 

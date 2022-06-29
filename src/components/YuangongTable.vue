@@ -1,24 +1,45 @@
 <template>
-    <div id="top">您好，{{data.rzname}}，祝您工作顺利！</div>
+    <div id="top">您好，{{data.ygname}}，祝您工作顺利！</div>
     <div id="middle">
         <div id="left">
             <div style="height: 30px;" :model="data.bcqk">上班时间：{{data.bcqk.bckssj}}，下班时间：{{data.bcqk.bcjssj}}，
-                记得<el-button type="text" style="font-weight: bold" @click="selectkqjlbyDate()">打卡</el-button>哦！</div>
+                记得
+                <el-button type="text" style="font-weight: bold" @click="selectkqjlbyDate()">打卡</el-button>
+                哦！
+            </div>
             <div>
                 <el-calendar v-model="rili.kqtimes" id="rili">
                     <template slot="dateCell" #dateCell="{ data }">
                         <p :class="data.isSelected ? 'is-selected' : ''">
                             {{ data.day.split("-").slice(1).join("-") }}
                         </p>
-                        <div  v-if="rili.kqzt.filter(e=>{return e.xzsj==data.day && e.kqsbdkzt==1 && e.kqxbdkzt==1}).length>0">正常</div>
-                        <div  v-if="rili.kqzt.filter(e=>{return e.xzsj==data.day && e.kqsbdkzt==1 && e.kqxbdkzt==3}).length>0">正常,早退</div>
-                        <div  v-if="rili.kqzt.filter(e=>{return e.xzsj==data.day && e.kqsbdkzt==1 && e.kqxbdkzt==4}).length>0">正常,未打卡</div>
-                        <div  v-if="rili.kqzt.filter(e=>{return e.xzsj==data.day && e.kqsbdkzt==2 && e.kqxbdkzt==1}).length>0">迟到,正常</div>
-                        <div  v-if="rili.kqzt.filter(e=>{return e.xzsj==data.day && e.kqsbdkzt==2 && e.kqxbdkzt==3}).length>0">迟到,早退</div>
-                        <div  v-if="rili.kqzt.filter(e=>{return e.xzsj==data.day && e.kqsbdkzt==2 && e.kqxbdkzt==4}).length>0">迟到,未打卡</div>
-                        <div  v-if="rili.kqzt.filter(e=>{return e.xzsj==data.day && e.kqsbdkzt==4 && e.kqxbdkzt==1}).length>0">未打卡,正常</div>
-                        <div  v-if="rili.kqzt.filter(e=>{return e.xzsj==data.day && e.kqsbdkzt==4 && e.kqxbdkzt==3}).length>0">未打卡,早退</div>
-                        <div  v-if="rili.kqzt.filter(e=>{return e.xzsj==data.day && e.kqsbdkzt==4 && e.kqxbdkzt==4}).length>0">未打卡</div>
+                        <div v-if="rili.kqzt.filter(e=>{return e.xzsj==data.day && e.kqsbdkzt==1 && e.kqxbdkzt==1}).length>0">
+                            正常
+                        </div>
+                        <div v-if="rili.kqzt.filter(e=>{return e.xzsj==data.day && e.kqsbdkzt==1 && e.kqxbdkzt==3}).length>0">
+                            正常,早退
+                        </div>
+                        <div v-if="rili.kqzt.filter(e=>{return e.xzsj==data.day && e.kqsbdkzt==1 && e.kqxbdkzt==4}).length>0">
+                            正常,未打卡
+                        </div>
+                        <div v-if="rili.kqzt.filter(e=>{return e.xzsj==data.day && e.kqsbdkzt==2 && e.kqxbdkzt==1}).length>0">
+                            迟到,正常
+                        </div>
+                        <div v-if="rili.kqzt.filter(e=>{return e.xzsj==data.day && e.kqsbdkzt==2 && e.kqxbdkzt==3}).length>0">
+                            迟到,早退
+                        </div>
+                        <div v-if="rili.kqzt.filter(e=>{return e.xzsj==data.day && e.kqsbdkzt==2 && e.kqxbdkzt==4}).length>0">
+                            迟到,未打卡
+                        </div>
+                        <div v-if="rili.kqzt.filter(e=>{return e.xzsj==data.day && e.kqsbdkzt==4 && e.kqxbdkzt==1}).length>0">
+                            未打卡,正常
+                        </div>
+                        <div v-if="rili.kqzt.filter(e=>{return e.xzsj==data.day && e.kqsbdkzt==4 && e.kqxbdkzt==3}).length>0">
+                            未打卡,早退
+                        </div>
+                        <div v-if="rili.kqzt.filter(e=>{return e.xzsj==data.day && e.kqsbdkzt==4 && e.kqxbdkzt==4}).length>0">
+                            未打卡
+                        </div>
                     </template>
                 </el-calendar>
             </div>
@@ -27,9 +48,9 @@
             <div id="bianjiedaohang">
                 <p style="font-size: 20px;font-weight: bold;margin-left: 10px;margin-top: 0;">便捷导航</p>
                 <el-button @click="Yuangongziliao=true,gerenziliao()" class="bianjie">个人资料</el-button>
-                <el-button @click="cxygphone(),drawer=true" class="bianjie">通讯录</el-button>
+                <el-button @click="cxygphone(),selectdeptxx(),drawer=true" class="bianjie">通讯录</el-button>
                 <el-button @click="rizhiDialog=true,merizhi(),yidianpingrz()" class="bianjie">工作日志</el-button>
-                <el-button @click="liuchengsq=true" class="bianjie">流程申请</el-button>
+                <el-button @click="liuchengsq=true,selectyuangongzt(),selectkqjqlx()" class="bianjie">流程申请</el-button>
                 <el-button @click="yuangongjilu=true,jxjl(),xzjl(),ccjl()" class="bianjie">个人记录</el-button>
             </div>
             <div style="box-shadow: 5px 5px 5px 5px #B3C0D1;margin-top: 3%;height: 430px; ">
@@ -41,7 +62,7 @@
                             <el-table-column prop="tzbt" label="标题"/>
                             <el-table-column prop="tznr" label="通知内容" show-overflow-tooltip/>
                             <el-table-column prop="tzsj" label="发布时间" sortable/>
-                            <el-table-column prop="tzyds" label="阅读数"/>
+                            <!--<el-table-column prop="tzyds" label="阅读数"/>-->
                         </el-table>
                     </el-tab-pane>
                     <el-tab-pane label="公告" name="second">
@@ -51,7 +72,7 @@
                             <el-table-column prop="ggbt" label="标题"/>
                             <el-table-column prop="ggnr" label="公告内容" show-overflow-tooltip/>
                             <el-table-column prop="ggsj" label="发布时间" sortable/>
-                            <el-table-column prop="ggyds" label="阅读数"/>
+                            <!--<el-table-column prop="ggyds" label="阅读数"/>-->
                         </el-table>
                     </el-tab-pane>
                 </el-tabs>
@@ -61,7 +82,7 @@
     <!--个人资料弹窗-->
     <el-dialog v-model="Yuangongziliao" title="个人资料">
         <el-form label-width="120px" :model="data.gerenziliaoxx">
-            <el-row>
+            <el-row class="wbkpb">
                 <el-col :span="11">
                     <el-form-item label="员工编号">
                         <el-input v-model="data.gerenziliaoxx.ybh" disabled/>
@@ -84,7 +105,7 @@
                 </el-col>
                 <el-col :span="11">
                     <el-form-item label="员工状态">
-                        <el-input v-model="data.gerenziliaoxx.ygzt" disabled/>
+                        <el-input v-model="data.ygzts" disabled/>
                     </el-form-item>
                 </el-col>
                 <el-col :span="11">
@@ -214,11 +235,25 @@
         </template>
     </el-dialog>
     <!--员工通讯录抽屉-->
-    <el-drawer v-model="drawer" title="员工通讯录">
-        <el-table :data="ygphoneTable">
+    <el-drawer v-model="drawer" size="35%" title="员工通讯录">
+        <el-select placeholder="请选择部门" v-model="data.dept.bmmc" clearable style="width: 200px;height: 30px">
+            <el-option v-for="dept in data.dept" :label="dept.bmmc" :value="dept.bmbh" @click="cxygtxlbybm(dept.bmbh)"/>
+        </el-select>
+        <el-input placeholder="请输入员工姓名" v-model="data.rzname" style="width: 200px;height: 30px;margin-left: 10px;" clearable/>
+        <el-button @click="mhcxygtxlbyname">查询</el-button>
+        <el-table :data="ygphoneTable" height="500px">
             <el-table-column prop="rzname" label="员工姓名"/>
+            <el-table-column prop="bmmc" label="部门"/>
             <el-table-column prop="rzphone" label="联系电话"/>
         </el-table>
+        <!-- 分页-->
+        <div class="page">
+            <el-pagination background layout="prev, pager, next"
+                           v-model:current-page="this.data.pageNum2"
+                           v-model:page-size="this.data.pageSize2"
+                           :total="data.total2"
+                           @current-change="ygpage()"/>
+        </div>
     </el-drawer>
     <!-- 日志弹窗 -->
     <el-dialog v-model="rizhiDialog" title="工作日志">
@@ -269,32 +304,138 @@
     <!--流程申请弹窗-->
     <el-dialog v-model="liuchengsq" title="流程申请">
         <el-tabs v-model="lcsq">
-            <el-tab-pane label="申请排休" name="first">
-                申请排休
+            <el-tab-pane label="申请请假" name="first">
+                <el-form :model="data.paixiu" label-width="100px">
+                    <el-row class="wbkpb">
+                        <el-col :span="11">
+                            <el-form-item label="员工编号">
+                                <el-input v-model="data.paixiu.ybh" disabled/>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="11">
+                            <el-form-item label="员工姓名">
+                                <el-input v-model="data.paixiu.rzname" disabled/>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="11">
+                            <el-form-item label="开始时间">
+                                <el-date-picker
+                                        type="date"
+                                        placeholder="请选择时间"
+                                        style="width: 100%"
+                                        v-model="data.paixiu.jqsqkssj"
+                                />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="11">
+                            <el-form-item label="结束时间">
+                                <el-date-picker
+                                        type="date"
+                                        placeholder="请选择时间"
+                                        style="width: 100%"
+                                        v-model="data.paixiu.jqsqjssj"
+                                />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="11">
+                            <el-form-item label="考勤假期类型">
+                                <el-select v-model="data.paixiu.kqjqbh" placeholder="请选择一项考勤假期类型" style="width: 100%">
+                                    <el-option v-for="jqlx in data.kqjqlx" :key="jqlx.kqjqbh" :label="jqlx.kqjqmc"
+                                               :value="jqlx.kqjqbh"/>
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-button type="primary" @click="sqpaixiu(data.paixiu)" style="float: right;margin-right: 8%;">提交
+                    </el-button>
+                </el-form>
             </el-tab-pane>
             <el-tab-pane label="申请补卡" name="second">
                 申请补卡
             </el-tab-pane>
             <el-tab-pane label="申请转正" name="third">
-                申请转正
+                <el-form v-if="data.ygzt==2?true:false" :model="data.zhuanzheng" label-width="100px">
+                    <el-row class="wbkpb">
+                        <el-col :span="11">
+                            <el-form-item label="员工编号">
+                                <el-input v-model="data.zhuanzheng.ybh" disabled/>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="11">
+                            <el-form-item label="员工状态">
+                                <el-input v-model="data.ygzts" disabled/>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="11">
+                            <el-form-item label="员工姓名">
+                                <el-input v-model="data.zhuanzheng.rzname" disabled/>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="11">
+                            <el-form-item label="申请时间">
+                                <el-date-picker
+                                        type="date"
+                                        placeholder="请选择时间"
+                                        style="width: 100%"
+                                        v-model="data.zhuanzheng.yggzsj"
+                                />
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-button type="primary" @click="sqzhuanzheng(data.zhuanzheng)"
+                               style="float: right;margin-right: 8%;">提交
+                    </el-button>
+                </el-form>
+                <span v-if="data.ygzt==3?true:false" style="font-weight: bold;font-size: 20px;">你是正式员工，不需要转正！</span>
             </el-tab-pane>
             <el-tab-pane label="申请离职" name="fourth">
-                申请离职
+                <el-form :model="data.lizhi" label-width="100px">
+                    <el-row class="wbkpb">
+                        <el-col :span="11">
+                            <el-form-item label="员工编号">
+                                <el-input v-model="data.lizhi.ybh" disabled/>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="11">
+                            <el-form-item label="员工状态">
+                                <el-input v-model="data.ygzts" disabled/>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="11">
+                            <el-form-item label="员工姓名">
+                                <el-input v-model="data.lizhi.rzname" disabled/>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="11">
+                            <el-form-item label="申请时间">
+                                <el-date-picker
+                                        type="date"
+                                        placeholder="请选择时间"
+                                        style="width: 100%"
+                                        v-model="data.lizhi.yggzsj"
+                                />
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-button type="primary" @click="sqlizhi(data.lizhi)" style="float: right;margin-right: 8%;">提交
+                    </el-button>
+                </el-form>
             </el-tab-pane>
             <el-tab-pane label="申请出差" name="fifth">
-                <el-form label-width="120px">
+                <el-form :model="data.shenqinchuchaiForm" label-width="120px">
                     <el-form-item label="出发地">
-                        <el-input class="wbk"/>
+                        <el-input v-model="data.shenqinchuchaiForm.ccfd" class="wbk"/>
                     </el-form-item>
                     <el-form-item label="目的地">
-                        <el-input class="wbk"/>
+                        <el-input v-model="data.shenqinchuchaiForm.cmdd" class="wbk"/>
                     </el-form-item>
-                    <el-row>
+                    <el-row class="wbkpb">
                         <el-col :span="10">
                             <el-form-item label="开始时间">
                                 <el-date-picker
                                         type="date"
                                         placeholder="请选择开始时间"
+                                        v-model="data.shenqinchuchaiForm.ckssj"
                                 />
                             </el-form-item>
                         </el-col>
@@ -303,14 +444,19 @@
                                 <el-date-picker
                                         type="date"
                                         placeholder="请选择预计回来时间"
+                                        v-model="data.shenqinchuchaiForm.cyjsj"
                                 />
                             </el-form-item>
                         </el-col>
                     </el-row>
                     <el-form-item label="出差内容">
-                        <el-input type="textarea" class="wbk"/>
+                        <el-input type="textarea" v-model="data.shenqinchuchaiForm.cccnr" class="wbk"/>
                     </el-form-item>
                 </el-form>
+                <el-button @click="qkchuchaibiaodan()" style="float: right;margin-right: 5%;">重置</el-button>
+                <el-button type="primary" @click="sqchuchai(data.shenqinchuchaiForm)"
+                           style="float: right;margin-right: 2%;">提交
+                </el-button>
             </el-tab-pane>
         </el-tabs>
     </el-dialog>
@@ -399,14 +545,13 @@
     const drawer = ref(false)//通讯录抽屉
     const rizhiDialog = ref(false)//日志弹窗
     const ygphoneTable = ref([])//员工通讯录
-    const liuchengsq=ref(false)
-    const yuangongjilu=ref(false)
+    const liuchengsq = ref(false)
+    const yuangongjilu = ref(false)
     const lcsq = ref('first')
     const tzandgg = ref('first')
     const rz = ref('first')
     const ygjl = ref('first')
     const fabiaoForm = reactive({//发表日志表单
-        ybh: '',
         gzrznr: '', //发表日志内容
     })
     const data = reactive({
@@ -419,18 +564,36 @@
         pageNum1: 1,
         pageSize1: 2,
         total1: 0,
+        pageNum2: 1,//员工通讯录
+        pageSize2: 10,
+        total2: 0,
         kaoqinData: [],//考勤数据
         jixiaoData: [],//绩效数据
         xinziData: [],//薪资数据
-        chuchaiData:[],//出差数据
+        chuchaiData: [],//出差数据
         tongzhiData: [],//通知数据
         gonggaoData: [],//公告数据
         gerenziliaoxx: {},//个人资料信息
         kaoqinjilubiao: {},//考勤记录表信息
-        bcqk:{},//班次情况
-        rzname:'',//当前登录人
+        bcqk: {},//班次情况
+        rzname: '',//员工通讯录姓名
+        shenqinchuchaiForm: {
+            ccfd: '',
+            cmdd: '',
+            ckssj: '',
+            cyjsj: '',
+            cccnr: ''
+        },//申请出差表单
+        ygzt: 0,//员工状态，用于判断员工是否能申请转正
+        zhuanzheng: {},//转正信息
+        lizhi: {},//离职信息
+        paixiu: {},//排休信息
+        kqjqlx: [],//考勤假期类型
+        dept: [],//所有部门
+        ygname: '',//当前登陆人
+        ygzts: '',
     })
-    const rili=reactive({
+    const rili = reactive({
         kqzt: [],//考勤状态
         kqtimes: new Date(),//当前时间
     })
@@ -483,10 +646,65 @@
             type: 'warning'
         })
     }
+    //7、申请成功
+    const sqcg = () => {
+        ElMessage({
+            showClose: true,
+            message: '申请成功！',
+            type: 'success'
+        })
+    }
 
     //查询员工通讯录
     function cxygphone() {
-        axios.get("/cxygphone").then(function (response) {
+        axios.get("/cxygphone", {
+            params: {
+                pageNum: data.pageNum2,
+                pageSize: data.pageSize2
+            }
+        }).then(function (response) {
+            ygphoneTable.value = response.data.data.list
+            data.total2 = response.data.data.total
+        }).catch(function (error) {
+            console.log(error)
+        })
+    }
+
+    //查询员工通讯录--分页
+    function ygpage() {
+        axios.get("/cxygphone", {
+            params: {
+                pageNum: data.pageNum2,
+                pageSize: data.pageSize2
+            }
+        }).then(function (response) {
+            ygphoneTable.value = response.data.data.list
+            data.total2 = response.data.data.total
+        }).catch(function (error) {
+            console.log(error)
+        })
+    }
+
+    //根据部门查询员工通讯录
+    function cxygtxlbybm(bmbh) {
+        axios.get("/cxygtxlbybm", {
+            params: {
+                bmbh: bmbh
+            }
+        }).then(function (response) {
+            ygphoneTable.value = response.data.data
+        }).catch(function (error) {
+            console.log(error)
+        })
+    }
+
+    //根据员工姓名模糊查询员工通讯录
+    function mhcxygtxlbyname() {
+        axios.get("/mhcxygtxlbyname", {
+            params: {
+                rzname: data.rzname
+            }
+        }).then(function (response) {
             ygphoneTable.value = response.data.data
         }).catch(function (error) {
             console.log(error)
@@ -506,7 +724,7 @@
         }).catch(function (error) {
             console.log(error)
         })
-        rizhiDialog.value=false
+        rizhiDialog.value = false
         fabiaoForm.gzrznr = null;
     }
 
@@ -569,11 +787,12 @@
             console.log(error)
         })
     }
+
     //刷新
-    function gztshuaxin(){
+    function gztshuaxin() {
         axios.get("/cxkqjlByid").then(function (response) {
             data.kaoqinData = response.data.data
-            data.rzname=response.data.data[0].rzname
+            data.rzname = response.data.data[0].rzname
             var kq = [];
             for (var i = 0; i < response.data.data.length; i++) {
                 kq.push({
@@ -597,17 +816,27 @@
             console.log(error)
         })
         axios.get("/cxbcxx").then(function (response) {
-            data.bcqk=response.data.data
+            data.bcqk = response.data.data
         }).catch(function (error) {
             console.log(error)
         })
     }
 
+    //查询所有部门信息
+    function selectdeptxx() {
+        axios.get("/selectdept").then(function (response) {
+            data.dept = response.data.data
+        }).catch(function (error) {
+            console.log(error)
+        })
+    }
+
+
     //根据id查询员工考勤记录
     onBeforeMount(() => {
         axios.get("/cxkqjlByid").then(function (response) {
             data.kaoqinData = response.data.data
-            data.rzname=response.data.data[0].rzname
+            data.ygname = response.data.data[0].rzname
             var kq = [];
             for (var i = 0; i < response.data.data.length; i++) {
                 kq.push({
@@ -621,8 +850,9 @@
             console.log(error)
         })
     })
+
     //根据id查询员工绩效记录
-    function jxjl(){
+    function jxjl() {
         axios.get("/cxjxjlByid").then(function (response) {
             data.jixiaoData = response.data.data
         }).catch(function (error) {
@@ -631,7 +861,7 @@
     }
 
     //根据id查询员工薪资记录
-    function xzjl(){
+    function xzjl() {
         axios.get("/cxxzjlByid").then(function (response) {
             data.xinziData = response.data.data
         }).catch(function (error) {
@@ -640,7 +870,7 @@
     }
 
     //根据id查询员工出差记录
-    function ccjl(){
+    function ccjl() {
         axios.get("/cxccjlByid").then(function (response) {
             data.chuchaiData = response.data.data
         }).catch(function (error) {
@@ -682,13 +912,13 @@
         }).catch(function (error) {
             console.log(error)
         })
-        Yuangongziliao.value=false
+        Yuangongziliao.value = false
     }
 
     //根据员工id查询员工班次情况
     onBeforeMount(() => {
         axios.get("/cxbcxx").then(function (response) {
-            data.bcqk=response.data.data
+            data.bcqk = response.data.data
         }).catch(function (error) {
             console.log(error)
         })
@@ -733,6 +963,102 @@
         }
     }
 
+    //清空出差表单
+    function qkchuchaibiaodan() {
+        data.shenqinchuchaiForm.ccfd = null
+        data.shenqinchuchaiForm.cmdd = null
+        data.shenqinchuchaiForm.ckssj = null
+        data.shenqinchuchaiForm.cyjsj = null
+        data.shenqinchuchaiForm.cccnr = null
+    }
+
+    //申请出差
+    function sqchuchai(shenqinchuchaiForm) {
+        axios.post("/sqchuchai", shenqinchuchaiForm).then(function (response) {
+            sqcg()
+            gztshuaxin()
+        }).catch(function (error) {
+            console.log(error)
+        })
+        qkchuchaibiaodan()
+        liuchengsq.value = false
+    }
+
+    //员工状态
+    onBeforeMount(() => {
+        axios.get("/selectyuangongzt").then(function (response) {
+            data.ygzt = response.data.data.ygzt
+            if (data.ygzt == 1) {
+                data.ygzts = '未到岗'
+            } else if (data.ygzt == 2) {
+                data.ygzts = '实习员工'
+            } else if (data.ygzt == 3) {
+                data.ygzts = '正式员工'
+            } else if (data.ygzt == 4) {
+                data.ygzts = '离职员工'
+            }else if(data.ygzt==5){
+                data.ygzts='黑名单'
+            }
+        }).catch(function (error) {
+            console.log(error)
+        })
+    })
+
+    //查询员工的状态(判断员工是否能申请转正)
+    function selectyuangongzt() {
+        axios.get("/selectyuangongzt").then(function (response) {
+            console.log(response.data.data)
+            data.ygzt = response.data.data.ygzt
+            data.zhuanzheng = response.data.data
+            data.lizhi = response.data.data
+            data.paixiu = response.data.data
+        }).catch(function (error) {
+            console.log(error)
+        })
+    }
+
+    //查询所有考勤假期类型
+    function selectkqjqlx() {
+        axios.get("/selectkqjqlx").then(function (response) {
+            data.kqjqlx = response.data.data
+        }).catch(function (error) {
+            console.log(error)
+        })
+    }
+
+    //申请排休
+    function sqpaixiu(paixiu) {
+        axios.post("/sqpaixiu", paixiu).then(function (response) {
+            sqcg()
+            gztshuaxin()
+        }).catch(function (error) {
+            console.log(error)
+        })
+        liuchengsq.value = false
+    }
+
+    //申请转正
+    function sqzhuanzheng(zhuanzheng) {
+        axios.post("/sqzhuanzheng", zhuanzheng).then(function (response) {
+            sqcg()
+            gztshuaxin()
+        }).catch(function (error) {
+            console.log(error)
+        })
+        liuchengsq.value = false
+    }
+
+    //申请离职
+    function sqlizhi(lizhi) {
+        axios.post("/sqlizhi", lizhi).then(function (response) {
+            sqcg()
+            gztshuaxin()
+        }).catch(function (error) {
+            console.log(error)
+        })
+        liuchengsq.value = false
+    }
+
 </script>
 
 <style scoped>
@@ -760,7 +1086,6 @@
     }
 
     #bianjiedaohang {
-        /*border: 1px solid black;*/
         box-shadow: 5px 5px 5px 5px #B3C0D1;
     }
 
@@ -772,7 +1097,7 @@
 
     .page {
         margin-top: 5%;
-        margin-left: 40%;
+        margin-left: 35%;
     }
 
     #rili {
@@ -783,7 +1108,11 @@
         height: auto;
     }
 
-    .wbk{
+    .wbk {
         width: 500px;
+    }
+
+    .wbkpb {
+        background: white;
     }
 </style>

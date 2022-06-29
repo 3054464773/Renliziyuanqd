@@ -54,7 +54,9 @@ const insers2=reactive({
   mbh:'',
   ybh:'',
   mzbh:'',
-  mzwt:''
+  mzwt:'',
+  zwmc:'',
+  mmc:''
 
 
 })
@@ -63,6 +65,7 @@ function mohuchaxun(){
     params:{pageNum:data.pageNum,pageSize:data.pageSize,mmc:data.rzname}
   }).then(function(response){
     data.Recruit=response.data.data.list
+
     data.total=response.data.data.total
     console.log(response.data.data)
   })
@@ -99,6 +102,24 @@ onBeforeMount(() => {
   })
 })
 function page() {
+  if(data.rzname!=""){
+    axios.get("/mohuguizhan",{
+      params:{pageNum:data.pageNum,pageSize:data.pageSize,mmc:data.rzname}
+    }).then(function(response){
+      data.Recruit=response.data.data.list
+
+      data.total=response.data.data.total
+      console.log(response.data.data)
+    })
+  }else if(data.bbbmmm!=""){
+    axios.get("/bumenguiz",{
+      params:{pageNum:data.pageNum,pageSize:data.pageSize,bmmc:data.bbbmmm}
+    }).then(function(response){
+      data.Recruit=response.data.data.list
+      data.total=response.data.data.total
+
+    })
+  }else{
   axios.get("/mianshiguizhang", {
     params: {
       pageNum: data.pageNum,
@@ -111,6 +132,7 @@ function page() {
   }).catch(function(error) {
     console.log(error)
   })
+  }
 }
 //查询id为x的这条数据
 function b(rzbh){
@@ -252,13 +274,9 @@ function xinzeng(insers){
   })
 }
 }
-function xinzeng2(insers2){
-  if(this.insers2.ybh==""){
-    ElMessage({
-      message:'制作人员不能为空',
-      type:'warning',
-    })
-  }else if(this.insers2.mzwt==""){
+function  xinzeng2(){
+
+  if(this.insers2.mzwt==""){
     ElMessage({
       message:'面试问题不能为空',
       type:'warning',
@@ -269,7 +287,8 @@ function xinzeng2(insers2){
     open100()
     insers2.ybh=""
     insers2.mzwt=""
-
+   insers2.zwmc=""
+    insers2.mmc=""
 
   }).catch(function(error) {
     console.log(Error)
@@ -327,6 +346,8 @@ function bumenchauxnhmd(){
 function xinzengzi(data){
   dialogTableVisible777.value=true
   insers2.mbh=data.mbh
+  insers2.mmc=data.mmc
+  insers2.zwmc=data.zwmc
 }
 //新增子表面试问题
 function xxxzzzzwt(){
@@ -359,7 +380,7 @@ function formatter(row,column) {
       <el-table-column  type="index" label="序号" width="200" />
 <!--      <el-table-column prop="ybh" label="制定员" />-->
       <el-table-column prop="zwmc" label="职位" />
-<!--      <el-table-column prop="bmmc" label="部门" />-->
+      <el-table-column prop="bmmc" label="部门" />
       <el-table-column prop="mmc" label="规章名称" />
       <el-table-column label="操作"  width="100">
         <template #default=scope v-slot="scope">
@@ -404,35 +425,40 @@ function formatter(row,column) {
 
     </template>
   </el-dialog>
-  <el-dialog v-model="dialogTableVisible7778" title="新增" >
-    <el-form    :model="insers2"  :rules="rules">
-      <el-row>
-        <el-col :span="11">
-          <el-form-item label="制作人编号" prop="ybh">
-            <el-input v-model="insers2.ybh" style="width: 200px;"  maxlength="11"/>
-          </el-form-item>
-        </el-col>
-        <el-form-item label="面试问题:" prop="mzwt" style="width: 600px;" >
-          <el-input v-model="insers2.mzwt" type="textarea"  clearable/>
-        </el-form-item>
-      </el-row>
+<!--  <el-dialog v-model="dialogTableVisible7778" title="新增" >-->
+<!--    <el-form    :model="insers2"  :rules="rules">-->
+<!--      <el-row>-->
+<!--        <el-col :span="11">-->
+<!--          <el-form-item label="制作人编号" prop="ybh">-->
+<!--            <el-input v-model="insers2.ybh" style="width: 200px;"  maxlength="11"/>-->
+<!--          </el-form-item>-->
+<!--        </el-col>-->
+<!--        <el-form-item label="面试问题:" prop="mzwt" style="width: 600px;" >-->
+<!--          <el-input v-model="insers2.mzwt" type="textarea"  clearable/>-->
+<!--        </el-form-item>-->
+<!--      </el-row>-->
 
-    </el-form>
-    <template #footer>
-	  	<span class="dialog-footer">
-	  		<el-button @click="dialogTableVisible7778 = false">关闭</el-button>
-	  		<el-button type="primary" @click="dialogTableVisible7778 = false,xinzeng2(insers2)">确定</el-button>
-	  	</span>
+<!--    </el-form>-->
+<!--    <template #footer>-->
+<!--	  	<span class="dialog-footer">-->
+<!--	  		<el-button @click="dialogTableVisible7778 = false">关闭</el-button>-->
+<!--	  		<el-button type="primary" @click="dialogTableVisible7778 = false,xinzeng2(data)">确定</el-button>-->
+<!--	  	</span>-->
 
-    </template>
-  </el-dialog>
+<!--    </template>-->
+<!--  </el-dialog>-->
   <el-dialog v-model="dialogTableVisible777" title="新增" >
     <el-form    :model="insers2"  :rules="rules">
       <el-row>
         <el-col :span="11">
-        <el-form-item label="制作人编号" prop="ybh">
-          <el-input v-model="insers2.ybh" style="width: 200px;"  maxlength="11"/>
-        </el-form-item>
+          <el-form-item label="职位:">
+            <el-input v-model="insers2.zwmc" style="width: 200px;"  disabled="disabled"/>
+          </el-form-item>
+        </el-col>
+        <el-col :span="11">
+          <el-form-item label="规章名称:" >
+            <el-input v-model="insers2.mmc" style="width: 200px;" disabled="disabled" />
+          </el-form-item>
         </el-col>
           <el-form-item label="面试问题:" prop="mzwt" style="width: 600px;" >
             <el-input v-model="insers2.mzwt" type="textarea"  clearable/>
