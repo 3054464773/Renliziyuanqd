@@ -4,8 +4,10 @@
 
     <el-card>
       <div class="score">
-        <el-row style="background: white">
-          <el-col :span="12">
+
+          <el-row style="background: white">
+            <el-col :span="10">
+
             <el-date-picker
                 value-format="YYYY-MM"
                 v-model="this.jxsj"
@@ -14,9 +16,10 @@
 
                 placeholder="请选择月份"
             />
-          </el-col>
-          <el-col :span="12">
-            <el-select clearable placeholder="按部门查看" v-model="value"  @change="ScaleHandleChange">
+            </el-col>
+            <el-col :span="10">
+            <el-select clearable placeholder="按部门查看" v-model="value" @change="ScaleHandleChange">
+
               <el-option
                   :label="item.label"
                   :value="item.value"
@@ -25,11 +28,12 @@
                 {{item.label}}
               </el-option>
             </el-select>
-          </el-col>
-        </el-row>
 
+            </el-col>
+          </el-row>
 
           <div id="main1" class="plateScale" style="width:100%;height:500px"></div>
+
       </div>
    </el-card>
 

@@ -1,9 +1,9 @@
 <template>
 
-    <el-row >
-      <el-col :span="12"></el-col>
-      <el-col :span="12">
-        <el-form
+  <el-row >
+    <el-col :span="12"></el-col>
+    <el-col :span="12">
+      <el-form
           ref="ruleFormRef"
           :model="userinfo"
           :rules="rules"
@@ -21,7 +21,7 @@
           <el-button type="primary" @click="submitForm(ruleFormRef)"  @keyup.enter.native="submitForm(ruleFormRef)">登录</el-button>
         </el-form-item>
       </el-form></el-col>
-    </el-row>
+  </el-row>
 
 </template>
 
@@ -31,11 +31,9 @@ import type { FormInstance, FormRules } from 'element-plus'
 import axios from '../axios'
 import stores from '../store/index'
 import router from '../router/index'
-
 onMounted(() => {
   searchEnterFun()
 })
-
 const formSize = ref('default')
 const ruleFormRef = ref<FormInstance>()
 const userinfo = reactive({
@@ -44,7 +42,6 @@ const userinfo = reactive({
 })
 function searchEnterFun(){
   document.onkeyup = e =>{
-
     if (e.keyCode === 13 ) {
       submitForm(ruleFormRef.value);
     }
@@ -60,11 +57,11 @@ const rules = reactive<FormRules>({
     { min: 6, message: '请输入合法密码！', trigger: 'blur' },
   ]
 })
-
 const submitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
   await formEl.validate((valid, fields) => {
     if (valid) {
+
      axios.post("/YuangongLogin",userinfo).then((e)=>{
           if(e.data.data){
             console.log(JSON.parse(e.data.data.dtly).length)
@@ -81,17 +78,16 @@ const submitForm = async (formEl: FormInstance | undefined) => {
           }
 
      })
+
     } else {
       console.log('error submit!', fields)
     }
   })
 }
-
 const resetForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return
   formEl.resetFields()
 }
-
 </script>
 <style>
 .demo-ruleForm{
