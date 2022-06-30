@@ -448,7 +448,7 @@ function  kaoqin(ybh){
 function  xinzi(ybh){
   axios.get("/findusersxinzi/"+ybh).then(function(response) {
     data6.xinzi = response.data.data
-
+    console.log(data6.xinzi)
   }).catch(function(error) {
     console.log(error)
   })
@@ -795,7 +795,7 @@ function  ruzhishij(){
         <el-tab-pane label="出差记录" name="first">
           <div>
             <el-table :data="data6.chuhcai" height="350" style="width: 100%">
-              <el-table-column prop="ybh" label="编号"  />
+              <el-table-column  type="index" label="序号" width="100" />
               <el-table-column prop="rzname" label="姓名"  />
               <el-table-column prop="rzsex" label="性别"  />s
               <el-table-column prop="ccfd" label="出发地"  />
@@ -819,7 +819,7 @@ function  ruzhishij(){
         <el-tab-pane label="考勤记录" name="second">
           <div>
             <el-table :data="data6.kaoqin" height="350" style="width: 100%">
-              <el-table-column prop="ybh" label="编号"  />
+              <el-table-column  type="index" label="序号" width="100" />
               <el-table-column prop="rzname" label="姓名"  />
               <el-table-column prop="rzsex" label="性别"  />
               <el-table-column prop="kqsbdksj" label="上班打卡时间"  />
@@ -848,7 +848,7 @@ function  ruzhishij(){
         <el-tab-pane label="面试记录" name="third">
           <div>
             <el-table :data="data6.mianshi" height="350" style="width: 100%">
-              <el-table-column prop="rid" label="编号"  />
+              <el-table-column  type="index" label="序号" width="100" />
               <el-table-column prop="rzname" label="姓名"  />
               <el-table-column prop="rzsex" label="性别"  />
               <el-table-column prop="mjsj" label="面试时间"  />
@@ -866,11 +866,11 @@ function  ruzhishij(){
         <el-tab-pane label="绩效记录" name="fourth">
           <div>
             <el-table :data="data6.jixiao" height="350" style="width: 100%">
-              <el-table-column prop="ybh" label="编号"  />
+              <el-table-column  type="index" label="序号" width="100" />
               <el-table-column prop="rzname" label="姓名"  />
               <el-table-column prop="rzsex" label="性别"  />s
               <el-table-column prop="jnr" label="绩效内容"  />
-              <el-table-column prop="jmc" label="绩效考核名称"  />
+              <el-table-column prop="jmc" label="绩效名称"  />
 
             </el-table>
           </div>
@@ -878,11 +878,12 @@ function  ruzhishij(){
         <el-tab-pane label="薪资记录" name="lll">
           <div>
             <el-table :data="data6.xinzi" height="350" style="width: 100%">
-              <el-table-column prop="ybh" label="编号"  />
+              <el-table-column  type="index" label="序号" width="100" />
               <el-table-column prop="rzname" label="姓名"  />
               <el-table-column prop="zwmc" label="职位"  />
               <el-table-column prop="bmmc" label="部门"  />
-              <el-table-column prop="xzjbgz" label="基本工资"  />
+              <el-table-column prop="xzjljbgz" label="基本工资"  />
+              <el-table-column prop="szjlze" label="总额"  />
               <el-table-column prop="ygrzsj" label="入职时间"  />
 
             </el-table>
