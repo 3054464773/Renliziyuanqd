@@ -14,16 +14,19 @@
             <el-divider/>
             <div class="table-salary">
                 <el-table :data="data.salary" style="width: 100%">
-<!--                  <el-table-column prop="rzname" label="员工姓名" width="180" />-->
                   <el-table-column prop="zwmc" label="职位名称" width="300" />
                   <el-table-column prop="bmmc" label="部门名称" width="300" />
                   <el-table-column prop="xzjbgz" label="基本工资" />
-<!--                  <el-table-column prop="ygzt" label="员工状态" >
-                    <template #default="scope" >
-                      {{scope.row.ygzt==2?"实习人员":(scope.row.ygzt==1?"未到岗"
-                        :(scope.row.ygzt==3?"正式人员":(scope.row.ygzt==4?"已离职人员":"黑名单")))}}
+                  <el-table-column label="操作">
+                    <template #default="scope" v-slot="scope">
+                      <el-button type="primary"  round>
+                        <el-icon style="vertical-align: middle">
+                          <edit />
+                        </el-icon>
+                        <span style="vertical-align: middle;" @click="selectPositionSalaryByXzjbbh2(scope.row.xzjbbh)">调薪</span>
+                      </el-button>
                     </template>
-                  </el-table-column>-->
+                  </el-table-column>
                 </el-table>
               <el-empty description="没有找到相关数据！" v-if="data.isShow"/>
             </div>
@@ -100,6 +103,9 @@
   >
     <el-form-item label="基本工资" >
       <el-input v-model="Updateform.xzjbgz">
+       <template #default="scope">
+         {{Updateform.xzjbgz==0?"":Updateform.xzjbgz}}
+       </template>
       </el-input>
     </el-form-item>
 
@@ -111,6 +117,29 @@
     </template>
   </el-dialog>
 
+
+  <el-dialog
+      v-model="dialogVisible2"
+      title="调薪"
+      width="30%"
+      :before-close="handleClose2"
+      :modal="Updateform2"
+  >
+    <el-form-item label="基本工资" >
+      <el-input v-model="Updateform2.xzjbgz">
+        <template #default="scope">
+          {{Updateform2.xzjbgz==0?"":Updateform2.xzjbgz}}
+        </template>
+      </el-input>
+    </el-form-item>
+
+    <template #footer>
+            <span class="dialog-footer">
+              <el-button @click="dialogVisible2 = false">关闭</el-button>
+              <el-button type="primary" @click="updatePositionSalaryByXzjbbh2()">确定</el-button>
+            </span>
+    </template>
+  </el-dialog>
 </template>
 
 <script lang="ts" setup>
@@ -270,8 +299,41 @@ function updatePositionSalaryByXzjbbh(){
     console.log(error)
   })
 }
-
-
+const dialogVisible2 = ref(false)
+const handleClose2 = (done: () => void) => {
+  ElMessageBox.confirm('确定关闭吗?')
+      .then(() => {
+        done()
+      })
+      .catch(() => {
+        // catch error
+      })
+}
+const Updateform2=reactive({
+  xzjbbh:0,
+  xzjbgz:0
+})
+function selectPositionSalaryByXzjbbh2(e){
+  axios.get("/selectPositionSalaryByXzjbbh?xzjbbh="+e).then(function (res){
+    console.log(res.data.data)
+    Updateform2.xzjbbh=res.data.data.xzjbbh
+    Updateform2.xzjbgz=res.data.data.xzjbgz
+    dialogVisible2.value=true
+    console.log(Updateform2)
+  })
+}
+function updatePositionSalaryByXzjbbh2(){
+  axios.put("/updatePositionSalaryByXzjbbh",Updateform2).then(function (res){
+    console.log(res.data.data)
+    Updateform2.xzjbbh=res.data.data.xzjbbh
+    Updateform2.xzjbgz=res.data.data.xzjbgz
+    open1()
+    dialogVisible2.value=false
+    findAllBasePay()
+  }).catch(function (error){
+    console.log(error)
+  })
+}
 //验证
 const rules=reactive({
   jmc:[

@@ -248,6 +248,11 @@ function findGradeByJxsj(){
 
     data.jixiao=res.data.data.list
     data.total=res.data.data.total
+    if (res.data.data.list.length==0){
+      data.isShow=true
+    }else {
+      data.isShow=false
+    }
   })
 }
 
@@ -265,16 +270,8 @@ function page(pageNum) {
     }).catch(function (error) {
       console.log(error)
     })
-
   } else {
-    axios.get("/findGrade", {
-      params: {pageNum: data.pageNum, pageSize: data.pageSize}
-    }).then(function (res) {
-      data.total = res.data.data.total
-      data.jixiao = res.data.data.list
-    }).catch(function (error) {
-      console.log(error)
-    })
+    findAllGrade()
   }
 }
 //查全部未评分的员工
