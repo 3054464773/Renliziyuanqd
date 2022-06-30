@@ -100,7 +100,7 @@
                 </el-col>
                 <el-col :span="11">
                     <el-form-item label="社保方案">
-                        <el-input v-model="data.gerenziliaoxx.sbbh" disabled/>
+                        <el-input v-model="data.sbmc" disabled/>
                     </el-form-item>
                 </el-col>
                 <el-col :span="11">
@@ -603,6 +603,7 @@
         ygname: '',//当前登陆人
         ygzts: '',//员工状态s
         shehes:[],//审核集合
+        sbmc:'',//社保名称
     })
     const rili = reactive({
         kqzt: [],//考勤状态
@@ -847,7 +848,6 @@
     onBeforeMount(() => {
         axios.get("/cxkqjlByid").then(function (response) {
             data.kaoqinData = response.data.data
-            data.ygname = response.data.data[0].rzname
             var kq = [];
             for (var i = 0; i < response.data.data.length; i++) {
                 kq.push({
@@ -910,6 +910,12 @@
     function gerenziliao() {
         axios.get("/selectgerenzl").then(function (response) {
             data.gerenziliaoxx = response.data.data
+            data.sbmc=response.data.data.sbmc
+            if(data.sbmc==null || data.sbmc==0){
+                data.sbmc='无'
+            }else{
+                data.sbmc=response.data.data.sbmc
+            }
         }).catch(function (error) {
             console.log(error)
         })
@@ -998,6 +1004,7 @@
     //员工状态
     onBeforeMount(() => {
         axios.get("/selectyuangongzt").then(function (response) {
+            data.ygname = response.data.data.rzname
             data.ygzt = response.data.data.ygzt
             if (data.ygzt == 1) {
                 data.ygzts = '未到岗'
