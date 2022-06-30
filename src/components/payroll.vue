@@ -24,6 +24,11 @@
           <el-table-column prop="rzname" label="姓名" width="120" align="center" fixed="left" />
           <el-table-column prop="bmmc" label="部门" width="120" align="center" />
           <el-table-column prop="zwmc" label="职位" width="120" align="center" />
+          <el-table-column prop="ygzt" label="员工状态" width="120" align="center" >
+            <template #default="scope">
+              {{scope.row.ygzt==2?"实习员工":"正式员工"}}
+            </template>
+          </el-table-column>
           <el-table-column prop="szjlsj" label="发放时间" width="120" align="center" />
           <el-table-column  label="基本工资" width="120" align="center" >
             <template #default="scope">
@@ -192,6 +197,11 @@ function selectEmpInfoByMonth(){
 
     data.payroll=res.data.data.list
     data.total=res.data.data.total
+    if(res.data.data.list.length==0){
+      data.isShow=true
+    }else {
+      data.isShow=false
+    }
   }).catch(function (err){
     console.log(err)
   })
@@ -201,6 +211,7 @@ function updateEmpInfoByMonth(){
   if (data.xzsj!=null){
     selectEmpInfoByMonth()
   } else{
+    data.isShow=false
     axios.get("/selectEmpInfo",{
       params:{pageNum:data.pageNum,pageSize:data.pageSize}
     }).then(function (res){
@@ -217,9 +228,7 @@ function updateEmpInfoByMonth(){
 //部门
 function bumen(){
   axios.get("/suoybumen").then(function (c){
-
     data.bumen=c.data.data;
-
   }).catch(function (error){
     console.log(error)
   })
@@ -231,7 +240,11 @@ function bumenchauxnhmd(){
   }).then(function(response){
     data.payroll=response.data.data.list
     data.total=response.data.data.total
-
+    if(response.data.data.list.length==0){
+      data.isShow=true
+    }else {
+      data.isShow=false
+    }
   })
 }
 
@@ -242,7 +255,11 @@ function findPayrollByName(){
   }).then(function(response){
     data.payroll=response.data.data.list
     data.total=response.data.data.total
-
+    if(response.data.data.list.length==0){
+      data.isShow=true
+    }else {
+      data.isShow=false
+    }
   })
 }
 
