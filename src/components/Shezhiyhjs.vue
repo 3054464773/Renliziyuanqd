@@ -1,6 +1,6 @@
 <template>
   <el-input v-model="cxtj" @input="chaxunff" placeholder="请输入用户名称"  style="width:300px;margin-top: 40px;margin-bottom: 40px"/>
-    <el-table :data="ygsj" style="width: 100%;height:430px;">
+    <el-table :data="ygsj" height="300px" style="width: 100%;height:430px;">
       <el-table-column  width="195"></el-table-column>
       <el-table-column type="index" label="序号" width="190"></el-table-column>
       <el-table-column prop="rzname" label="名字" width="200" />
@@ -115,6 +115,7 @@ export default {
     },
     findallygjs(){
       axios.get("/findallygjs").then((e)=>{
+        console.log(e)
         this.ygsj=e.data.data
       })
     },
